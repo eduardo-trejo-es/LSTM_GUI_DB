@@ -40,11 +40,14 @@ class Forcast_Data:
     Data_dates=Data_dates.tz_localize(None)
     #....... dates .....#
     #Dates_To_Use_To_Forcast=Data_dates[Data_dates.shape[0]-40:]
-    Dates_To_Use_To_Forcast=Data_dates[df.index.get_loc(dateFromForcast)-(backDaysRef-1):df.index.get_loc(dateFromForcast)+1]
+    print(len(Data_dates))
+    print(Data_dates.get_loc("2001-01-09"))
+    Dates_To_Use_To_Forcast=Data_dates[Data_dates.get_loc(dateFromForcast)-(backDaysRef-1):Data_dates.get_loc(dateFromForcast)+1]
     
     #print(Dates_To_Use_To_Forcast)
     
     Columns_N=df.shape[1]
+    ColumToforcast=0
     #Getting the columns name
     cols = list(df)[0:Columns_N]
     #New dataframe with only training data - 5 columns
@@ -59,8 +62,12 @@ class Forcast_Data:
     
     ####    Scaling only the close colum   ####
     print(dateFromForcast)
-    df_forcasting_close=df_forcasting[cols[3]].to_numpy()
-    df_forcasting_close=df_forcasting_close.reshape(len(df_forcasting[cols[3]].to_numpy()),-1)
+    df_forcasting_close=df_forcasting[cols[ColumToforcast]].to_numpy()
+    #df_forcasting_close=df_forcasting[cols[3]].to_numpy()
+    #df_forcasting_close=df_forcasting[cols[8]].to_numpy()
+    df_forcasting_close=df_forcasting_close.reshape(len(df_forcasting[cols[ColumToforcast]].to_numpy()),-1)
+    #df_forcasting_close=df_forcasting_close.reshape(len(df_forcasting[cols[3]].to_numpy()),-1)
+    #df_forcasting_close=df_forcasting_close.reshape(len(df_forcasting[cols[8]].to_numpy()),-1)
     
     scaler_Close = MinMaxScaler()
 
@@ -119,10 +126,6 @@ class Forcast_Data:
       y_pred_future = AllPrediction_DS_scaled_Back[i]
       Forcast_Close.append(y_pred_future)
       
-      
-    ####################################### 
-    #      Getting the candle chart       #
-    #######################################
     #######    Generating forcasted dates    #######
 
     lastTimedate=Dates_To_Use_To_Forcast[Dates_To_Use_To_Forcast.shape[0]-1:]
@@ -145,9 +148,13 @@ class Forcast_Data:
     
     #Splitting data  real Y
     #print("The shape of Batch_Real_Y_NonScaled: " + str(Batch_Real_Y_NonScaled.shape))
-    Real_Y_Close=Batch_Real_Y_NonScaled[Batch_Real_Y_NonScaled.shape[0]-1][3]
-    Real_Y_current=Batch_Real_Y_NonScaled[Batch_Real_Y_NonScaled.shape[0]-2][3]
-    Batch_Real_Y_NonScaled
+    Real_Y_Close=Batch_Real_Y_NonScaled[Batch_Real_Y_NonScaled.shape[0]-1][ColumToforcast]
+    Real_Y_current=Batch_Real_Y_NonScaled[Batch_Real_Y_NonScaled.shape[0]-2][ColumToforcast]
+    """Real_Y_Close=Batch_Real_Y_NonScaled[Batch_Real_Y_NonScaled.shape[0]-1][3]
+    Real_Y_current=Batch_Real_Y_NonScaled[Batch_Real_Y_NonScaled.shape[0]-2][3]""
+    Real_Y_Close=Batch_Real_Y_NonScaled[Batch_Real_Y_NonScaled.shape[0]-1][8]
+    Real_Y_current=Batch_Real_Y_NonScaled[Batch_Real_Y_NonScaled.shape[0]-2][8]
+    Batch_Real_Y_NonScaled"""
 
     Forcast_Close=Forcast_Close[0][0]
     Forcast_Close=Forcast_Close[0]
@@ -158,7 +165,6 @@ class Forcast_Data:
     
     return Real_Y_current,Forcast_Close,Real_Y_Close
     
-      
   
   def to_forcast_close_true_and_forcasted(self,n_units_to_predict,model_Path,dateFromForcast):
     ########     Getting the Data      ######
@@ -223,9 +229,9 @@ class Forcast_Data:
     #testingX=np.array(testingX)
     ######    Generating forcast data   #####
     for i in DS_finished_X:
-      BackUnits_Reshaped=np.reshape(i,(1,60,6))
+      BackUnits_Reshaped=np.reshape(i,(1,120,4))
       prediction = model.predict(BackUnits_Reshaped) #the input is a 30 units of time batch
-      prediction_Reshaped=np.reshape(prediction,(1,1,6))
+      prediction_Reshaped=np.reshape(prediction,(1,1,5))
       #Batch_to_predict=np.append(Batch_to_predict,prediction_Reshaped, axis=1)
       #Batch_to_predict=np.delete(Batch_to_predict,0,1)
       #print(Batch_to_predict.shape)

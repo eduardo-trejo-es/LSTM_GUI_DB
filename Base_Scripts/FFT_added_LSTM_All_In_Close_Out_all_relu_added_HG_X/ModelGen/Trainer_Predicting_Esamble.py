@@ -38,10 +38,13 @@ class Model_Trainer:
     Data_dates=Data_dates.tz_localize(None)
     
     Columns_N=df.shape[1]
+    ColumToforcast=0
+    print(Columns_N)
     #Getting the columns name
     cols = list(df)[0:Columns_N]
     print(cols)
-
+    
+    
 
     #New dataframe with only training data - 5 columns
     df_for_training = df[cols].astype(float)
@@ -54,9 +57,10 @@ class Model_Trainer:
 
     scaler = scaler.fit(df_for_training)
     DS_raw_scaled = scaler.transform(df_for_training)
-
-    DS_raw_Close_scaled=DS_raw_scaled[:,[3]]
-
+    DS_raw_Close_scaled=DS_raw_scaled[:,[ColumToforcast]]
+    #DS_raw_Close_scaled=DS_raw_scaled[:,[Columns_N]]
+    #DS_raw_Close_scaled=DS_raw_scaled[:,[3]]
+    #DS_raw_Close_scaled=DS_raw_scaled[:,[8]]
 
     
     #Empty lists to be populated using formatted training data
@@ -136,7 +140,7 @@ class Model_Trainer:
     
     early_stop= EarlyStopping(monitor='val_loss',mode='min',verbose=1,patience=25)
     
-    model.fit(x=trainX,y=y_data, epochs=10, batch_size=15, validation_data=(testingX,testing_y_data),callbacks=[early_stop])
+    model.fit(x=trainX,y=y_data, epochs=120, batch_size=15, validation_data=(testingX,testing_y_data),callbacks=[early_stop])
     #history = model.fit(trainX,y=y_data, epochs=125, batch_size=15)
 
 
@@ -144,7 +148,7 @@ class Model_Trainer:
 
     losses.plot()
 
-    model.save(modelPath)
+    model.save(modelPath,save_format="h5")
     
     
     Training_result="done... ;)"

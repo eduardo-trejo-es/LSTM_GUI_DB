@@ -15,34 +15,16 @@ class DatasetGenerator:
 
         df=yf.download(name_item,start = startDate, end = endDate,interval='1d',threads = True)
         df.pop("Adj Close")
-        """#df=yf.download('CL=F',start = startDate, end = endDate,interval='1d',threads = True)
-        df_Crude_Oil=yf.download('CL=F',start = startDate, end = endDate,threads = True)
-        df_Copper=yf.download('HG=F',start = startDate, end = endDate,threads = True)
-        df_Steel=yf.download('X',start = startDate, end = endDate,threads = True)
-
-        df_Crude_Oil.pop("Adj Close")
-        df_Copper.pop("Adj Close")
-        df_Steel.pop("Adj Close")
-        
-        #____________ Changing columns names _____________
-
-        #####   Crude oil  CL=F
-        dict_CL_F_Columns={'Open':'Open_CL=F', 'High':'High_CL=F', 'Low':'Low_CL=F', 'Close':'Close_CL=F','Volume':'Volume_CL=F'}
-        df_Crude_Oil_Renam=df_Crude_Oil.rename(columns=dict_CL_F_Columns)
-
-        #### Copper HG=F 
-        dict_HG_F_Columns={'Open':'Open_HG=F', 'High':'High_HG=F', 'Low':'Low_HG=F', 'Close':'Close_HG=F','Volume':'Volume_HG=F'}
-        df_Copper_Renam=df_Copper.rename(columns=dict_HG_F_Columns)
-
-        #### Steel X
-        dict_X_Columns={'Open':'Open_X', 'High':'High_X', 'Low':'Low_X', 'Close':'Close_X','Volume':'Volume_X'}
-        df_steel_Renam=df_Steel.rename(columns=dict_X_Columns)
-        
-        Last_pd = pd.concat([df_Crude_Oil_Renam, df_Copper_Renam,df_steel_Renam], axis=1)"""
         
         self.SavingDataset(df,csvFileName, csvFileName_New, True)
         
-            
+    def PopListdf(self,columns,csvFileName, csvFileName_New,):
+        df=pd.read_csv(csvFileName, index_col="Date")
+        Column=columns
+        for i in Column:
+            df.pop(i)
+        self.SavingDataset(df,csvFileName, csvFileName_New,False)
+              
     def SavingDataset(self,df,csvFileName, csvFileName_New,Add_to_old):
         #####      Saving Data In CSV file   ####
         if Add_to_old:
@@ -211,14 +193,15 @@ class DatasetGenerator:
         Last_pd=pd.DataFrame({})
         
         for i in PathListdf:
+            print(i)
             existing=pd.read_csv(i, index_col="Date")
-            print(existing.columns)
             if i.find("GH_F")!=-1:
                 itemName="_GH_F"
             elif i.find("CRUDE_OIL")!=-1:
                 itemName="_CRUDE_OIL"
             elif i.find("Steel_X")!=-1:
                 itemName="_Steel_X"
+            
             list_Orig_Columns=existing.columns
             list_New_Columns=[]
             
@@ -226,17 +209,139 @@ class DatasetGenerator:
                 list_New_Columns.append(k+itemName)
             
             
+            
             dict_Columns={}
             for j in range(0,len(list_Orig_Columns)):
                 dict_Columns[list_Orig_Columns[j]]=list_New_Columns[j]
-                
+            
+            print(len(dict_Columns))
+            
             existing_Columns_Renamed=existing.rename(columns=dict_Columns)
             
-            
-            Last_pd = pd.concat([Last_pd,existing_Columns_Renamed], axis=1)
+            #Last_pd = pd.concat([Last_pd,existing_Columns_Renamed], axis=1,join='inner')
             
         
         Last_pd=self.deleterRowWhenNull(Last_pd)
         Last_pd.index.name='Date'
         print(Last_pd.shape)
         self.SavingDataset(Last_pd,NewFIleName, NewFIleName,False)
+    
+    def AddColumnPRCNTG(self,csvFileName, csvFileName_New):
+        df=pd.read_csv(csvFileName, index_col="Date")
+    
+        columns_list=df.columns[0:5]
+
+        indexDatesList=[]
+        indexDatesDic={}
+        for o in df.index:
+            indexDatesList.append(o)
+            
+        ListPercentages=[]
+        val_n=0
+        val_n_1=0
+        percentage_n_1=0
+        First_val=True
+        df_percentage=pd.DataFrame()
+        for columns in columns_list:
+            accu_=0
+            First_val=True
+            ListPercentages=[]
+            for rows in df[columns]:
+                val_n_1=rows
+            
+                if First_val==True:
+                    First_val=False
+                    ListPercentages.append(0)
+                else:
+                    try:
+                        percentage_n_1=((val_n_1*100)/val_n)-100
+                    except:
+                        percentage_n_1=((val_n_1*100)/1)-100
+                    ListPercentages.append(percentage_n_1)
+                val_n=val_n_1
+            
+            df[columns+"_PRCNTG"]=ListPercentages
+        df['Date']=indexDatesList
+        df_percentage=df.set_index('Date')
+                    
+        self.SavingDataset(df_percentage,csvFileName, csvFileName_New,False)
+    
+    def AddColumnDirePrice(self,csvFileName, csvFileName_New):
+        df=pd.read_csv(csvFileName, index_col="Date")
+    
+        columns_list=df.columns[0:5]
+
+        indexDatesList=[]
+        ListPercentages={}
+        for o in df.index:
+            indexDatesList.append(o)
+            
+        val_n=0
+        val_n_1=0
+        percentage_n_1=0
+        First_val=True
+        df_percentage=pd.DataFrame()
+        for columns in columns_list:
+            accu_=0
+            First_val=True
+            ListPercentages=[]
+            for rows in df[columns]:
+                val_n_1=rows
+            
+                if First_val==True:
+                    First_val=False
+                    ListPercentages.append(0)
+                else:
+                    try:
+                        percentage_n_1=((val_n_1*100)/val_n)-100
+                    except:
+                        percentage_n_1=((val_n_1*100)/1)-100
+                    ListPercentages.append(percentage_n_1)
+                val_n=val_n_1
+            
+            df[columns+"_DirPrice"]=ListPercentages
+        df['Date']=indexDatesList
+        df_percentage=df.set_index('Date')
+                    
+        self.SavingDataset(df_percentage,csvFileName, csvFileName_New,False)
+        
+        
+    def AddColumnInverseDirePrice(self,csvFileName, csvFileName_New):
+        df=pd.read_csv(csvFileName, index_col="Date")
+    
+        columns_list=df.columns[0:5]
+
+        indexDatesList=[]
+        ListPercentages={}
+        for o in df.index:
+            indexDatesList.append(o)
+            
+        
+        val_n=0
+        val_n_1=0
+        percentage_n_1=0
+        First_val=True
+        df_percentage=pd.DataFrame()
+        for columns in columns_list:
+            accu_=0
+            First_val=True
+            ListPercentages=[]
+            for rows in df[columns]:
+                val_n_1=rows
+            
+                if First_val==True:
+                    First_val=False
+                    ListPercentages.append(0)
+                else:
+                    try:
+                        percentage_n_1=((val_n_1*100)/val_n)-100
+                    except:
+                        percentage_n_1=((val_n_1*100)/1)-100
+                    ListPercentages.append(percentage_n_1*(-1))
+                val_n=val_n_1
+            
+            df[columns+"_InvDirPrice"]=ListPercentages
+        df['Date']=indexDatesList
+        df_percentage=df.set_index('Date')
+                    
+        self.SavingDataset(df_percentage,csvFileName, csvFileName_New,False)
