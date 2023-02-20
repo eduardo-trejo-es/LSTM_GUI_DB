@@ -17,6 +17,30 @@ class Ui_GUI_LSTM_FORCASTER(object):
         self.Data_CSV="FFT_added_LSTM_All_In_Close_Out_all_relu_added_HG_X/DatasetGen/CRUDE_OIL/CRUDE_OIL_Dataand_FFT_900.csv"
         self.percentageData=95
         self.forcastPath="FFT_added_LSTM_All_In_Close_Out_all_relu_added_HG_X/ModelGen/Forcasts/Focast_CloseDayMonthYearFFT90019_02_2023.csv"
+        ##################################################################
+        #                       Init ComboBoxData                        #
+        ################################################################## 
+        """self.BaCon_Combox_ChooseModel
+        self.ForC_ComBox_DateFrom 
+        self.MoTr_ComBox_ChooseModel
+        self.DaMa_ComBox_ChooseDataset"""
+        ##################################################################
+        #                       Init txtLine                             #
+        ##################################################################
+        """self.BaCon_txtLine_DatasetBelongs 
+        self.ForC_txtLine_TailBackDays
+        self.MoTr_txtLine_DataSet
+        self.MoTr_txtLine_PercentDataSet
+        self.DaMa_txtLine_Modelbelongs"""
+        
+        ##################################################################
+        #                          Init lbl                              #
+        ##################################################################
+        """self.ForC_lbl_TodayPrice
+        self.ForC_lbl_TomorrowPrice
+        self.ForC_lbl_LoadStatus
+        self.DaMA_lbl_loadStatus"""
+        
     
     def setupUi(self, GUI_LSTM_FORCASTER):
         GUI_LSTM_FORCASTER.setObjectName("GUI_LSTM_FORCASTER")
@@ -66,9 +90,9 @@ class Ui_GUI_LSTM_FORCASTER(object):
         self.ForC_radioButton_GetGraph = QtWidgets.QRadioButton(self.Forcasting_Tab)
         self.ForC_radioButton_GetGraph.setGeometry(QtCore.QRect(370, 50, 111, 20))
         self.ForC_radioButton_GetGraph.setObjectName("ForC_radioButton_GetGraph")
-        self.label_6 = QtWidgets.QLabel(self.Forcasting_Tab)
-        self.label_6.setGeometry(QtCore.QRect(140, 230, 171, 16))
-        self.label_6.setObjectName("label_6")
+        self.ForC_lbl_LoadStatus = QtWidgets.QLabel(self.Forcasting_Tab)
+        self.ForC_lbl_LoadStatus.setGeometry(QtCore.QRect(140, 230, 171, 16))
+        self.ForC_lbl_LoadStatus.setObjectName("ForC_lbl_LoadStatus")
         self.ForC_Gbox_ForcastResul = QtWidgets.QGroupBox(self.Forcasting_Tab)
         self.ForC_Gbox_ForcastResul.setGeometry(QtCore.QRect(50, 110, 251, 91))
         self.ForC_Gbox_ForcastResul.setObjectName("ForC_Gbox_ForcastResul")
@@ -139,9 +163,9 @@ class Ui_GUI_LSTM_FORCASTER(object):
         self.DaMa_LoadBar_UpdateData.setGeometry(QtCore.QRect(150, 260, 411, 41))
         self.DaMa_LoadBar_UpdateData.setProperty("value", 24)
         self.DaMa_LoadBar_UpdateData.setObjectName("DaMa_LoadBar_UpdateData")
-        self.label_12 = QtWidgets.QLabel(self.Data_Manager_tab)
-        self.label_12.setGeometry(QtCore.QRect(150, 250, 60, 16))
-        self.label_12.setObjectName("label_12")
+        self.DaMA_lbl_loadStatus = QtWidgets.QLabel(self.Data_Manager_tab)
+        self.DaMA_lbl_loadStatus.setGeometry(QtCore.QRect(150, 250, 60, 16))
+        self.DaMA_lbl_loadStatus.setObjectName("DaMA_lbl_loadStatus")
         self.DaMa_ComBox_ChooseDataset = QtWidgets.QComboBox(self.Data_Manager_tab)
         self.DaMa_ComBox_ChooseDataset.setGeometry(QtCore.QRect(80, 80, 371, 26))
         self.DaMa_ComBox_ChooseDataset.setObjectName("DaMa_ComBox_ChooseDataset")
@@ -177,7 +201,7 @@ class Ui_GUI_LSTM_FORCASTER(object):
         self.ForC_lbl_DateFrom.setText(_translate("GUI_LSTM_FORCASTER", "Date from"))
         self.ForC_btn_StartForcasting.setText(_translate("GUI_LSTM_FORCASTER", "START FORCASTING"))
         self.ForC_radioButton_GetGraph.setText(_translate("GUI_LSTM_FORCASTER", "Get the graph?"))
-        self.label_6.setText(_translate("GUI_LSTM_FORCASTER", "Ready to forcast"))
+        self.ForC_lbl_LoadStatus.setText(_translate("GUI_LSTM_FORCASTER", "Ready to forcast"))
         self.ForC_Gbox_ForcastResul.setTitle(_translate("GUI_LSTM_FORCASTER", "Forcast Result Close"))
         self.label_13.setText(_translate("GUI_LSTM_FORCASTER", "Today Close price:"))
         self.label_5.setText(_translate("GUI_LSTM_FORCASTER", "Tomorrow forcast:"))
@@ -195,7 +219,7 @@ class Ui_GUI_LSTM_FORCASTER(object):
         self.Tabs.setTabText(self.Tabs.indexOf(self.Model_Trainner_Tab), _translate("GUI_LSTM_FORCASTER", "Model Trainner"))
         self.DaMa_lbl_Modelbelongs.setText(_translate("GUI_LSTM_FORCASTER", "Model DataSet belongs to"))
         self.DaMa_btn_Update.setText(_translate("GUI_LSTM_FORCASTER", "Update"))
-        self.label_12.setText(_translate("GUI_LSTM_FORCASTER", "Ready"))
+        self.DaMA_lbl_loadStatus.setText(_translate("GUI_LSTM_FORCASTER", "Ready"))
         self.DaMa_lbl_ChooseDataset.setText(_translate("GUI_LSTM_FORCASTER", "To choose DataSet"))
         self.Tabs.setTabText(self.Tabs.indexOf(self.Data_Manager_tab), _translate("GUI_LSTM_FORCASTER", "Data manager"))
     
