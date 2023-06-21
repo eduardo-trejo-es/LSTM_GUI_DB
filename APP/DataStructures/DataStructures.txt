@@ -3,11 +3,21 @@ DataSet
  **-IdModel
  -DataSetName
  -DataSetPath
+ -ColumsNum
+ -BackdaysNum
+ -DateCreation
+ -FFT
+ 
 
 Model
  *-IdModel
  -ModelName
- -MOdelPath
+ -ModelPath
+ -Columstype
+ -Backdaystype
+ -DateCreation
+ -FFT
+  
 
 Config
  -ModeltoUsed
