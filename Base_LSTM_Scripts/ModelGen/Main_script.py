@@ -1,9 +1,13 @@
 import sys
 sys.path.append("/Users/eduardo/Desktop/LSTM_Capital_API_220922/FFT_added_LSTM_All_In_Close_Out_all_relu_added_HG_X/Pakages/DataSetgenPacks")
-sys.path.append("/Users/eduardo/Desktop/LSTM_Capital_API_220922/FFT_added_LSTM_All_In_Close_Out_all_relu_added_HG_X/Pakages/ForcastingPacks")
+sys.path.append("/Users/eduardo/Desktop/LSTM_Capital_API_220922/FFT_added_LSTM_All_In_Close_Out_all_relu_added_HG_X/Pakages/Model")
 from Trainer_Predicting_Esamble import Model_Trainer
 #from Forcaster_Model import Forcast_Data
 from Forcaster_Model_DateFromToForcast import Forcast_Data
+
+from Model_Creation import
+
+
 import pandas as pd
 import numpy as np
 from matplotlib import pyplot as plt

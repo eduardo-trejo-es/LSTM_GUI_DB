@@ -148,6 +148,8 @@ class Ui_GUI_LSTM_FORCASTER(object):
         self.MoTr_ComBox_ChooseModel.setGeometry(QtCore.QRect(106, 50, 311, 26))
         self.MoTr_ComBox_ChooseModel.setObjectName("MoTr_ComBox_ChooseModel")
         self.Tabs.addTab(self.Model_Trainner_Tab, "")
+        
+        ######## Data Manager ##############
         self.Data_Manager_tab = QtWidgets.QWidget()
         self.Data_Manager_tab.setObjectName("Data_Manager_tab")
         self.DaMa_lbl_Modelbelongs = QtWidgets.QLabel(self.Data_Manager_tab)
@@ -217,11 +219,20 @@ class Ui_GUI_LSTM_FORCASTER(object):
         self.MoTr_lbl_CMD_training.setText(_translate("GUI_LSTM_FORCASTER", "CMD training process"))
         self.MoTr_lbl_PercentDataset.setText(_translate("GUI_LSTM_FORCASTER", "% Data to test"))
         self.Tabs.setTabText(self.Tabs.indexOf(self.Model_Trainner_Tab), _translate("GUI_LSTM_FORCASTER", "Model Trainner"))
+                    ######################
+        ##############  Tada manager Tab ###############
         self.DaMa_lbl_Modelbelongs.setText(_translate("GUI_LSTM_FORCASTER", "Model DataSet belongs to"))
         self.DaMa_btn_Update.setText(_translate("GUI_LSTM_FORCASTER", "Update"))
         self.DaMA_lbl_loadStatus.setText(_translate("GUI_LSTM_FORCASTER", "Ready"))
         self.DaMa_lbl_ChooseDataset.setText(_translate("GUI_LSTM_FORCASTER", "To choose DataSet"))
         self.Tabs.setTabText(self.Tabs.indexOf(self.Data_Manager_tab), _translate("GUI_LSTM_FORCASTER", "Data manager"))
+                    #################
+        ############# Model Creatio ##############
+        self.ModCrtion_lbl_Modelbelongs.setText(_translate("GUI_LSTM_FORCASTER", "Model DataSet belongs to"))
+        self.ModCrtion_btn_Update.setText(_translate("GUI_LSTM_FORCASTER", "Update"))
+        self.ModCrtion_lbl_loadStatus.setText(_translate("GUI_LSTM_FORCASTER", "Ready"))
+        self.ModCrtion_lbl_ChooseDataset.setText(_translate("GUI_LSTM_FORCASTER", "To choose DataSet"))
+        self.Tabs.setTabText(self.Tabs.indexOf(self.Model_Creation_tab), _translate("GUI_LSTM_FORCASTER", "Model Creation"))
     
     ##################################################################
     #                       Funct Forcaster                          #
