@@ -1,11 +1,11 @@
 import sys
 sys.path.append("/Users/eduardo/Desktop/LSTM_Capital_API_220922/FFT_added_LSTM_All_In_Close_Out_all_relu_added_HG_X/Pakages/DataSetgenPacks")
-sys.path.append("/Users/eduardo/Desktop/LSTM_Capital_API_220922/FFT_added_LSTM_All_In_Close_Out_all_relu_added_HG_X/Pakages/Model")
+sys.path.append("/Users/eduardo/Desktop/GUI_LSTM_FFT/Base_LSTM_Scripts/Pakages/Model")
 from Trainer_Predicting_Esamble import Model_Trainer
 #from Forcaster_Model import Forcast_Data
 from Forcaster_Model_DateFromToForcast import Forcast_Data
 
-from Model_Creation import
+from Model_Creation import ModelCreator
 
 
 import pandas as pd
@@ -31,8 +31,12 @@ else:
     percentageData=100
     
 
-trainer_model = Model_Trainer()
-forcaster =Forcast_Data(Model_Path)
+#trainer_model = Model_Trainer()
+#forcaster =Forcast_Data(Model_Path)
+model_Creator = ModelCreator("Base_LSTM_Scripts/ModelGen/OnlyCloseColum/Model/Models_fewColums")
+
+model_Creator.To_Create_Model("TestingModelCreator",5,0.6,400,0.6,"1e-6",7)
+
 
 #is this one the old working trainer version
 #training_result=trainer_model.to_train(True,100,Model_Path,Data_CSV,percentageData,5)
@@ -55,7 +59,7 @@ print(Real_Y_Close)
 """
 ########## forcasting instuctions below ########
 
-
+"""
 saveAllandforcast=pd.DataFrame({})
 fd_ColumnForcast_Close_Day=pd.DataFrame({})
 all_df=pd.read_csv(all_colums_Data_CSV,index_col=0)
@@ -132,3 +136,4 @@ plt.show()
     # to convert to CSV
 
 Final_Allandforcast.to_csv(path_or_buf=forcastPath,index=True)
+"""
