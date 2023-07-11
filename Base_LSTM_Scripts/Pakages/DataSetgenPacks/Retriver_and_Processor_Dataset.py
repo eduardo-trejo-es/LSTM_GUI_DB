@@ -221,7 +221,7 @@ class DatasetGenerator:
     
     def UpdateToday(self, ItemName,CsvFileName):
         startDate=""
-        endDate=str(date.today())
+        endDate=str(date.today()+timedelta(days=1))
         itemName=ItemName
         csvFileName=CsvFileName
         df=pd.read_csv(csvFileName, index_col="Date")
