@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>683</width>
+    <width>700</width>
     <height>446</height>
    </rect>
   </property>
@@ -493,8 +493,8 @@
      <widget class="QLabel" name="label_14">
       <property name="geometry">
        <rect>
-        <x>170</x>
-        <y>290</y>
+        <x>160</x>
+        <y>340</y>
         <width>60</width>
         <height>16</height>
        </rect>
@@ -506,8 +506,8 @@
      <widget class="QProgressBar" name="DaMa_LoadBar_UpdateData_2">
       <property name="geometry">
        <rect>
-        <x>170</x>
-        <y>300</y>
+        <x>160</x>
+        <y>350</y>
         <width>411</width>
         <height>41</height>
        </rect>
@@ -516,97 +516,224 @@
        <number>24</number>
       </property>
      </widget>
-     <widget class="QLineEdit" name="DaMa_txtLine_Modelbelongs_2">
-      <property name="geometry">
-       <rect>
-        <x>10</x>
-        <y>30</y>
-        <width>361</width>
-        <height>21</height>
-       </rect>
-      </property>
-     </widget>
-     <widget class="QLineEdit" name="DaMa_txtLine_Modelbelongs_3">
+     <widget class="QLineEdit" name="Model_C_txtLine_LSTM1">
       <property name="geometry">
        <rect>
         <x>20</x>
         <y>90</y>
-        <width>361</width>
-        <height>21</height>
+        <width>270</width>
+        <height>25</height>
        </rect>
       </property>
      </widget>
-     <widget class="QLineEdit" name="DaMa_txtLine_Modelbelongs_4">
+     <widget class="QLineEdit" name="Model_C_txtLine_LSTM2">
       <property name="geometry">
        <rect>
         <x>20</x>
-        <y>140</y>
-        <width>361</width>
-        <height>21</height>
-       </rect>
-      </property>
-     </widget>
-     <widget class="QLineEdit" name="DaMa_txtLine_Modelbelongs_5">
-      <property name="geometry">
-       <rect>
-        <x>20</x>
-        <y>190</y>
-        <width>361</width>
-        <height>21</height>
-       </rect>
-      </property>
-     </widget>
-     <widget class="QLineEdit" name="DaMa_txtLine_Modelbelongs_6">
-      <property name="geometry">
-       <rect>
-        <x>30</x>
-        <y>230</y>
-        <width>361</width>
-        <height>21</height>
-       </rect>
-      </property>
-     </widget>
-     <widget class="QLineEdit" name="DaMa_txtLine_Modelbelongs_7">
-      <property name="geometry">
-       <rect>
-        <x>460</x>
-        <y>30</y>
-        <width>241</width>
-        <height>21</height>
-       </rect>
-      </property>
-     </widget>
-     <widget class="QLineEdit" name="DaMa_txtLine_Modelbelongs_8">
-      <property name="geometry">
-       <rect>
-        <x>460</x>
-        <y>90</y>
-        <width>211</width>
-        <height>21</height>
-       </rect>
-      </property>
-     </widget>
-     <widget class="QLineEdit" name="DaMa_txtLine_Modelbelongs_9">
-      <property name="geometry">
-       <rect>
-        <x>440</x>
-        <y>140</y>
-        <width>361</width>
-        <height>21</height>
+        <y>150</y>
+        <width>270</width>
+        <height>25</height>
        </rect>
       </property>
      </widget>
      <widget class="QPushButton" name="DaMa_btn_Update_2">
       <property name="geometry">
        <rect>
-        <x>450</x>
-        <y>170</y>
-        <width>113</width>
-        <height>101</height>
+        <x>40</x>
+        <y>260</y>
+        <width>221</width>
+        <height>71</height>
        </rect>
       </property>
       <property name="text">
        <string>Create model</string>
+      </property>
+     </widget>
+     <widget class="QLabel" name="Model_C_LBL_Int_Seed_Data">
+      <property name="geometry">
+       <rect>
+        <x>20</x>
+        <y>10</y>
+        <width>181</width>
+        <height>16</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>#Int Seed_Data</string>
+      </property>
+     </widget>
+     <widget class="QLineEdit" name="Model_C_txtLine_Lyr_Dns">
+      <property name="geometry">
+       <rect>
+        <x>360</x>
+        <y>30</y>
+        <width>270</width>
+        <height>25</height>
+       </rect>
+      </property>
+     </widget>
+     <widget class="QLineEdit" name="Model_C_Lyr_Dn_Rgzr">
+      <property name="geometry">
+       <rect>
+        <x>360</x>
+        <y>90</y>
+        <width>270</width>
+        <height>25</height>
+       </rect>
+      </property>
+     </widget>
+     <widget class="QLineEdit" name="Model_C_txtLine_OptAdam_Co">
+      <property name="geometry">
+       <rect>
+        <x>360</x>
+        <y>150</y>
+        <width>270</width>
+        <height>25</height>
+       </rect>
+      </property>
+     </widget>
+     <widget class="QLineEdit" name="Model_C_txtLine_Colums">
+      <property name="geometry">
+       <rect>
+        <x>360</x>
+        <y>210</y>
+        <width>270</width>
+        <height>25</height>
+       </rect>
+      </property>
+     </widget>
+     <widget class="QLineEdit" name="Model_C_txtLine_LryDCoeff">
+      <property name="geometry">
+       <rect>
+        <x>20</x>
+        <y>210</y>
+        <width>270</width>
+        <height>25</height>
+       </rect>
+      </property>
+     </widget>
+     <widget class="QLabel" name="Model_C_LBL_LSTM1">
+      <property name="geometry">
+       <rect>
+        <x>20</x>
+        <y>70</y>
+        <width>180</width>
+        <height>16</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>LSTM_1_#Units</string>
+      </property>
+     </widget>
+     <widget class="QLabel" name="Model_C_LBL_LSTM2">
+      <property name="geometry">
+       <rect>
+        <x>20</x>
+        <y>130</y>
+        <width>180</width>
+        <height>16</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>LSTM_2_#Units</string>
+      </property>
+     </widget>
+     <widget class="QLabel" name="Model_C_LBL_LryDCoeff">
+      <property name="geometry">
+       <rect>
+        <x>20</x>
+        <y>190</y>
+        <width>180</width>
+        <height>16</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Lyr_Drop_Coeff</string>
+      </property>
+     </widget>
+     <widget class="QLabel" name="Model_C_LBL_Lyr_Dns">
+      <property name="geometry">
+       <rect>
+        <x>360</x>
+        <y>10</y>
+        <width>180</width>
+        <height>16</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Lyr_Dns_#Unit</string>
+      </property>
+     </widget>
+     <widget class="QLabel" name="Model_C_LBL_Lyr_Dn_Rgzr">
+      <property name="geometry">
+       <rect>
+        <x>360</x>
+        <y>70</y>
+        <width>180</width>
+        <height>16</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Lyr_Dns_Rgzr_Coeff</string>
+      </property>
+     </widget>
+     <widget class="QLabel" name="Model_C_LBL_OptAdam_Co">
+      <property name="geometry">
+       <rect>
+        <x>360</x>
+        <y>130</y>
+        <width>180</width>
+        <height>16</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Optmzer_Adam_Coeff</string>
+      </property>
+     </widget>
+     <widget class="QLabel" name="Model_C_LBL_Colums">
+      <property name="geometry">
+       <rect>
+        <x>360</x>
+        <y>190</y>
+        <width>180</width>
+        <height>16</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Colums_N</string>
+      </property>
+     </widget>
+     <widget class="QLineEdit" name="Model_C_txtLine_Int_Model">
+      <property name="geometry">
+       <rect>
+        <x>280</x>
+        <y>280</y>
+        <width>141</width>
+        <height>25</height>
+       </rect>
+      </property>
+     </widget>
+     <widget class="QLabel" name="Model_C_LBL_Int_Model">
+      <property name="geometry">
+       <rect>
+        <x>280</x>
+        <y>260</y>
+        <width>180</width>
+        <height>16</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>#Int_model</string>
+      </property>
+     </widget>
+     <widget class="QComboBox" name="Model_C_ComBox_Int_Seed_Data">
+      <property name="geometry">
+       <rect>
+        <x>20</x>
+        <y>30</y>
+        <width>131</width>
+        <height>26</height>
+       </rect>
       </property>
      </widget>
     </widget>
