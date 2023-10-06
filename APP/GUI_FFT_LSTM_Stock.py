@@ -290,8 +290,8 @@ class Ui_GUI_LSTM_FORCASTER(object):
         #--------- thread emit signals -----------
         #self.notes_retriver.Update_Progress.connect(self.Event_UpdateProgress_SP)
         self.model_creator.Update_ModelCreationStatus.connect(self.Event_ModelCreationStatus)
-        self.model_creator.Update_Progress.connect(self.Event_UpdateProgress_SP)
-        self.model_creator.Update_Progress_String.connect(self.Event_UpdateProgress_string)
+        self.model_creator.Update_Progress.connect(self.Event_UpdateProgress_ModelCreator)
+        self.model_creator.Update_Progress_String.connect(self.Event_UpdateProgress_string_ModelCreator)
         
          
          #####  Buttons calls #####
@@ -352,14 +352,13 @@ class Ui_GUI_LSTM_FORCASTER(object):
         self.Model_C_LBL_Int_Model.setText(_translate("GUI_LSTM_FORCASTER", "#Int_model"))
         self.Model_C_LBL_BackDays.setText(_translate("GUI_LSTM_FORCASTER", "#BackDays"))
         self.Tabs.setTabText(self.Tabs.indexOf(self.ModCrtion), _translate("GUI_LSTM_FORCASTER", "Model Creation"))
-        #self.UpdateObjectsTabAPI()
         
     
     ###########################################
-    #              Bottons def               #
+    #              TAB Model Creator          #
     ###########################################
     
-    ############### TAB Model Creator  ################
+    ############### Bottons functions  ################
     
     def Create_New_Model(self):
         matching=False
@@ -412,12 +411,7 @@ class Ui_GUI_LSTM_FORCASTER(object):
         
         self.model_creator.start()
         
-        
-    ###########################################
-    #            General Fucntions            #
-    ###########################################
-    
-    ############ TAB Model Creator  ############   
+    ############ General Fucntions  ############   
     def ModelsComboBoxChanged(self):
         Model_Selected=self.Model_C_ComBox_Int_Model.currentText()
         
@@ -430,8 +424,7 @@ class Ui_GUI_LSTM_FORCASTER(object):
             SeedDataModel=i[4]
         index= self.Model_C_ComBox_Int_Seed_Data.findText(str(SeedDataModel),QtCore.Qt.MatchFixedString)
         self.Model_C_ComBox_Int_Seed_Data.setCurrentIndex(index)  
-         
-    
+       
     def SeedDataComboBoxChanged(self):
         Item_Selected=self.Model_C_ComBox_Int_Seed_Data.currentText()
         
@@ -551,13 +544,11 @@ class Ui_GUI_LSTM_FORCASTER(object):
             self.AddinElementComoBoxModelData(modelJustCreated)
             index= self.Model_C_ComBox_Int_Model.findText(str(modelJustCreated),QtCore.Qt.MatchFixedString)
             self.Model_C_ComBox_Int_Model.setCurrentIndex(index)
-            
-    
-    def Event_UpdateProgress_SP(self,val):
+                
+    def Event_UpdateProgress_ModelCreator(self,val):
         self.Model_C_LdBar.setProperty("value",val)
-        
-        
-    def Event_UpdateProgress_string(self,val): 
+                
+    def Event_UpdateProgress_string_ModelCreator(self,val): 
         self.Model_C_LBL_Progres.setText(val)
             
                   
