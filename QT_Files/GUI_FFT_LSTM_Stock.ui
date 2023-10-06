@@ -30,7 +30,7 @@
      <enum>QTabWidget::North</enum>
     </property>
     <property name="currentIndex">
-     <number>4</number>
+     <number>3</number>
     </property>
     <property name="movable">
      <bool>false</bool>
@@ -400,34 +400,24 @@
      <attribute name="title">
       <string>Data manager</string>
      </attribute>
-     <widget class="QLabel" name="DaMa_lbl_Modelbelongs">
+     <widget class="QLabel" name="DaMa_lbl_Seed_DataSet">
       <property name="geometry">
        <rect>
-        <x>80</x>
-        <y>130</y>
+        <x>60</x>
+        <y>20</y>
         <width>201</width>
         <height>16</height>
        </rect>
       </property>
       <property name="text">
-       <string>Model DataSet belongs to</string>
-      </property>
-     </widget>
-     <widget class="QLineEdit" name="DaMa_txtLine_Modelbelongs">
-      <property name="geometry">
-       <rect>
-        <x>90</x>
-        <y>150</y>
-        <width>361</width>
-        <height>21</height>
-       </rect>
+       <string>Seed DataSet Id</string>
       </property>
      </widget>
      <widget class="QPushButton" name="DaMa_btn_Update">
       <property name="geometry">
        <rect>
-        <x>490</x>
-        <y>80</y>
+        <x>500</x>
+        <y>200</y>
         <width>113</width>
         <height>101</height>
        </rect>
@@ -436,11 +426,11 @@
        <string>Update</string>
       </property>
      </widget>
-     <widget class="QProgressBar" name="DaMa_LoadBar_UpdateData">
+     <widget class="QProgressBar" name="DaMa_LoadBar_Progres">
       <property name="geometry">
        <rect>
         <x>150</x>
-        <y>260</y>
+        <y>340</y>
         <width>411</width>
         <height>41</height>
        </rect>
@@ -449,12 +439,12 @@
        <number>24</number>
       </property>
      </widget>
-     <widget class="QLabel" name="label_12">
+     <widget class="QLabel" name="DaMa_Lbl_Progres">
       <property name="geometry">
        <rect>
         <x>150</x>
-        <y>250</y>
-        <width>60</width>
+        <y>330</y>
+        <width>291</width>
         <height>16</height>
        </rect>
       </property>
@@ -462,27 +452,363 @@
        <string>Ready</string>
       </property>
      </widget>
-     <widget class="QComboBox" name="DaMa_ComBox_ChooseDataset">
+     <widget class="QComboBox" name="DaMa_ComBox_Seed_DataSet">
       <property name="geometry">
        <rect>
-        <x>80</x>
-        <y>80</y>
-        <width>371</width>
+        <x>60</x>
+        <y>40</y>
+        <width>101</width>
         <height>26</height>
        </rect>
       </property>
      </widget>
-     <widget class="QLabel" name="DaMa_lbl_ChooseDataset">
+     <widget class="QLabel" name="DaMa_lbl_DataSetId">
       <property name="geometry">
        <rect>
-        <x>80</x>
-        <y>60</y>
+        <x>370</x>
+        <y>20</y>
+        <width>91</width>
+        <height>16</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>DataSet id</string>
+      </property>
+     </widget>
+     <widget class="QComboBox" name="DaMa_ComBox_DataSet_Id">
+      <property name="geometry">
+       <rect>
+        <x>370</x>
+        <y>40</y>
+        <width>101</width>
+        <height>26</height>
+       </rect>
+      </property>
+     </widget>
+     <widget class="QPushButton" name="DaMa_btn_Create">
+      <property name="geometry">
+       <rect>
+        <x>370</x>
+        <y>200</y>
+        <width>113</width>
+        <height>101</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Create</string>
+      </property>
+     </widget>
+     <widget class="QLineEdit" name="DaMa_txtLine_Stock_Item">
+      <property name="geometry">
+       <rect>
+        <x>60</x>
+        <y>90</y>
+        <width>231</width>
+        <height>21</height>
+       </rect>
+      </property>
+     </widget>
+     <widget class="QLineEdit" name="DaMa_txtLine_BackDay">
+      <property name="geometry">
+       <rect>
+        <x>60</x>
+        <y>140</y>
+        <width>231</width>
+        <height>21</height>
+       </rect>
+      </property>
+     </widget>
+     <widget class="QLabel" name="DaMa_lbl_Stock_Item">
+      <property name="geometry">
+       <rect>
+        <x>60</x>
+        <y>70</y>
         <width>201</width>
         <height>16</height>
        </rect>
       </property>
       <property name="text">
-       <string>To choose DataSet</string>
+       <string>Stock Item</string>
+      </property>
+     </widget>
+     <widget class="QLineEdit" name="DaMa_txtLine_DateTime">
+      <property name="geometry">
+       <rect>
+        <x>370</x>
+        <y>90</y>
+        <width>241</width>
+        <height>21</height>
+       </rect>
+      </property>
+     </widget>
+     <widget class="QLineEdit" name="DaMa_txtLine_PathCSV_File">
+      <property name="geometry">
+       <rect>
+        <x>370</x>
+        <y>140</y>
+        <width>241</width>
+        <height>21</height>
+       </rect>
+      </property>
+     </widget>
+     <widget class="QLabel" name="DaMa_lbl_DateTime">
+      <property name="geometry">
+       <rect>
+        <x>370</x>
+        <y>70</y>
+        <width>201</width>
+        <height>16</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Date time</string>
+      </property>
+     </widget>
+     <widget class="QLabel" name="DaMa_lbl_BackDays">
+      <property name="geometry">
+       <rect>
+        <x>60</x>
+        <y>120</y>
+        <width>201</width>
+        <height>16</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>BackDays</string>
+      </property>
+     </widget>
+     <widget class="QLabel" name="DaMa_lbl_PathCSVFile">
+      <property name="geometry">
+       <rect>
+        <x>370</x>
+        <y>120</y>
+        <width>201</width>
+        <height>16</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Path CSV file</string>
+      </property>
+     </widget>
+     <widget class="QRadioButton" name="DaMa_radioBtn_Open">
+      <property name="geometry">
+       <rect>
+        <x>40</x>
+        <y>200</y>
+        <width>100</width>
+        <height>20</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Open</string>
+      </property>
+     </widget>
+     <widget class="QLabel" name="DaMa_lbl_Columns">
+      <property name="geometry">
+       <rect>
+        <x>60</x>
+        <y>180</y>
+        <width>201</width>
+        <height>16</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Columns</string>
+      </property>
+     </widget>
+     <widget class="QRadioButton" name="DaMa_radioBtn_high">
+      <property name="geometry">
+       <rect>
+        <x>40</x>
+        <y>220</y>
+        <width>100</width>
+        <height>20</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>High</string>
+      </property>
+     </widget>
+     <widget class="QRadioButton" name="DaMa_radioBtn_Low">
+      <property name="geometry">
+       <rect>
+        <x>40</x>
+        <y>240</y>
+        <width>100</width>
+        <height>20</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Low</string>
+      </property>
+     </widget>
+     <widget class="QRadioButton" name="DaMa_radioBtn_Close">
+      <property name="geometry">
+       <rect>
+        <x>40</x>
+        <y>260</y>
+        <width>100</width>
+        <height>20</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Close</string>
+      </property>
+     </widget>
+     <widget class="QRadioButton" name="DaMa_radioBtn_DayNumber">
+      <property name="geometry">
+       <rect>
+        <x>240</x>
+        <y>200</y>
+        <width>100</width>
+        <height>20</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>DayNumber</string>
+      </property>
+     </widget>
+     <widget class="QRadioButton" name="DaMa_radioBtn_Open_FFT">
+      <property name="geometry">
+       <rect>
+        <x>120</x>
+        <y>200</y>
+        <width>100</width>
+        <height>20</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Open FFT</string>
+      </property>
+     </widget>
+     <widget class="QRadioButton" name="DaMa_radioBtn_HighFFT">
+      <property name="geometry">
+       <rect>
+        <x>120</x>
+        <y>220</y>
+        <width>100</width>
+        <height>20</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>High FFT</string>
+      </property>
+     </widget>
+     <widget class="QRadioButton" name="DaMa_radioBtn_Low_FFT">
+      <property name="geometry">
+       <rect>
+        <x>120</x>
+        <y>240</y>
+        <width>100</width>
+        <height>21</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Low FFT</string>
+      </property>
+     </widget>
+     <widget class="QRadioButton" name="DaMa_radioBtn_Close_FFT">
+      <property name="geometry">
+       <rect>
+        <x>120</x>
+        <y>260</y>
+        <width>100</width>
+        <height>21</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Close FFT</string>
+      </property>
+     </widget>
+     <widget class="QRadioButton" name="DaMa_radioBtn_Month_Number">
+      <property name="geometry">
+       <rect>
+        <x>240</x>
+        <y>220</y>
+        <width>111</width>
+        <height>20</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Month Number</string>
+      </property>
+     </widget>
+     <widget class="QRadioButton" name="DaMa_radioBtn_DayMonth">
+      <property name="geometry">
+       <rect>
+        <x>240</x>
+        <y>240</y>
+        <width>100</width>
+        <height>20</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>DayMonth</string>
+      </property>
+     </widget>
+     <widget class="QRadioButton" name="DaMa_radioBtn_Year">
+      <property name="geometry">
+       <rect>
+        <x>240</x>
+        <y>260</y>
+        <width>100</width>
+        <height>20</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Year</string>
+      </property>
+     </widget>
+     <widget class="QRadioButton" name="DaMa_radioBtn_Volume">
+      <property name="geometry">
+       <rect>
+        <x>40</x>
+        <y>280</y>
+        <width>100</width>
+        <height>20</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Volume</string>
+      </property>
+     </widget>
+     <widget class="QRadioButton" name="DaMa_radioBtn_Volume_FFT">
+      <property name="geometry">
+       <rect>
+        <x>120</x>
+        <y>280</y>
+        <width>100</width>
+        <height>20</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Volume FFT</string>
+      </property>
+     </widget>
+     <widget class="QCheckBox" name="checkBox">
+      <property name="geometry">
+       <rect>
+        <x>30</x>
+        <y>320</y>
+        <width>87</width>
+        <height>20</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>CheckBox</string>
+      </property>
+     </widget>
+     <widget class="QCheckBox" name="checkBox_2">
+      <property name="geometry">
+       <rect>
+        <x>30</x>
+        <y>350</y>
+        <width>87</width>
+        <height>20</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>CheckBox</string>
       </property>
      </widget>
     </widget>
