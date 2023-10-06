@@ -44,6 +44,12 @@ class Ui_GUI_LSTM_FORCASTER(object):
         
         self.Model_c.execute(query)
         self.SeedData_SLCT_all=self.Model_c.fetchall()
+        
+        ## model Data; getting all data
+        query="SELECT * FROM Models"
+        
+        self.Model_c.execute(query)
+        self.ModelsData_SLCT_all=self.Model_c.fetchall()
     
     def setupUi(self, GUI_LSTM_FORCASTER):
         GUI_LSTM_FORCASTER.setObjectName("GUI_LSTM_FORCASTER")
@@ -178,13 +184,13 @@ class Ui_GUI_LSTM_FORCASTER(object):
         self.Tabs.addTab(self.Data_Manager_tab, "")
         self.ModCrtion = QtWidgets.QWidget()
         self.ModCrtion.setObjectName("ModCrtion")
-        self.label_14 = QtWidgets.QLabel(self.ModCrtion)
-        self.label_14.setGeometry(QtCore.QRect(160, 340, 60, 16))
-        self.label_14.setObjectName("label_14")
-        self.DaMa_LoadBar_UpdateData_2 = QtWidgets.QProgressBar(self.ModCrtion)
-        self.DaMa_LoadBar_UpdateData_2.setGeometry(QtCore.QRect(160, 350, 411, 41))
-        self.DaMa_LoadBar_UpdateData_2.setProperty("value", 24)
-        self.DaMa_LoadBar_UpdateData_2.setObjectName("DaMa_LoadBar_UpdateData_2")
+        self.Model_C_LBL_Progres = QtWidgets.QLabel(self.ModCrtion)
+        self.Model_C_LBL_Progres.setGeometry(QtCore.QRect(160, 340, 450, 16))
+        self.Model_C_LBL_Progres.setObjectName("Model_C_LBL_Progres")
+        self.Model_C_LdBar = QtWidgets.QProgressBar(self.ModCrtion)
+        self.Model_C_LdBar.setGeometry(QtCore.QRect(160, 350, 411, 41))
+        self.Model_C_LdBar.setProperty("value", 24)
+        self.Model_C_LdBar.setObjectName("Model_C_LdBar")
         self.Model_C_txtLine_LSTM1 = QtWidgets.QLineEdit(self.ModCrtion)
         self.Model_C_txtLine_LSTM1.setGeometry(QtCore.QRect(20, 90, 270, 25))
         self.Model_C_txtLine_LSTM1.setObjectName("Model_C_txtLine_LSTM1")
@@ -194,9 +200,6 @@ class Ui_GUI_LSTM_FORCASTER(object):
         self.Model_C_PB_Create_M = QtWidgets.QPushButton(self.ModCrtion)
         self.Model_C_PB_Create_M.setGeometry(QtCore.QRect(40, 260, 221, 71))
         self.Model_C_PB_Create_M.setObjectName("Model_C_PB_Create_M")
-        self.Model_C_LBL_Int_Seed_Data = QtWidgets.QLabel(self.ModCrtion)
-        self.Model_C_LBL_Int_Seed_Data.setGeometry(QtCore.QRect(20, 10, 181, 16))
-        self.Model_C_LBL_Int_Seed_Data.setObjectName("Model_C_LBL_Int_Seed_Data")
         self.Model_C_txtLine_Lyr_Dns = QtWidgets.QLineEdit(self.ModCrtion)
         self.Model_C_txtLine_Lyr_Dns.setGeometry(QtCore.QRect(360, 30, 270, 25))
         self.Model_C_txtLine_Lyr_Dns.setObjectName("Model_C_txtLine_Lyr_Dns")
@@ -233,19 +236,40 @@ class Ui_GUI_LSTM_FORCASTER(object):
         self.Model_C_LBL_Colums = QtWidgets.QLabel(self.ModCrtion)
         self.Model_C_LBL_Colums.setGeometry(QtCore.QRect(360, 190, 180, 16))
         self.Model_C_LBL_Colums.setObjectName("Model_C_LBL_Colums")
+        
+        self.Model_C_LBL_BackDays = QtWidgets.QLabel(self.ModCrtion)
+        self.Model_C_LBL_BackDays.setGeometry(QtCore.QRect(20, 10, 181, 16))
+        self.Model_C_LBL_BackDays.setObjectName("Model_C_LBL_BackDays")
+        self.Model_C_txtLine_BackDays = QtWidgets.QLineEdit(self.ModCrtion)
+        self.Model_C_txtLine_BackDays.setGeometry(QtCore.QRect(20, 30, 131, 25))
+        
+        self.Model_C_txtLine_BackDays.setObjectName("Model_C_txtLine_LryDCoeff")
+        
         self.Model_C_LBL_Int_Model = QtWidgets.QLabel(self.ModCrtion)
         self.Model_C_LBL_Int_Model.setGeometry(QtCore.QRect(280, 260, 180, 16))
         self.Model_C_LBL_Int_Model.setObjectName("Model_C_LBL_Int_Model")
-        self.Model_C_txtLine_Int_Model = QtWidgets.QComboBox(self.ModCrtion)
-        self.Model_C_txtLine_Int_Model.setGeometry(QtCore.QRect(280, 280, 141, 25))
-        self.Model_C_txtLine_Int_Model.setObjectName("Model_C_txtLine_Int_Model")
+        
+        self.Model_C_ComBox_Int_Model = QtWidgets.QComboBox(self.ModCrtion)
+        self.Model_C_ComBox_Int_Model.setGeometry(QtCore.QRect(280, 280, 141, 25))
+        self.Model_C_ComBox_Int_Model.setObjectName("Model_C_ComBox_Int_Model")
+        self.Model_C_ComBox_Int_Model.clear()
+        for i in self.ModelsData_SLCT_all: #ComboBox is updated
+            Current_Row=i[0]
+            self.Model_C_ComBox_Int_Model.addItem(str(Current_Row))
+        
+        self.Model_C_LBL_Int_Seed_Data = QtWidgets.QLabel(self.ModCrtion)
+        self.Model_C_LBL_Int_Seed_Data.setGeometry(QtCore.QRect(195, 10, 180, 26))
+        self.Model_C_LBL_Int_Seed_Data.setObjectName("Model_C_LBL_Int_Seed_Data")   
+        
         self.Model_C_ComBox_Int_Seed_Data = QtWidgets.QComboBox(self.ModCrtion)
-        self.Model_C_ComBox_Int_Seed_Data.setGeometry(QtCore.QRect(20, 30, 131, 26))
+        self.Model_C_ComBox_Int_Seed_Data.setGeometry(QtCore.QRect(195, 30, 100, 26))
         self.Model_C_ComBox_Int_Seed_Data.setObjectName("Model_C_ComBox_Int_Seed_Data")
+        
         self.Model_C_ComBox_Int_Seed_Data.clear() #When starting app, combobox is updated
         for i in self.SeedData_SLCT_all: #ComboBox is updated
             Current_Row=i[0]
             self.Model_C_ComBox_Int_Seed_Data.addItem(str(Current_Row))
+        self.SeedDataComboBoxChanged() 
         
         
         self.Tabs.addTab(self.ModCrtion, "")
@@ -261,11 +285,13 @@ class Ui_GUI_LSTM_FORCASTER(object):
         
         #---------- General emit signals ---------
         self.Model_C_ComBox_Int_Seed_Data.currentIndexChanged.connect(self.SeedDataComboBoxChanged)
-        
-        
+        self.Model_C_ComBox_Int_Model.currentIndexChanged.connect(self.ModelsComboBoxChanged)
+            
         #--------- thread emit signals -----------
         #self.notes_retriver.Update_Progress.connect(self.Event_UpdateProgress_SP)
         self.model_creator.Update_ModelCreationStatus.connect(self.Event_ModelCreationStatus)
+        self.model_creator.Update_Progress.connect(self.Event_UpdateProgress_SP)
+        self.model_creator.Update_Progress_String.connect(self.Event_UpdateProgress_string)
         
          
          #####  Buttons calls #####
@@ -312,7 +338,8 @@ class Ui_GUI_LSTM_FORCASTER(object):
         self.label_12.setText(_translate("GUI_LSTM_FORCASTER", "Ready"))
         self.DaMa_lbl_ChooseDataset.setText(_translate("GUI_LSTM_FORCASTER", "To choose DataSet"))
         self.Tabs.setTabText(self.Tabs.indexOf(self.Data_Manager_tab), _translate("GUI_LSTM_FORCASTER", "Data manager"))
-        self.label_14.setText(_translate("GUI_LSTM_FORCASTER", "Ready"))
+        self.Model_C_LBL_Progres.setText(_translate("GUI_LSTM_FORCASTER", "Ready"))
+        self.Model_C_LdBar.setProperty("value",0)
         self.Model_C_PB_Create_M.setText(_translate("GUI_LSTM_FORCASTER", "Create model"))
         self.Model_C_LBL_Int_Seed_Data.setText(_translate("GUI_LSTM_FORCASTER", "#Int Seed_Data"))
         self.Model_C_LBL_LSTM1.setText(_translate("GUI_LSTM_FORCASTER", "LSTM_1_#Units"))
@@ -323,7 +350,9 @@ class Ui_GUI_LSTM_FORCASTER(object):
         self.Model_C_LBL_OptAdam_Co.setText(_translate("GUI_LSTM_FORCASTER", "Optmzer_Adam_Coeff"))
         self.Model_C_LBL_Colums.setText(_translate("GUI_LSTM_FORCASTER", "Colums_N"))
         self.Model_C_LBL_Int_Model.setText(_translate("GUI_LSTM_FORCASTER", "#Int_model"))
+        self.Model_C_LBL_BackDays.setText(_translate("GUI_LSTM_FORCASTER", "#BackDays"))
         self.Tabs.setTabText(self.Tabs.indexOf(self.ModCrtion), _translate("GUI_LSTM_FORCASTER", "Model Creation"))
+        #self.UpdateObjectsTabAPI()
         
     
     ###########################################
@@ -335,7 +364,7 @@ class Ui_GUI_LSTM_FORCASTER(object):
     def Create_New_Model(self):
         matching=False
         CurrentSeedDataRow=0
-        
+        BackDays=self.Model_C_txtLine_BackDays.text()
         LSTM1_Units=self.Model_C_txtLine_LSTM1.text()
         LSTM2_Units=self.Model_C_txtLine_LSTM2.text()
         LryDcoeff=self.Model_C_txtLine_LryDCoeff.text()
@@ -345,11 +374,11 @@ class Ui_GUI_LSTM_FORCASTER(object):
         Colums=self.Model_C_txtLine_Colums.text()
         
         #Check if seed data already exist
-        matching,matching_row=self.Check_Matching_DataSeed(Colums,LSTM1_Units,LSTM2_Units,LryDcoeff,Lyr_Dns,Lyr_Dn_Rgzr,OptAdam_Co)
+        matching,matching_row=self.Check_Matching_DataSeed(Colums,LSTM1_Units,LSTM2_Units,LryDcoeff,Lyr_Dns,Lyr_Dn_Rgzr,OptAdam_Co,BackDays)
         
         #new seed data is created; if at least a feature has been changed
         if matching==False:
-            self.Create_new_DataSeed_DB(Colums,LSTM1_Units,LSTM2_Units,LryDcoeff,Lyr_Dns,Lyr_Dn_Rgzr,OptAdam_Co)
+            self.Create_new_DataSeed_DB(Colums,LSTM1_Units,LSTM2_Units,LryDcoeff,Lyr_Dns,Lyr_Dn_Rgzr,OptAdam_Co,BackDays)
             query="SELECT * FROM Seed_Data WHERE Seed_Data_id=(SELECT max(Seed_Data_id) FROM Seed_Data)"
             self.Model_c.execute(query)
             ContentList=self.Model_c.fetchall()
@@ -368,13 +397,18 @@ class Ui_GUI_LSTM_FORCASTER(object):
         query="SELECT * FROM Models WHERE Model_id=(SELECT max(Model_id) FROM Models)"
         self.Model_c.execute(query)
         Last_Model_row=self.Model_c.fetchall()
-        for j in Last_Model_row: 
-            LastModelRow=j[0]
+        print(Last_Model_row)
+        if Last_Model_row==[]:
+            LastModelRow=0
+        else:    
+            for j in Last_Model_row: 
+                LastModelRow=j[0]
+                print(LastModelRow)
         self.model_creator.Set_Last_model_Crated(LastModelRow)
         
         #Model is created (thread)
        
-        self.model_creator.Set_SeedParam(CurrentSeedDataRow,LSTM1_Units,LSTM2_Units,LryDcoeff,Lyr_Dns,Lyr_Dn_Rgzr,OptAdam_Co,Colums)
+        self.model_creator.Set_SeedParam(CurrentSeedDataRow,LSTM1_Units,LSTM2_Units,LryDcoeff,Lyr_Dns,Lyr_Dn_Rgzr,OptAdam_Co,Colums,BackDays)
         
         self.model_creator.start()
         
@@ -383,17 +417,20 @@ class Ui_GUI_LSTM_FORCASTER(object):
     #            General Fucntions            #
     ###########################################
     
-    ############ TAB Model Creator  ############ 
-    
-    def Event_ModelCreationStatus(self,val):
-        date_Time,Path_Model,N_epochs_Done,Seed_Data_id_FRGN,DataSet_id_FRGN=self.model_creator.Get_NewModelData()
-        NewModelStatus=self.model_creator.GetModelCreationStatus()
-        print(NewModelStatus)
-
-        if val:
-            self.Creare_new_model_DB(date_Time,Path_Model,N_epochs_Done,Seed_Data_id_FRGN,DataSet_id_FRGN)
-            print("Model Created :'D")
+    ############ TAB Model Creator  ############   
+    def ModelsComboBoxChanged(self):
+        Model_Selected=self.Model_C_ComBox_Int_Model.currentText()
         
+        query="SELECT * FROM Models WHERE Model_id=?"
+        
+        self.Model_c.execute(query,(Model_Selected,))
+        Select_Model=self.Model_c.fetchall()
+
+        for i in Select_Model:   
+            SeedDataModel=i[4]
+        index= self.Model_C_ComBox_Int_Seed_Data.findText(str(SeedDataModel),QtCore.Qt.MatchFixedString)
+        self.Model_C_ComBox_Int_Seed_Data.setCurrentIndex(index)  
+         
     
     def SeedDataComboBoxChanged(self):
         Item_Selected=self.Model_C_ComBox_Int_Seed_Data.currentText()
@@ -403,19 +440,23 @@ class Ui_GUI_LSTM_FORCASTER(object):
         self.Model_c.execute(query,(Item_Selected,))
         Select_SeedData=self.Model_c.fetchall()
 
-        for i in Select_SeedData:    
+        for i in Select_SeedData:  
             self.Model_C_txtLine_LSTM1.setText(str(i[2]))
             self.Model_C_txtLine_LSTM2.setText(str(i[3]))
             self.Model_C_txtLine_LryDCoeff.setText(str(i[4]))
             self.Model_C_txtLine_Lyr_Dns.setText(str(i[5]))
             self.Model_C_Lyr_Dn_Rgzr.setText(str(i[6]))
             self.Model_C_txtLine_OptAdam_Co.setText(str(i[7]))
+            self.Model_C_txtLine_BackDays.setText(str(i[8]))
             self.Model_C_txtLine_Colums.setText(str(i[1]))
     
     def AddinElementComoBoxDataSeed(self,val1):
         self.Model_C_ComBox_Int_Seed_Data.addItem(str(val1))
+    
+    def AddinElementComoBoxModelData(self,val1):
+        self.Model_C_ComBox_Int_Model.addItem(str(val1))
           
-    def Check_Matching_DataSeed(self,val_1,val_2,val_3,val_4,val_5,val_6,val_7):
+    def Check_Matching_DataSeed(self,val_1,val_2,val_3,val_4,val_5,val_6,val_7,val_8):
         Matching=False
         Matching_Row=0
         Matching_Val1=False
@@ -425,6 +466,7 @@ class Ui_GUI_LSTM_FORCASTER(object):
         Matching_Val5=False
         Matching_Val6=False
         Matching_Val7=False
+        Matching_Val8=False
         
         ##Seed_Data; Getting all data 
         query="SELECT * FROM Seed_Data"
@@ -455,8 +497,11 @@ class Ui_GUI_LSTM_FORCASTER(object):
             
             if str(i[7])==str(val_7): Matching_Val7=True 
             else: Matching_Val7=False
+            
+            if str(i[8])==str(val_8): Matching_Val8=True 
+            else: Matching_Val8=False
 
-            if Matching_Val1 and Matching_Val2 and Matching_Val3 and Matching_Val4 and Matching_Val5 and Matching_Val6 and Matching_Val7==True:
+            if Matching_Val1 and Matching_Val2 and Matching_Val3 and Matching_Val4 and Matching_Val5 and Matching_Val6 and Matching_Val7 and Matching_Val8==True:
                 Matching=True
                 break
             else:
@@ -464,12 +509,12 @@ class Ui_GUI_LSTM_FORCASTER(object):
         
         return Matching,Matching_Row
         
-    def Create_new_DataSeed_DB(self,val_1,val_2,val_3,val_4,val_5,val_6,val_7):
+    def Create_new_DataSeed_DB(self,val_1,val_2,val_3,val_4,val_5,val_6,val_7,val_8):
         
-        query=""" INSERT INTO Seed_Data (Columns_N,LSTM_1_N_Units, LSTM_2_N_Units,Lyr_Drop_Coeff,Lyr_Dns_N_Units,Lyr_Dns_Rgzr_Coeff,Optmzer_Adam_Coeff)
-         VALUES (?,?,?,?,?,?,?)"""
+        query=""" INSERT INTO Seed_Data (Columns_N,LSTM_1_N_Units, LSTM_2_N_Units,Lyr_Drop_Coeff,Lyr_Dns_N_Units,Lyr_Dns_Rgzr_Coeff,Optmzer_Adam_Coeff,BackDays)
+         VALUES (?,?,?,?,?,?,?,?)"""
 
-        self.Model_c.execute(query,(val_1,val_2,val_3,val_4,val_5,val_6,val_7)) 
+        self.Model_c.execute(query,(val_1,val_2,val_3,val_4,val_5,val_6,val_7,val_8)) 
         
         #Validate changes to our DB 
         self.Model_DB_conn.commit()
@@ -491,7 +536,31 @@ class Ui_GUI_LSTM_FORCASTER(object):
         #Validate changes to our DB 
         self.Model_DB_conn.commit()
         print("was created new model")
+
+    ##### Emit thread signals
+    
+    def Event_ModelCreationStatus(self,val):
+        date_Time,Path_Model,N_epochs_Done,Seed_Data_id_FRGN,DataSet_id_FRGN=self.model_creator.Get_NewModelData()
+        NewModelStatus=self.model_creator.GetModelCreationStatus()
+        print(NewModelStatus)
+
+        if val:
+            self.Creare_new_model_DB(date_Time,Path_Model,N_epochs_Done,Seed_Data_id_FRGN,DataSet_id_FRGN)
+            print("Model Created :'D")
+            modelJustCreated=self.model_creator.Get_Last_model_Create()+1
+            self.AddinElementComoBoxModelData(modelJustCreated)
+            index= self.Model_C_ComBox_Int_Model.findText(str(modelJustCreated),QtCore.Qt.MatchFixedString)
+            self.Model_C_ComBox_Int_Model.setCurrentIndex(index)
+            
+    
+    def Event_UpdateProgress_SP(self,val):
+        self.Model_C_LdBar.setProperty("value",val)
         
+        
+    def Event_UpdateProgress_string(self,val): 
+        self.Model_C_LBL_Progres.setText(val)
+            
+                  
 if __name__ == "__main__":
     import sys
     app = QtWidgets.QApplication(sys.argv)
