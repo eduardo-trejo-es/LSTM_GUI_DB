@@ -19,12 +19,23 @@ class DL_Model(QThread):
     ReadyToSend_Progress = pyqtSignal(int)
     Update_Progress = pyqtSignal(int)
     Update_Progress_String = pyqtSignal(str)"""
+    Update_ModelCreationStatus = pyqtSignal(bool)
+    
+    
     
     def __init__(self):
         super().__init__()
         keras.backend.clear_session()  # Reseteo sencillo
+        ### Model Data ###
+        self.date_Time=""
+        self.Path_Model=""
+        self.N_epochs_Done=0
+        self.DataSet_id_FRGN=0
+        self.ModelCreationStatus=False
         
-    def Set_SeedParam(self,val_1,val_2,val_3,val_4,val_5,val_6,val_7):#---------Layes are created
+    def Set_SeedParam(self,val_0,val_1,val_2,val_3,val_4,val_5,val_6,val_7):#---------Layes are created
+        ### Data Seed ####
+        self.Seed_Data_id_FRGN=val_0
         self.LSTM1_Units=val_1
         self.LSTM2_Units=val_2
         self.LryDcoeff=val_3
@@ -34,12 +45,39 @@ class DL_Model(QThread):
         self.Colums=val_7
         
         
+        
+    def Get_NewModelData(self):
+        return self.date_Time,self.Path_Model,self.N_epochs_Done,self.Seed_Data_id_FRGN,self.DataSet_id_FRGN
+    
+    def GetModelCreationStatus(self):
+        return self.ModelCreationStatus
+    
+    def Set_Last_model_Crated(self,val):
+        self.last_model_Created_N=val
+        
+        
+        
     def run(self):
+        self.Update_ModelCreationStatus.emit(False)
         time.sleep(5)
-        print("Hello World Model Creator")
-        print("From Thread "+str(self.LSTM1_Units))
-        print("From Thread "+str(self.LSTM2_Units))
         #self.Update_Progress.emit(self.progess)
+        
+        ### Model Data ###
+        self.date_Time="octube1"
+        self.Path_Model="path/2"
+        self.N_epochs_Done=0
+        #SeedData is set at Set_SeedParam
+        self.DataSet_id_FRGN=0
+        last_model_Created_N=int(self.last_model_Created_N)+1
+        
+        #Note work: to know the next modelid works, this will be used to set the path model name
+        #would be grate if I can test this predict next model id when is empty
+        # Whats next: set the parameters and finally create the model :D
+        
+        print("the next model ID will be: " +str(last_model_Created_N))
+        
+        self.Update_ModelCreationStatus.emit(True)
+        
         """n_future = 1   # Number of units(day, min, hour, etc..) we want to look into the future based on the past days.
         n_past =5
         OneColum=False

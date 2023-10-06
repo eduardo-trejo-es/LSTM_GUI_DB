@@ -265,6 +265,7 @@ class Ui_GUI_LSTM_FORCASTER(object):
         
         #--------- thread emit signals -----------
         #self.notes_retriver.Update_Progress.connect(self.Event_UpdateProgress_SP)
+        self.model_creator.Update_ModelCreationStatus.connect(self.Event_ModelCreationStatus)
         
          
          #####  Buttons calls #####
@@ -348,7 +349,7 @@ class Ui_GUI_LSTM_FORCASTER(object):
         
         #new seed data is created; if at least a feature has been changed
         if matching==False:
-            self.Create_new_DataSeed(Colums,LSTM1_Units,LSTM2_Units,LryDcoeff,Lyr_Dns,Lyr_Dn_Rgzr,OptAdam_Co)
+            self.Create_new_DataSeed_DB(Colums,LSTM1_Units,LSTM2_Units,LryDcoeff,Lyr_Dns,Lyr_Dn_Rgzr,OptAdam_Co)
             query="SELECT * FROM Seed_Data WHERE Seed_Data_id=(SELECT max(Seed_Data_id) FROM Seed_Data)"
             self.Model_c.execute(query)
             ContentList=self.Model_c.fetchall()
@@ -364,18 +365,17 @@ class Ui_GUI_LSTM_FORCASTER(object):
         self.Model_C_ComBox_Int_Seed_Data.setCurrentIndex(index) #To set the item, consider (item from 1) (index from 0)    
         
         
-        
+        query="SELECT * FROM Models WHERE Model_id=(SELECT max(Model_id) FROM Models)"
+        self.Model_c.execute(query)
+        Last_Model_row=self.Model_c.fetchall()
+        for j in Last_Model_row: 
+            LastModelRow=j[0]
+        self.model_creator.Set_Last_model_Crated(LastModelRow)
         
         #Model is created (thread)
+       
+        self.model_creator.Set_SeedParam(CurrentSeedDataRow,LSTM1_Units,LSTM2_Units,LryDcoeff,Lyr_Dns,Lyr_Dn_Rgzr,OptAdam_Co,Colums)
         
-        print(LSTM1_Units)
-        print(LSTM2_Units)
-        print(LryDcoeff)
-        print(Lyr_Dns)
-        print(Lyr_Dn_Rgzr)
-        print(OptAdam_Co)
-        print(Colums)
-        self.model_creator.Set_SeedParam(LSTM1_Units,LSTM2_Units,LryDcoeff,Lyr_Dns,Lyr_Dn_Rgzr,OptAdam_Co,Colums)
         self.model_creator.start()
         
         
@@ -384,6 +384,16 @@ class Ui_GUI_LSTM_FORCASTER(object):
     ###########################################
     
     ############ TAB Model Creator  ############ 
+    
+    def Event_ModelCreationStatus(self,val):
+        date_Time,Path_Model,N_epochs_Done,Seed_Data_id_FRGN,DataSet_id_FRGN=self.model_creator.Get_NewModelData()
+        NewModelStatus=self.model_creator.GetModelCreationStatus()
+        print(NewModelStatus)
+
+        if val:
+            self.Creare_new_model_DB(date_Time,Path_Model,N_epochs_Done,Seed_Data_id_FRGN,DataSet_id_FRGN)
+            print("Model Created :'D")
+        
     
     def SeedDataComboBoxChanged(self):
         Item_Selected=self.Model_C_ComBox_Int_Seed_Data.currentText()
@@ -454,7 +464,7 @@ class Ui_GUI_LSTM_FORCASTER(object):
         
         return Matching,Matching_Row
         
-    def Create_new_DataSeed(self,val_1,val_2,val_3,val_4,val_5,val_6,val_7):
+    def Create_new_DataSeed_DB(self,val_1,val_2,val_3,val_4,val_5,val_6,val_7):
         
         query=""" INSERT INTO Seed_Data (Columns_N,LSTM_1_N_Units, LSTM_2_N_Units,Lyr_Drop_Coeff,Lyr_Dns_N_Units,Lyr_Dns_Rgzr_Coeff,Optmzer_Adam_Coeff)
          VALUES (?,?,?,?,?,?,?)"""
@@ -465,6 +475,23 @@ class Ui_GUI_LSTM_FORCASTER(object):
         self.Model_DB_conn.commit()
         print("was created new dataseed")
 
+    def Creare_new_model_DB(self,val_1,val_2,val_3,val_4,val_5):
+
+        """date_Time TEXT,
+        Path_Model TEXT,
+        N_epochs_Done INTEGER,
+        Seed_Data_id_FRGN INTEGER,
+        DataSet_id_FRGN INTEGER"""
+        
+        query=""" INSERT INTO Models (date_Time,Path_Model, N_epochs_Done,Seed_Data_id_FRGN,DataSet_id_FRGN)
+         VALUES (?,?,?,?,?)"""
+
+        self.Model_c.execute(query,(val_1,val_2,val_3,val_4,val_5)) 
+        
+        #Validate changes to our DB 
+        self.Model_DB_conn.commit()
+        print("was created new model")
+        
 if __name__ == "__main__":
     import sys
     app = QtWidgets.QApplication(sys.argv)
