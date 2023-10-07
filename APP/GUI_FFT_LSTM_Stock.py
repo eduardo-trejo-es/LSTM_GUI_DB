@@ -192,8 +192,11 @@ class Ui_GUI_LSTM_FORCASTER(object):
         self.DaMa_txtLine_Stock_Item.setGeometry(QtCore.QRect(60, 90, 231, 21))
         self.DaMa_txtLine_Stock_Item.setObjectName("DaMa_txtLine_Stock_Item")
         self.DaMa_txtLine_BackDay = QtWidgets.QLineEdit(self.Data_Manager_tab)
-        self.DaMa_txtLine_BackDay.setGeometry(QtCore.QRect(60, 140, 231, 21))
+        self.DaMa_txtLine_BackDay.setGeometry(QtCore.QRect(60, 140, 80, 21))
         self.DaMa_txtLine_BackDay.setObjectName("DaMa_txtLine_BackDay")
+        self.DaMa_txtLine_FFT_Frec = QtWidgets.QLineEdit(self.Data_Manager_tab)
+        self.DaMa_txtLine_FFT_Frec.setGeometry(QtCore.QRect(210, 140, 80, 21))
+        self.DaMa_txtLine_FFT_Frec.setObjectName("DaMa_txtLine_FFT_Frec")
         self.DaMa_lbl_Stock_Item = QtWidgets.QLabel(self.Data_Manager_tab)
         self.DaMa_lbl_Stock_Item.setGeometry(QtCore.QRect(60, 70, 201, 16))
         self.DaMa_lbl_Stock_Item.setObjectName("DaMa_lbl_Stock_Item")
@@ -207,64 +210,60 @@ class Ui_GUI_LSTM_FORCASTER(object):
         self.DaMa_lbl_DateTime.setGeometry(QtCore.QRect(370, 70, 201, 16))
         self.DaMa_lbl_DateTime.setObjectName("DaMa_lbl_DateTime")
         self.DaMa_lbl_BackDays = QtWidgets.QLabel(self.Data_Manager_tab)
-        self.DaMa_lbl_BackDays.setGeometry(QtCore.QRect(60, 120, 201, 16))
+        self.DaMa_lbl_BackDays.setGeometry(QtCore.QRect(60, 120, 80, 16))
         self.DaMa_lbl_BackDays.setObjectName("DaMa_lbl_BackDays")
+        self.DaMa_lbl_FFT_Frec = QtWidgets.QLabel(self.Data_Manager_tab)
+        self.DaMa_lbl_FFT_Frec.setGeometry(QtCore.QRect(210, 120, 80, 16))
+        self.DaMa_lbl_FFT_Frec.setObjectName("DaMa_lbl_FFT_Frec")
         self.DaMa_lbl_PathCSVFile = QtWidgets.QLabel(self.Data_Manager_tab)
         self.DaMa_lbl_PathCSVFile.setGeometry(QtCore.QRect(370, 120, 201, 16))
         self.DaMa_lbl_PathCSVFile.setObjectName("DaMa_lbl_PathCSVFile")
-        self.DaMa_radioBtn_Open = QtWidgets.QCheckBox(self.Data_Manager_tab)
-        self.DaMa_radioBtn_Open.setGeometry(QtCore.QRect(40, 200, 100, 20))
-        self.DaMa_radioBtn_Open.setObjectName("DaMa_radioBtn_Open")
+        self.DaMa_CheckBox_Open = QtWidgets.QCheckBox(self.Data_Manager_tab)
+        self.DaMa_CheckBox_Open.setGeometry(QtCore.QRect(40, 200, 100, 20))
+        self.DaMa_CheckBox_Open.setObjectName("DaMa_CheckBox_Open")
         self.DaMa_lbl_Columns = QtWidgets.QLabel(self.Data_Manager_tab)
         self.DaMa_lbl_Columns.setGeometry(QtCore.QRect(60, 180, 201, 16))
         self.DaMa_lbl_Columns.setObjectName("DaMa_lbl_Columns")
-        self.DaMa_radioBtn_high = QtWidgets.QCheckBox(self.Data_Manager_tab)
-        self.DaMa_radioBtn_high.setGeometry(QtCore.QRect(40, 220, 100, 20))
-        self.DaMa_radioBtn_high.setObjectName("DaMa_radioBtn_high")
-        self.DaMa_radioBtn_Low = QtWidgets.QCheckBox(self.Data_Manager_tab)
-        self.DaMa_radioBtn_Low.setGeometry(QtCore.QRect(40, 240, 100, 20))
-        self.DaMa_radioBtn_Low.setObjectName("DaMa_radioBtn_Low")
-        self.DaMa_radioBtn_Close = QtWidgets.QCheckBox(self.Data_Manager_tab)
-        self.DaMa_radioBtn_Close.setGeometry(QtCore.QRect(40, 260, 100, 20))
-        self.DaMa_radioBtn_Close.setObjectName("DaMa_radioBtn_Close")
-        self.DaMa_radioBtn_DayNumber = QtWidgets.QCheckBox(self.Data_Manager_tab)
-        self.DaMa_radioBtn_DayNumber.setGeometry(QtCore.QRect(240, 200, 100, 20))
-        self.DaMa_radioBtn_DayNumber.setObjectName("DaMa_radioBtn_DayNumber")
-        self.DaMa_radioBtn_Open_FFT = QtWidgets.QCheckBox(self.Data_Manager_tab)
-        self.DaMa_radioBtn_Open_FFT.setGeometry(QtCore.QRect(120, 200, 100, 20))
-        self.DaMa_radioBtn_Open_FFT.setObjectName("DaMa_radioBtn_Open_FFT")
-        self.DaMa_radioBtn_HighFFT = QtWidgets.QCheckBox(self.Data_Manager_tab)
-        self.DaMa_radioBtn_HighFFT.setGeometry(QtCore.QRect(120, 220, 100, 20))
-        self.DaMa_radioBtn_HighFFT.setObjectName("DaMa_radioBtn_HighFFT")
-        self.DaMa_radioBtn_Low_FFT = QtWidgets.QCheckBox(self.Data_Manager_tab)
-        self.DaMa_radioBtn_Low_FFT.setGeometry(QtCore.QRect(120, 240, 100, 21))
-        self.DaMa_radioBtn_Low_FFT.setObjectName("DaMa_radioBtn_Low_FFT")
-        
-        self.DaMa_radioBtn_Close_FFT = QtWidgets.QCheckBox(self.Data_Manager_tab)
-        self.DaMa_radioBtn_Close_FFT.setGeometry(QtCore.QRect(120, 260, 100, 21))
-        self.DaMa_radioBtn_Close_FFT.setObjectName("DaMa_radioBtn_Close_FFT")
-        
-        self.DaMa_radioBtn_Month_Number = QtWidgets.QCheckBox(self.Data_Manager_tab)
-        self.DaMa_radioBtn_Month_Number.setGeometry(QtCore.QRect(240, 220, 111, 20))
-        self.DaMa_radioBtn_Month_Number.setObjectName("DaMa_radioBtn_Month_Number")
-        
-        self.DaMa_radioBtn_DayMonth = QtWidgets.QCheckBox(self.Data_Manager_tab)
-        self.DaMa_radioBtn_DayMonth.setGeometry(QtCore.QRect(240, 240, 100, 20))
-        self.DaMa_radioBtn_DayMonth.setObjectName("DaMa_radioBtn_DayMonth")
-        
-        self.DaMa_radioBtn_Year = QtWidgets.QCheckBox(self.Data_Manager_tab)
-        self.DaMa_radioBtn_Year.setGeometry(QtCore.QRect(240, 260, 100, 20))
-        self.DaMa_radioBtn_Year.setObjectName("DaMa_radioBtn_Year")
-        
-        self.DaMa_radioBtn_Volume = QtWidgets.QCheckBox(self.Data_Manager_tab)
-        self.DaMa_radioBtn_Volume.setGeometry(QtCore.QRect(40, 280, 100, 20))
-        self.DaMa_radioBtn_Volume.setObjectName("DaMa_radioBtn_Volume")
-        
-        self.DaMa_radioBtn_Volume_FFT = QtWidgets.QCheckBox(self.Data_Manager_tab)
-        self.DaMa_radioBtn_Volume_FFT.setGeometry(QtCore.QRect(120, 280, 100, 20))
-        self.DaMa_radioBtn_Volume_FFT.setObjectName("DaMa_radioBtn_Volume_FFT")
+        self.DaMa_CheckBox_High = QtWidgets.QCheckBox(self.Data_Manager_tab)
+        self.DaMa_CheckBox_High.setGeometry(QtCore.QRect(40, 220, 100, 20))
+        self.DaMa_CheckBox_High.setObjectName("DaMa_CheckBox_high")
+        self.DaMa_CheckBox_Low = QtWidgets.QCheckBox(self.Data_Manager_tab)
+        self.DaMa_CheckBox_Low.setGeometry(QtCore.QRect(40, 240, 100, 20))
+        self.DaMa_CheckBox_Low.setObjectName("DaMa_CheckBox_Low")
+        self.DaMa_CheckBox_Close = QtWidgets.QCheckBox(self.Data_Manager_tab)
+        self.DaMa_CheckBox_Close.setGeometry(QtCore.QRect(40, 260, 100, 20))
+        self.DaMa_CheckBox_Close.setObjectName("DaMa_CheckBox_Close")
+        self.DaMa_CheckBox_DayNumber = QtWidgets.QCheckBox(self.Data_Manager_tab)
+        self.DaMa_CheckBox_DayNumber.setGeometry(QtCore.QRect(240, 200, 100, 20))
+        self.DaMa_CheckBox_DayNumber.setObjectName("DaMa_CheckBox_DayNumber")
+        self.DaMa_CheckBox_Open_FFT = QtWidgets.QCheckBox(self.Data_Manager_tab)
+        self.DaMa_CheckBox_Open_FFT.setGeometry(QtCore.QRect(120, 200, 100, 20))
+        self.DaMa_CheckBox_Open_FFT.setObjectName("DaMa_CheckBox_Open_FFT")
+        self.DaMa_CheckBox_High_FFT = QtWidgets.QCheckBox(self.Data_Manager_tab)
+        self.DaMa_CheckBox_High_FFT.setGeometry(QtCore.QRect(120, 220, 100, 20))
+        self.DaMa_CheckBox_High_FFT.setObjectName("DaMa_CheckBox_HighFFT")
+        self.DaMa_CheckBox_Low_FFT = QtWidgets.QCheckBox(self.Data_Manager_tab)
+        self.DaMa_CheckBox_Low_FFT.setGeometry(QtCore.QRect(120, 240, 100, 21))
+        self.DaMa_CheckBox_Low_FFT.setObjectName("DaMa_CheckBox_Low_FFT")
+        self.DaMa_CheckBox_Close_FFT = QtWidgets.QCheckBox(self.Data_Manager_tab)
+        self.DaMa_CheckBox_Close_FFT.setGeometry(QtCore.QRect(120, 260, 100, 21))
+        self.DaMa_CheckBox_Close_FFT.setObjectName("DaMa_CheckBox_Close_FFT")
+        self.DaMa_CheckBox_Month_Number = QtWidgets.QCheckBox(self.Data_Manager_tab)
+        self.DaMa_CheckBox_Month_Number.setGeometry(QtCore.QRect(240, 220, 111, 20))
+        self.DaMa_CheckBox_Month_Number.setObjectName("DaMa_CheckBox_Month_Number")
+        self.DaMa_CheckBox_DayMonth = QtWidgets.QCheckBox(self.Data_Manager_tab)
+        self.DaMa_CheckBox_DayMonth.setGeometry(QtCore.QRect(240, 240, 100, 20))
+        self.DaMa_CheckBox_DayMonth.setObjectName("DaMa_CheckBox_DayMonth")
+        self.DaMa_CheckBox_Year = QtWidgets.QCheckBox(self.Data_Manager_tab)
+        self.DaMa_CheckBox_Year.setGeometry(QtCore.QRect(240, 260, 100, 20))
+        self.DaMa_CheckBox_Year.setObjectName("DaMa_CheckBox_Year")
+        self.DaMa_CheckBox_Volume = QtWidgets.QCheckBox(self.Data_Manager_tab)
+        self.DaMa_CheckBox_Volume.setGeometry(QtCore.QRect(40, 280, 100, 20))
+        self.DaMa_CheckBox_Volume.setObjectName("DaMa_CheckBox_Volume")
+        self.DaMa_CheckBox_Volume_FFT = QtWidgets.QCheckBox(self.Data_Manager_tab)
+        self.DaMa_CheckBox_Volume_FFT.setGeometry(QtCore.QRect(120, 280, 100, 20))
+        self.DaMa_CheckBox_Volume_FFT.setObjectName("DaMa_CheckBox_Volume_FFT")
         self.Tabs.addTab(self.Data_Manager_tab, "")
-        
         self.ModCrtion = QtWidgets.QWidget()
         self.ModCrtion.setObjectName("ModCrtion")
         self.Model_C_LBL_Progres = QtWidgets.QLabel(self.ModCrtion)
@@ -335,15 +334,12 @@ class Ui_GUI_LSTM_FORCASTER(object):
         for i in self.ModelsData_SLCT_all: #ComboBox is updated
             Current_Row=i[0]
             self.Model_C_ComBox_Int_Model.addItem(str(Current_Row))
-        
         self.Model_C_LBL_Int_Seed_Data = QtWidgets.QLabel(self.ModCrtion)
         self.Model_C_LBL_Int_Seed_Data.setGeometry(QtCore.QRect(195, 10, 180, 26))
         self.Model_C_LBL_Int_Seed_Data.setObjectName("Model_C_LBL_Int_Seed_Data")   
-        
         self.Model_C_ComBox_Int_Seed_Data = QtWidgets.QComboBox(self.ModCrtion)
         self.Model_C_ComBox_Int_Seed_Data.setGeometry(QtCore.QRect(195, 30, 100, 26))
         self.Model_C_ComBox_Int_Seed_Data.setObjectName("Model_C_ComBox_Int_Seed_Data")
-        
         self.Model_C_ComBox_Int_Seed_Data.clear() #When starting app, combobox is updated
         for i in self.SeedData_SLCT_all: #ComboBox is updated
             Current_Row=i[0]
@@ -367,7 +363,6 @@ class Ui_GUI_LSTM_FORCASTER(object):
         self.Model_C_ComBox_Int_Model.currentIndexChanged.connect(self.ModelsComboBoxChanged)
             
         #--------- thread emit signals -----------
-        #self.notes_retriver.Update_Progress.connect(self.Event_UpdateProgress_SP)
         self.model_creator.Update_ModelCreationStatus.connect(self.Event_ModelCreationStatus)
         self.model_creator.Update_Progress.connect(self.Event_UpdateProgress_ModelCreator)
         self.model_creator.Update_Progress_String.connect(self.Event_UpdateProgress_string_ModelCreator)
@@ -375,11 +370,11 @@ class Ui_GUI_LSTM_FORCASTER(object):
          
          #####  Buttons calls #####
     
-            ### Tab API Conf  
+            ### Tab Model creator  
         self.Model_C_PB_Create_M.clicked.connect(self.Create_New_Model)
         
-            ### TabSendNotes
-        #self.SenNo_PB_Clear.clicked.connect(self.SenNo_Clear)
+            ### Data Manager
+        self.DaMa_btn_Create.clicked.connect(self.CreateDataSet)
        
         
             ### TabAppComments
@@ -388,7 +383,7 @@ class Ui_GUI_LSTM_FORCASTER(object):
 
     def retranslateUi(self, GUI_LSTM_FORCASTER):
         _translate = QtCore.QCoreApplication.translate
-        GUI_LSTM_FORCASTER.setWindowTitle(_translate("GUI_LSTM_FORCASTER", "MainWindow"))
+        GUI_LSTM_FORCASTER.setWindowTitle(_translate("GUI_LSTM_FORCASTER", "Stock_Forcastig_Interface"))
         self.BaCon_lbl_ChooseModel.setText(_translate("GUI_LSTM_FORCASTER", "To choose the model"))
         self.BaCon_lbl_DatasetBelongs.setText(_translate("GUI_LSTM_FORCASTER", "Dataset that belongs to model"))
         self.BaCon_btn_SetConfig.setText(_translate("GUI_LSTM_FORCASTER", "Set Config"))
@@ -420,22 +415,23 @@ class Ui_GUI_LSTM_FORCASTER(object):
         self.DaMa_lbl_Stock_Item.setText(_translate("GUI_LSTM_FORCASTER", "Stock Item"))
         self.DaMa_lbl_DateTime.setText(_translate("GUI_LSTM_FORCASTER", "Date time"))
         self.DaMa_lbl_BackDays.setText(_translate("GUI_LSTM_FORCASTER", "BackDays"))
+        self.DaMa_lbl_FFT_Frec.setText(_translate("GUI_LSTM_FORCASTER", "FFT_frec"))
         self.DaMa_lbl_PathCSVFile.setText(_translate("GUI_LSTM_FORCASTER", "Path CSV file"))
-        self.DaMa_radioBtn_Open.setText(_translate("GUI_LSTM_FORCASTER", "Open"))
+        self.DaMa_CheckBox_Open.setText(_translate("GUI_LSTM_FORCASTER", "Open"))
         self.DaMa_lbl_Columns.setText(_translate("GUI_LSTM_FORCASTER", "Columns"))
-        self.DaMa_radioBtn_high.setText(_translate("GUI_LSTM_FORCASTER", "High"))
-        self.DaMa_radioBtn_Low.setText(_translate("GUI_LSTM_FORCASTER", "Low"))
-        self.DaMa_radioBtn_Close.setText(_translate("GUI_LSTM_FORCASTER", "Close"))
-        self.DaMa_radioBtn_DayNumber.setText(_translate("GUI_LSTM_FORCASTER", "DayNumber"))
-        self.DaMa_radioBtn_Open_FFT.setText(_translate("GUI_LSTM_FORCASTER", "Open FFT"))
-        self.DaMa_radioBtn_HighFFT.setText(_translate("GUI_LSTM_FORCASTER", "High FFT"))
-        self.DaMa_radioBtn_Low_FFT.setText(_translate("GUI_LSTM_FORCASTER", "Low FFT"))
-        self.DaMa_radioBtn_Close_FFT.setText(_translate("GUI_LSTM_FORCASTER", "Close FFT"))
-        self.DaMa_radioBtn_Month_Number.setText(_translate("GUI_LSTM_FORCASTER", "Month Number"))
-        self.DaMa_radioBtn_DayMonth.setText(_translate("GUI_LSTM_FORCASTER", "DayMonth"))
-        self.DaMa_radioBtn_Year.setText(_translate("GUI_LSTM_FORCASTER", "Year"))
-        self.DaMa_radioBtn_Volume.setText(_translate("GUI_LSTM_FORCASTER", "Volume"))
-        self.DaMa_radioBtn_Volume_FFT.setText(_translate("GUI_LSTM_FORCASTER", "Volume FFT"))
+        self.DaMa_CheckBox_High.setText(_translate("GUI_LSTM_FORCASTER", "High"))
+        self.DaMa_CheckBox_Low.setText(_translate("GUI_LSTM_FORCASTER", "Low"))
+        self.DaMa_CheckBox_Close.setText(_translate("GUI_LSTM_FORCASTER", "Close"))
+        self.DaMa_CheckBox_DayNumber.setText(_translate("GUI_LSTM_FORCASTER", "DayNumber"))
+        self.DaMa_CheckBox_Open_FFT.setText(_translate("GUI_LSTM_FORCASTER", "Open FFT"))
+        self.DaMa_CheckBox_High_FFT.setText(_translate("GUI_LSTM_FORCASTER", "High FFT"))
+        self.DaMa_CheckBox_Low_FFT.setText(_translate("GUI_LSTM_FORCASTER", "Low FFT"))
+        self.DaMa_CheckBox_Close_FFT.setText(_translate("GUI_LSTM_FORCASTER", "Close FFT"))
+        self.DaMa_CheckBox_Month_Number.setText(_translate("GUI_LSTM_FORCASTER", "Month Number"))
+        self.DaMa_CheckBox_DayMonth.setText(_translate("GUI_LSTM_FORCASTER", "DayMonth"))
+        self.DaMa_CheckBox_Year.setText(_translate("GUI_LSTM_FORCASTER", "Year"))
+        self.DaMa_CheckBox_Volume.setText(_translate("GUI_LSTM_FORCASTER", "Volume"))
+        self.DaMa_CheckBox_Volume_FFT.setText(_translate("GUI_LSTM_FORCASTER", "Volume FFT"))
         self.Tabs.setTabText(self.Tabs.indexOf(self.Data_Manager_tab), _translate("GUI_LSTM_FORCASTER", "Data manager"))
         self.Model_C_LBL_Progres.setText(_translate("GUI_LSTM_FORCASTER", "Ready"))
         self.Model_C_LdBar.setProperty("value",0)
@@ -650,7 +646,50 @@ class Ui_GUI_LSTM_FORCASTER(object):
     def Event_UpdateProgress_string_ModelCreator(self,val): 
         self.Model_C_LBL_Progres.setText(val)
             
-                  
+       
+    ###########################################
+    #              TAB Data Manager           #
+    ###########################################
+    
+    ############### Bottons functions  ################   
+    def CreateDataSet(self):
+        matching=False
+        CurrentSeedDataRow=0
+        Item = self.DaMa_txtLine_Stock_Item.text()
+        BackDays = self.DaMa_txtLine_BackDay.text()
+        FFT_Frec = self.DaMa_txtLine_FFT_Frec.text()
+        Open_C = self.DaMa_CheckBox_Open.isChecked()
+        
+        High_C = self.DaMa_CheckBox_High.isChecked()
+        Low_C = self.DaMa_CheckBox_Low.isChecked()
+        Close_C = self.DaMa_CheckBox_Close.isChecked()
+        Volume_C = self.DaMa_CheckBox_Volume.isChecked()
+        Open_FFT_C = self.DaMa_CheckBox_Open_FFT.isChecked()
+        High_FFT_C = self.DaMa_CheckBox_High_FFT.isChecked()
+        Low_FFT_C = self.DaMa_CheckBox_Low_FFT.isChecked()
+        Close_FFT_C = self.DaMa_CheckBox_Close_FFT.isChecked()
+        Volum_FFT_C = self.DaMa_CheckBox_Volume_FFT.isChecked()
+        Day_Wk_N_C = self.DaMa_CheckBox_DayNumber.isChecked()
+        Month_N_C = self.DaMa_CheckBox_Month_Number.isChecked()
+        Day_Month_C =  self.DaMa_CheckBox_DayMonth.isChecked()
+        Year_C = self.DaMa_CheckBox_Year.isChecked()
+        
+        print(Item)
+        print(BackDays)
+        print(FFT_Frec)
+        print(Open_C)
+        print(Low_C)
+        print(Volume_C)
+        print(High_FFT_C)
+        print(Close_FFT_C)
+        print(Day_Wk_N_C)
+        print(Day_Month_C)
+        print(Year_C)
+
+        
+        
+        
+                      
 if __name__ == "__main__":
     import sys
     app = QtWidgets.QApplication(sys.argv)
