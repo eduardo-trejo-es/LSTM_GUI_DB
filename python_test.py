@@ -1,7 +1,5 @@
-b="3e-10"
+a=int(0)
 
-print(type(float(b)))
-c=5
-a="hola{}...{}".format(b,c)
+a=True
 
 print(a)

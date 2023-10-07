@@ -30,6 +30,7 @@ class Ui_GUI_LSTM_FORCASTER(object):
         #### PathFiles  ####
         
         ####  App Instances 
+        #Opening connection
         self.Model_DB_conn=sqlite3.connect('APP/DataStructures/Predict_model.db')
         #Create cursor
         self.Model_c = self.Model_DB_conn.cursor()
@@ -374,7 +375,8 @@ class Ui_GUI_LSTM_FORCASTER(object):
         self.Model_C_PB_Create_M.clicked.connect(self.Create_New_Model)
         
             ### Data Manager
-        self.DaMa_btn_Create.clicked.connect(self.CreateDataSet)
+        self.DaMa_btn_Create.clicked.connect(self.Create_DataSet)
+        self.DaMa_btn_Update.clicked.connect(self.Update_DataSet)
        
         
             ### TabAppComments
@@ -488,6 +490,7 @@ class Ui_GUI_LSTM_FORCASTER(object):
         self.Model_C_ComBox_Int_Seed_Data.setCurrentIndex(index) #To set the item, consider (item from 1) (index from 0)    
         
         
+        #Model is created (thread)
         query="SELECT * FROM Models WHERE Model_id=(SELECT max(Model_id) FROM Models)"
         self.Model_c.execute(query)
         Last_Model_row=self.Model_c.fetchall()
@@ -500,8 +503,6 @@ class Ui_GUI_LSTM_FORCASTER(object):
                 print(LastModelRow)
         self.model_creator.Set_Last_model_Crated(LastModelRow)
         
-        #Model is created (thread)
-       
         self.model_creator.Set_SeedParam(CurrentSeedDataRow,LSTM1_Units,LSTM2_Units,LryDcoeff,Lyr_Dns,Lyr_Dn_Rgzr,OptAdam_Co,Colums,BackDays)
         
         self.model_creator.start()
@@ -560,9 +561,9 @@ class Ui_GUI_LSTM_FORCASTER(object):
         query="SELECT * FROM Seed_Data"
          
         self.Model_c.execute(query)
-        SeedData_SLCT_all=self.Model_c.fetchall()
+        All_table_Data=self.Model_c.fetchall()
         
-        for i in SeedData_SLCT_all: 
+        for i in All_table_Data: 
             Matching_Row=i[0]
             
             if int(i[1])==int(val_1): Matching_Val1=True
@@ -608,7 +609,7 @@ class Ui_GUI_LSTM_FORCASTER(object):
         self.Model_DB_conn.commit()
         print("was created new dataseed")
 
-    def Creare_new_model_DB(self,val_1,val_2,val_3,val_4,val_5):
+    def Creare_new_model_in_DB(self,val_1,val_2,val_3,val_4,val_5):
 
         """date_Time TEXT,
         Path_Model TEXT,
@@ -633,7 +634,7 @@ class Ui_GUI_LSTM_FORCASTER(object):
         print(NewModelStatus)
 
         if val:
-            self.Creare_new_model_DB(date_Time,Path_Model,N_epochs_Done,Seed_Data_id_FRGN,DataSet_id_FRGN)
+            self.Creare_new_model_in_DB(date_Time,Path_Model,N_epochs_Done,Seed_Data_id_FRGN,DataSet_id_FRGN)
             print("Model Created :'D")
             modelJustCreated=self.model_creator.Get_Last_model_Create()+1
             self.AddinElementComoBoxModelData(modelJustCreated)
@@ -652,40 +653,208 @@ class Ui_GUI_LSTM_FORCASTER(object):
     ###########################################
     
     ############### Bottons functions  ################   
-    def CreateDataSet(self):
+    def Create_DataSet(self): 
         matching=False
         CurrentSeedDataRow=0
         Item = self.DaMa_txtLine_Stock_Item.text()
         BackDays = self.DaMa_txtLine_BackDay.text()
         FFT_Frec = self.DaMa_txtLine_FFT_Frec.text()
-        Open_C = self.DaMa_CheckBox_Open.isChecked()
         
-        High_C = self.DaMa_CheckBox_High.isChecked()
-        Low_C = self.DaMa_CheckBox_Low.isChecked()
-        Close_C = self.DaMa_CheckBox_Close.isChecked()
-        Volume_C = self.DaMa_CheckBox_Volume.isChecked()
-        Open_FFT_C = self.DaMa_CheckBox_Open_FFT.isChecked()
-        High_FFT_C = self.DaMa_CheckBox_High_FFT.isChecked()
-        Low_FFT_C = self.DaMa_CheckBox_Low_FFT.isChecked()
-        Close_FFT_C = self.DaMa_CheckBox_Close_FFT.isChecked()
-        Volum_FFT_C = self.DaMa_CheckBox_Volume_FFT.isChecked()
-        Day_Wk_N_C = self.DaMa_CheckBox_DayNumber.isChecked()
-        Month_N_C = self.DaMa_CheckBox_Month_Number.isChecked()
-        Day_Month_C =  self.DaMa_CheckBox_DayMonth.isChecked()
-        Year_C = self.DaMa_CheckBox_Year.isChecked()
+        if self.DaMa_CheckBox_Open.isChecked():Open_C=1
+        else: Open_C=0
         
-        print(Item)
-        print(BackDays)
-        print(FFT_Frec)
-        print(Open_C)
-        print(Low_C)
-        print(Volume_C)
-        print(High_FFT_C)
-        print(Close_FFT_C)
-        print(Day_Wk_N_C)
-        print(Day_Month_C)
-        print(Year_C)
+        if self.DaMa_CheckBox_High.isChecked():High_C=1
+        else: High_C=0
+        
+        if self.DaMa_CheckBox_Low.isChecked():Low_C=1
+        else: Low_C=0
+        
+        if self.DaMa_CheckBox_Close.isChecked():Close_C=1
+        else: Close_C=0
+        
+        if self.DaMa_CheckBox_Volume.isChecked():Volume_C=1
+        else: Volume_C=0
+        
+        if self.DaMa_CheckBox_Open_FFT.isChecked():Open_FFT_C=1
+        else:Open_FFT_C=0
+        
+        if self.DaMa_CheckBox_High_FFT.isChecked(): High_FFT_C=1
+        else:High_FFT_C=0
+        
+        if self.DaMa_CheckBox_Low_FFT.isChecked():Low_FFT_C=1
+        else: Low_FFT_C=0
+        
+        if self.DaMa_CheckBox_Close_FFT.isChecked():Close_FFT_C=1
+        else:Close_FFT_C=0
+        
+        if self.DaMa_CheckBox_Volume_FFT.isChecked(): Volum_FFT_C=1
+        else:Volum_FFT_C=0
+        
+        if self.DaMa_CheckBox_DayNumber.isChecked():Day_Wk_N_C=1
+        else:Day_Wk_N_C=0
+        
+        if self.DaMa_CheckBox_Month_Number.isChecked():Month_N_C=1
+        else:Month_N_C=0
+        
+        if self.DaMa_CheckBox_DayMonth.isChecked(): Day_Month_C=1
+        else: Day_Month_C=0
+        
+        if self.DaMa_CheckBox_Year.isChecked():Year_C=1
+        else:Year_C=0
+        
+        #Check if seed data already exist
+        matching,matching_row=self.Check_Matching_Seed_DataSet(Item,BackDays,Open_C ,High_C,Low_C,Close_C ,Volume_C,Open_FFT_C ,High_FFT_C ,Low_FFT_C,
+                                                           Close_FFT_C ,Volum_FFT_C ,Day_Wk_N_C ,Month_N_C ,Day_Month_C ,Year_C ,FFT_Frec)
+        
+        #new seed data is created; if at least a feature has been changed
+        if matching==False:
+            self.Create_new_SeedDataSet_DB(Item,BackDays,Open_C ,High_C,Low_C,Close_C ,Volume_C,Open_FFT_C ,High_FFT_C ,Low_FFT_C,
+                                        Close_FFT_C ,Volum_FFT_C ,Day_Wk_N_C ,Month_N_C ,Day_Month_C ,Year_C ,FFT_Frec)
+            query="SELECT * FROM Seed_DataSet WHERE SeedDataSet_id=(SELECT max(SeedDataSet_id) FROM Seed_DataSet)"
+            self.Model_c.execute(query)
+            ContentList=self.Model_c.fetchall()
+            for i in ContentList: 
+                CurrentSeedDataRow=i[0]
+            #Adding to Combo Box the data seed just created
+            self.AddinElementComoBoxSeed_DataSet(CurrentSeedDataRow)
+        else:
+            CurrentSeedDataRow=matching_row
+        
+    
+    def Update_DataSet(self):
+        pass 
 
+    ############ General Fucntions  ############
+    def ModelsComboBoxChanged(self):
+        pass
+    
+    def SeedDataComboBoxChanged(self):
+        pass
+    
+    def AddinElementComoBoxSeed_DataSet(self,val1):
+        self.DaMa_ComBox_Seed_DataSet.addItem(str(val1))
+        
+    def AddinElementComoBoxModelData(self):
+        pass
+        
+    def Check_Matching_Seed_DataSet(self,val_1,val_2,val_3,val_4,val_5,val_6,val_7,val_8,
+                                    val_9,val_10,val_11,val_12,val_13,val_14,val_15,val_16,val_17):
+        Matching=False
+        Matching_Row=0
+        Matching_Val1=False
+        Matching_Val2=False
+        Matching_Val3=False
+        Matching_Val4=False
+        Matching_Val5=False
+        Matching_Val6=False
+        Matching_Val7=False
+        Matching_Val8=False
+        Matching_Val9=False
+        Matching_Val10=False
+        Matching_Val11=False
+        Matching_Val12=False
+        Matching_Val13=False
+        Matching_Val14=False
+        Matching_Val15=False
+        Matching_Val16=False
+        Matching_Val17=False
+        
+        ##Seed_Data; Getting all data 
+        query="SELECT * FROM Seed_DataSet"
+         
+        self.Model_c.execute(query)
+        All_table_Data=self.Model_c.fetchall()
+        
+        for i in All_table_Data: 
+            Matching_Row=i[0]
+            
+            if str(i[1])==str(val_1): Matching_Val1=True
+            else: Matching_Val1=False
+
+            if int(i[2])==int(val_2): Matching_Val2=True 
+            else: Matching_Val2=False
+            
+            if int(i[3])==int(val_3): Matching_Val3=True 
+            else: Matching_Val3=False
+            
+            if int(i[4])==int(val_4): Matching_Val4=True 
+            else: Matching_Val4=False
+            
+            if int(i[5])==int(val_5): Matching_Val5=True 
+            else: Matching_Val5=False
+            
+            if int(i[6])==int(val_6): Matching_Val6=True 
+            else: Matching_Val6=False
+            
+            if int(i[7])==int(val_7): Matching_Val7=True 
+            else: Matching_Val7=False
+            
+            if int(i[8])==int(val_8): Matching_Val8=True 
+            else: Matching_Val8=False
+            
+            if int(i[9])==int(val_9): Matching_Val8=True 
+            else: Matching_Val9=False
+            
+            if int(i[10])==int(val_10): Matching_Val8=True 
+            else: Matching_Val10=False
+            
+            if int(i[11])==int(val_11): Matching_Val8=True 
+            else: Matching_Val11=False
+            
+            if int(i[12])==int(val_12): Matching_Val8=True 
+            else: Matching_Val12=False
+            
+            if int(i[13])==int(val_13): Matching_Val8=True 
+            else: Matching_Val13=False
+            
+            if int(i[14])==int(val_14): Matching_Val8=True 
+            else: Matching_Val14=False
+            
+            if int(i[15])==int(val_15): Matching_Val8=True 
+            else: Matching_Val15=False
+            
+            if int(i[16])==int(val_16): Matching_Val8=True 
+            else: Matching_Val16=False
+            
+            if int(i[17])==int(val_17): Matching_Val8=True 
+            else: Matching_Val17=False
+
+            if (Matching_Val1 and Matching_Val2 and Matching_Val3 and Matching_Val4 and Matching_Val5 and Matching_Val6 and Matching_Val7 and Matching_Val8
+                and Matching_Val9 and Matching_Val10 and Matching_Val11 and Matching_Val12 and Matching_Val13 and Matching_Val14 and Matching_Val15 and 
+                Matching_Val16 and Matching_Val17==True):
+                Matching=True
+                break
+            else:
+                Matching_Row=0
+        
+        return Matching,Matching_Row
+        
+    def Create_new_SeedDataSet_DB(self,val_1,val_2,val_3,val_4,val_5,val_6,val_7,val_8,
+                                    val_9,val_10,val_11,val_12,val_13,val_14,val_15,val_16,val_17):
+        
+        query=""" INSERT INTO Seed_DataSet (Item,BackDays,Open_C ,High_C,Low_C,Close_C ,Volume_C,Open_FFT_C ,High_FFT_C ,Low_FFT_C,
+                                        Close_FFT_C ,Volum_FFT_C ,Day_Wk_N_C ,Month_N_C ,Day_Month_C ,Year_C ,FFT_Frec)
+         VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)"""
+
+        self.Model_c.execute(query,(val_1,val_2,val_3,val_4,val_5,val_6,val_7,val_8,val_9,
+                                    val_10,val_11,val_12,val_13,val_14,val_15,val_16,val_17)) 
+        
+        #Validate changes to our DB 
+        self.Model_DB_conn.commit()
+        print("was created new Seed_dataSet")
+        
+        
+    def Creare_new_model_in_DB(self):
+        pass
+    
+    ##### Emit thread signals
+    
+    def Event_ModelCreationStatus(self):
+        pass
+    def Event_UpdateProgress_ModelCreator(self):
+        pass
+    def Event_UpdateProgress_string_ModelCreator(self):
+        pass
         
         
         
