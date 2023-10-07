@@ -513,7 +513,7 @@
        <rect>
         <x>60</x>
         <y>140</y>
-        <width>231</width>
+        <width>80</width>
         <height>21</height>
        </rect>
       </property>
@@ -569,7 +569,7 @@
        <rect>
         <x>60</x>
         <y>120</y>
-        <width>201</width>
+        <width>80</width>
         <height>16</height>
        </rect>
       </property>
@@ -785,23 +785,33 @@
        <string>Volume FFT</string>
       </property>
      </widget>
-     <widget class="QCheckBox" name="checkBox">
+     <widget class="QLineEdit" name="DaMa_txtLine_FFT_Frec">
       <property name="geometry">
        <rect>
-        <x>30</x>
-        <y>320</y>
-        <width>87</width>
-        <height>20</height>
+        <x>210</x>
+        <y>140</y>
+        <width>80</width>
+        <height>21</height>
+       </rect>
+      </property>
+     </widget>
+     <widget class="QLabel" name="DaMa_lbl_FFT_Frec">
+      <property name="geometry">
+       <rect>
+        <x>210</x>
+        <y>120</y>
+        <width>80</width>
+        <height>16</height>
        </rect>
       </property>
       <property name="text">
-       <string>CheckBox</string>
+       <string>FFT_Frec</string>
       </property>
      </widget>
-     <widget class="QCheckBox" name="checkBox_2">
+     <widget class="QCheckBox" name="checkBox">
       <property name="geometry">
        <rect>
-        <x>30</x>
+        <x>40</x>
         <y>350</y>
         <width>87</width>
         <height>20</height>
