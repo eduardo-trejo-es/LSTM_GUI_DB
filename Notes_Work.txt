@@ -1,0 +1,6 @@
+Seed Data set is saved but there is a problem:
+even if I didn't changed the config, a new seed Data Seet is created
+
+
+DataSet are been saved but doesn't show the data like : date time Path seed DataSet id
+missing to created the function combobox changed

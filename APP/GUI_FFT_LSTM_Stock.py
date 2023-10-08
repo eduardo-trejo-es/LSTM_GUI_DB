@@ -19,6 +19,7 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 import sqlite3
 
 from Model_Creator import DL_Model
+from DataSet_Creator import DL_DataSet
 
 #To see easy the db file is to drag bdfiel into:  https://inloop.github.io/sqlite-viewer/
 #or by using the command c.execute('SELECT * FROM estudiantes")
@@ -31,26 +32,43 @@ class Ui_GUI_LSTM_FORCASTER(object):
         
         ####  App Instances 
         #Opening connection
-        self.Model_DB_conn=sqlite3.connect('APP/DataStructures/Predict_model.db')
+        self.Forcaster_DB_conn=sqlite3.connect('APP/DataStructures/Predict_model.db')
         #Create cursor
-        self.Model_c = self.Model_DB_conn.cursor()
+        self.Forcaster_DB_c = self.Forcaster_DB_conn.cursor()
         
-        ### Class Model Creator
+        ### Classes 
+        # Model Creator
         self.model_creator = DL_Model() 
+        # DataSet creator
+        self.DataSet_creator = DL_DataSet() 
         
         ## global var init
         
         ##Seed_Data; Getting all data 
         query="SELECT * FROM Seed_Data"
         
-        self.Model_c.execute(query)
-        self.SeedData_SLCT_all=self.Model_c.fetchall()
+        self.Forcaster_DB_c.execute(query)
+        self.SeedData_SLCT_all=self.Forcaster_DB_c.fetchall()
         
         ## model Data; getting all data
         query="SELECT * FROM Models"
         
-        self.Model_c.execute(query)
-        self.ModelsData_SLCT_all=self.Model_c.fetchall()
+        self.Forcaster_DB_c.execute(query)
+        self.ModelsData_SLCT_all=self.Forcaster_DB_c.fetchall()
+        
+        ## SeedDataSet; Getting all data
+        query="SELECT * FROM Seed_DataSet"
+        
+        self.Forcaster_DB_c.execute(query)
+        self.SeedDataSet_all=self.Forcaster_DB_c.fetchall()
+        
+        ## DataSet; Getting all data
+        query="SELECT * FROM DataSet"
+        
+        self.Forcaster_DB_c.execute(query)
+        self.DataSet_all=self.Forcaster_DB_c.fetchall()
+        
+        
     
     def setupUi(self, GUI_LSTM_FORCASTER):
         GUI_LSTM_FORCASTER.setObjectName("GUI_LSTM_FORCASTER")
@@ -177,15 +195,15 @@ class Ui_GUI_LSTM_FORCASTER(object):
         self.DaMa_Lbl_Progres = QtWidgets.QLabel(self.Data_Manager_tab)
         self.DaMa_Lbl_Progres.setGeometry(QtCore.QRect(150, 330, 291, 16))
         self.DaMa_Lbl_Progres.setObjectName("DaMa_Lbl_Progres")
-        self.DaMa_ComBox_Seed_DataSet = QtWidgets.QComboBox(self.Data_Manager_tab)
-        self.DaMa_ComBox_Seed_DataSet.setGeometry(QtCore.QRect(60, 40, 101, 26))
-        self.DaMa_ComBox_Seed_DataSet.setObjectName("DaMa_ComBox_Seed_DataSet")
+        
+        
+        
         self.DaMa_lbl_DataSetId = QtWidgets.QLabel(self.Data_Manager_tab)
         self.DaMa_lbl_DataSetId.setGeometry(QtCore.QRect(370, 20, 91, 16))
         self.DaMa_lbl_DataSetId.setObjectName("DaMa_lbl_DataSetId")
-        self.DaMa_ComBox_DataSet_Id = QtWidgets.QComboBox(self.Data_Manager_tab)
-        self.DaMa_ComBox_DataSet_Id.setGeometry(QtCore.QRect(370, 40, 101, 26))
-        self.DaMa_ComBox_DataSet_Id.setObjectName("DaMa_ComBox_DataSet_Id")
+
+        
+        
         self.DaMa_btn_Create = QtWidgets.QPushButton(self.Data_Manager_tab)
         self.DaMa_btn_Create.setGeometry(QtCore.QRect(370, 200, 113, 101))
         self.DaMa_btn_Create.setObjectName("DaMa_btn_Create")
@@ -264,7 +282,26 @@ class Ui_GUI_LSTM_FORCASTER(object):
         self.DaMa_CheckBox_Volume_FFT = QtWidgets.QCheckBox(self.Data_Manager_tab)
         self.DaMa_CheckBox_Volume_FFT.setGeometry(QtCore.QRect(120, 280, 100, 20))
         self.DaMa_CheckBox_Volume_FFT.setObjectName("DaMa_CheckBox_Volume_FFT")
+        
+        self.DaMa_ComBox_DataSet_Id = QtWidgets.QComboBox(self.Data_Manager_tab)
+        self.DaMa_ComBox_DataSet_Id.setGeometry(QtCore.QRect(370, 40, 101, 26))
+        self.DaMa_ComBox_DataSet_Id.setObjectName("DaMa_ComBox_DataSet_Id")
+        self.DaMa_ComBox_DataSet_Id.clear() #When starting app, combobox is updated
+        for i in self.DataSet_all: #ComboBox is updated
+            Current_Row=i[0]
+            self.DaMa_ComBox_DataSet_Id.addItem(str(Current_Row))
+        
+        self.DaMa_ComBox_Seed_DataSet = QtWidgets.QComboBox(self.Data_Manager_tab)
+        self.DaMa_ComBox_Seed_DataSet.setGeometry(QtCore.QRect(60, 40, 101, 26))
+        self.DaMa_ComBox_Seed_DataSet.setObjectName("DaMa_ComBox_Seed_DataSet")
+        self.DaMa_ComBox_Seed_DataSet.clear() #When starting app, combobox is updated
+        for i in self.SeedDataSet_all: #ComboBox is updated
+            Current_Row=i[0]
+            self.DaMa_ComBox_Seed_DataSet.addItem(str(Current_Row))
+        self.SeedDataSetComboBoxChanged() 
+        
         self.Tabs.addTab(self.Data_Manager_tab, "")
+        
         self.ModCrtion = QtWidgets.QWidget()
         self.ModCrtion.setObjectName("ModCrtion")
         self.Model_C_LBL_Progres = QtWidgets.QLabel(self.ModCrtion)
@@ -346,6 +383,7 @@ class Ui_GUI_LSTM_FORCASTER(object):
             Current_Row=i[0]
             self.Model_C_ComBox_Int_Seed_Data.addItem(str(Current_Row))
         self.SeedDataComboBoxChanged() 
+        
         self.Tabs.addTab(self.ModCrtion, "")
         
         
@@ -359,14 +397,22 @@ class Ui_GUI_LSTM_FORCASTER(object):
         QtCore.QMetaObject.connectSlotsByName(GUI_LSTM_FORCASTER)
         
         
-        #---------- General emit signals ---------
+        #---------- GENERAL EMIT SIGNALS ---------
+        ########## Tab Model Creator
         self.Model_C_ComBox_Int_Seed_Data.currentIndexChanged.connect(self.SeedDataComboBoxChanged)
         self.Model_C_ComBox_Int_Model.currentIndexChanged.connect(self.ModelsComboBoxChanged)
+        ########## Tab DataManagement
+        self.DaMa_ComBox_Seed_DataSet.currentIndexChanged.connect(self.SeedDataSetComboBoxChanged)
+        self.DaMa_ComBox_DataSet_Id.currentIndexChanged.connect(self.DataSetComboBoxChanged)
             
-        #--------- thread emit signals -----------
+        #---------THREAD EMIT SIGNALS -----------
+        ########## Tab Model Creator
         self.model_creator.Update_ModelCreationStatus.connect(self.Event_ModelCreationStatus)
         self.model_creator.Update_Progress.connect(self.Event_UpdateProgress_ModelCreator)
         self.model_creator.Update_Progress_String.connect(self.Event_UpdateProgress_string_ModelCreator)
+        ########## Tab DataManagement
+        self.DataSet_creator.Update_DataSetCreationStatus.connect(self.Event_DataSetCreationStatus)
+        
         
          
          #####  Buttons calls #####
@@ -476,8 +522,8 @@ class Ui_GUI_LSTM_FORCASTER(object):
         if matching==False:
             self.Create_new_DataSeed_DB(Colums,LSTM1_Units,LSTM2_Units,LryDcoeff,Lyr_Dns,Lyr_Dn_Rgzr,OptAdam_Co,BackDays)
             query="SELECT * FROM Seed_Data WHERE Seed_Data_id=(SELECT max(Seed_Data_id) FROM Seed_Data)"
-            self.Model_c.execute(query)
-            ContentList=self.Model_c.fetchall()
+            self.Forcaster_DB_c.execute(query)
+            ContentList=self.Forcaster_DB_c.fetchall()
             for i in ContentList: 
                 CurrentSeedDataRow=i[0]
             #Adding to Combo Box the data seed just created
@@ -492,15 +538,13 @@ class Ui_GUI_LSTM_FORCASTER(object):
         
         #Model is created (thread)
         query="SELECT * FROM Models WHERE Model_id=(SELECT max(Model_id) FROM Models)"
-        self.Model_c.execute(query)
-        Last_Model_row=self.Model_c.fetchall()
-        print(Last_Model_row)
+        self.Forcaster_DB_c.execute(query)
+        Last_Model_row=self.Forcaster_DB_c.fetchall()
         if Last_Model_row==[]:
             LastModelRow=0
         else:    
             for j in Last_Model_row: 
                 LastModelRow=j[0]
-                print(LastModelRow)
         self.model_creator.Set_Last_model_Crated(LastModelRow)
         
         self.model_creator.Set_SeedParam(CurrentSeedDataRow,LSTM1_Units,LSTM2_Units,LryDcoeff,Lyr_Dns,Lyr_Dn_Rgzr,OptAdam_Co,Colums,BackDays)
@@ -513,8 +557,8 @@ class Ui_GUI_LSTM_FORCASTER(object):
         
         query="SELECT * FROM Models WHERE Model_id=?"
         
-        self.Model_c.execute(query,(Model_Selected,))
-        Select_Model=self.Model_c.fetchall()
+        self.Forcaster_DB_c.execute(query,(Model_Selected,))
+        Select_Model=self.Forcaster_DB_c.fetchall()
 
         for i in Select_Model:   
             SeedDataModel=i[4]
@@ -526,8 +570,8 @@ class Ui_GUI_LSTM_FORCASTER(object):
         
         query="SELECT * FROM Seed_Data WHERE Seed_Data_id=?"
         
-        self.Model_c.execute(query,(Item_Selected,))
-        Select_SeedData=self.Model_c.fetchall()
+        self.Forcaster_DB_c.execute(query,(Item_Selected,))
+        Select_SeedData=self.Forcaster_DB_c.fetchall()
 
         for i in Select_SeedData:  
             self.Model_C_txtLine_LSTM1.setText(str(i[2]))
@@ -560,8 +604,8 @@ class Ui_GUI_LSTM_FORCASTER(object):
         ##Seed_Data; Getting all data 
         query="SELECT * FROM Seed_Data"
          
-        self.Model_c.execute(query)
-        All_table_Data=self.Model_c.fetchall()
+        self.Forcaster_DB_c.execute(query)
+        All_table_Data=self.Forcaster_DB_c.fetchall()
         
         for i in All_table_Data: 
             Matching_Row=i[0]
@@ -603,11 +647,10 @@ class Ui_GUI_LSTM_FORCASTER(object):
         query=""" INSERT INTO Seed_Data (Columns_N,LSTM_1_N_Units, LSTM_2_N_Units,Lyr_Drop_Coeff,Lyr_Dns_N_Units,Lyr_Dns_Rgzr_Coeff,Optmzer_Adam_Coeff,BackDays)
          VALUES (?,?,?,?,?,?,?,?)"""
 
-        self.Model_c.execute(query,(val_1,val_2,val_3,val_4,val_5,val_6,val_7,val_8)) 
+        self.Forcaster_DB_c.execute(query,(val_1,val_2,val_3,val_4,val_5,val_6,val_7,val_8)) 
         
         #Validate changes to our DB 
-        self.Model_DB_conn.commit()
-        print("was created new dataseed")
+        self.Forcaster_DB_conn.commit()
 
     def Creare_new_model_in_DB(self,val_1,val_2,val_3,val_4,val_5):
 
@@ -620,11 +663,10 @@ class Ui_GUI_LSTM_FORCASTER(object):
         query=""" INSERT INTO Models (date_Time,Path_Model, N_epochs_Done,Seed_Data_id_FRGN,DataSet_id_FRGN)
          VALUES (?,?,?,?,?)"""
 
-        self.Model_c.execute(query,(val_1,val_2,val_3,val_4,val_5)) 
+        self.Forcaster_DB_c.execute(query,(val_1,val_2,val_3,val_4,val_5)) 
         
         #Validate changes to our DB 
-        self.Model_DB_conn.commit()
-        print("was created new model")
+        self.Forcaster_DB_conn.commit()
 
     ##### Emit thread signals
     
@@ -658,8 +700,9 @@ class Ui_GUI_LSTM_FORCASTER(object):
         CurrentSeedDataRow=0
         Item = self.DaMa_txtLine_Stock_Item.text()
         BackDays = self.DaMa_txtLine_BackDay.text()
-        FFT_Frec = self.DaMa_txtLine_FFT_Frec.text()
         
+        
+        #Getting data from GUI
         if self.DaMa_CheckBox_Open.isChecked():Open_C=1
         else: Open_C=0
         
@@ -702,40 +745,119 @@ class Ui_GUI_LSTM_FORCASTER(object):
         if self.DaMa_CheckBox_Year.isChecked():Year_C=1
         else:Year_C=0
         
+        FFT_Frec = self.DaMa_txtLine_FFT_Frec.text()
+        
         #Check if seed data already exist
         matching,matching_row=self.Check_Matching_Seed_DataSet(Item,BackDays,Open_C ,High_C,Low_C,Close_C ,Volume_C,Open_FFT_C ,High_FFT_C ,Low_FFT_C,
                                                            Close_FFT_C ,Volum_FFT_C ,Day_Wk_N_C ,Month_N_C ,Day_Month_C ,Year_C ,FFT_Frec)
         
-        #new seed data is created; if at least a feature has been changed
+        #new seed dataSet is created; if at least a feature has been changed
         if matching==False:
             self.Create_new_SeedDataSet_DB(Item,BackDays,Open_C ,High_C,Low_C,Close_C ,Volume_C,Open_FFT_C ,High_FFT_C ,Low_FFT_C,
                                         Close_FFT_C ,Volum_FFT_C ,Day_Wk_N_C ,Month_N_C ,Day_Month_C ,Year_C ,FFT_Frec)
             query="SELECT * FROM Seed_DataSet WHERE SeedDataSet_id=(SELECT max(SeedDataSet_id) FROM Seed_DataSet)"
-            self.Model_c.execute(query)
-            ContentList=self.Model_c.fetchall()
+            self.Forcaster_DB_c.execute(query)
+            ContentList=self.Forcaster_DB_c.fetchall()
             for i in ContentList: 
                 CurrentSeedDataRow=i[0]
             #Adding to Combo Box the data seed just created
             self.AddinElementComoBoxSeed_DataSet(CurrentSeedDataRow)
         else:
             CurrentSeedDataRow=matching_row
+            
+        #Shows in combo box the current Item in used
+        index= self.DaMa_ComBox_Seed_DataSet.findText(str(CurrentSeedDataRow),QtCore.Qt.MatchFixedString)
+        self.DaMa_ComBox_Seed_DataSet.setCurrentIndex(index) #To set the item, consider (item from 1) (index from 0)
         
+        
+        #DataSet is created (thread)
+        query="SELECT * FROM DataSet WHERE DataSet_id=(SELECT max(DataSet_id) FROM DataSet)"
+        self.Forcaster_DB_c.execute(query)
+        Last_DataSet_row=self.Forcaster_DB_c.fetchall()
+        if Last_DataSet_row==[]:
+            LastDataSetRow=0
+        else:    
+            for j in Last_DataSet_row: 
+                LastDataSetRow=j[0]
+        
+        #Set the last dataset row
+        self.DataSet_creator.Set_Last_DataSet_Crated(LastDataSetRow)
+        
+        self.DataSet_creator.Set_SeedParam(CurrentSeedDataRow, Item, BackDays, Open_C, High_C, Low_C, Close_C, Volume_C, Open_FFT_C, High_FFT_C,
+                                           Low_FFT_C, Close_FFT_C, Volum_FFT_C, Day_Wk_N_C, Month_N_C, Day_Month_C, Year_C, FFT_Frec)
+        
+        self.DataSet_creator.start()      
     
     def Update_DataSet(self):
-        pass 
+        pass
 
     ############ General Fucntions  ############
-    def ModelsComboBoxChanged(self):
+    def DataSetComboBoxChanged(self):
         pass
     
-    def SeedDataComboBoxChanged(self):
-        pass
-    
+    def SeedDataSetComboBoxChanged(self):
+        Item_Selected=self.DaMa_ComBox_Seed_DataSet.currentText()
+        
+        query="SELECT * FROM Seed_DataSet WHERE SeedDataSet_id=?"
+        
+        self.Forcaster_DB_c.execute(query,(Item_Selected,))
+        Select_SeedDataSet=self.Forcaster_DB_c.fetchall()
+        
+        #Setting data to GUI
+        for i in Select_SeedDataSet:  
+            self.DaMa_txtLine_Stock_Item.setText(str(i[1]))
+            self.DaMa_txtLine_BackDay.setText(str(i[2]))
+            
+            # data from GUI
+            if i[3]==1:self.DaMa_CheckBox_Open.setChecked(True)
+            else:self.DaMa_CheckBox_Open.setChecked(False)
+            
+            if i[4]==1:self.DaMa_CheckBox_High.setChecked(True)
+            else: self.DaMa_CheckBox_High.setChecked(False)
+            
+            if i[5]==1:self.DaMa_CheckBox_Low.setChecked(True)
+            else: self.DaMa_CheckBox_Low.setChecked(False)
+            
+            if i[6]==1:self.DaMa_CheckBox_Close.setChecked(True)
+            else: self.DaMa_CheckBox_Close.setChecked(False)
+            
+            if i[7]==1:self.DaMa_CheckBox_Volume.setChecked(True)
+            else: self.DaMa_CheckBox_Volume.setChecked(False)
+            
+            if i[8]==1:self.DaMa_CheckBox_Open_FFT.setChecked(True)
+            else:self.DaMa_CheckBox_Open_FFT.setChecked(False)
+            
+            if i[9]==1: self.DaMa_CheckBox_High_FFT.setChecked(True)
+            else:self.DaMa_CheckBox_High_FFT.setChecked(False)
+            
+            if i[10]==1:self.DaMa_CheckBox_Low_FFT.setChecked(True)
+            else: self.DaMa_CheckBox_Low_FFT.setChecked(False)
+            
+            if i[11]==1:self.DaMa_CheckBox_Close_FFT.setChecked(True)
+            else:self.DaMa_CheckBox_Close_FFT.setChecked(False)
+            
+            if i[12]==1: self.DaMa_CheckBox_Volume_FFT.setChecked(True)
+            else:self.DaMa_CheckBox_Volume_FFT.setChecked(False)
+            
+            if i[13]==1:self.DaMa_CheckBox_DayNumber.setChecked(True)
+            else:self.DaMa_CheckBox_DayNumber.setChecked(False)
+            
+            if i[14]==1:self.DaMa_CheckBox_Month_Number.setChecked(True)
+            else:self.DaMa_CheckBox_Month_Number.setChecked(False)
+            
+            if i[15]==1: self.DaMa_CheckBox_DayMonth.setChecked(True)
+            else: self.DaMa_CheckBox_DayMonth.setChecked(False)
+            
+            if i[16]==1:self.DaMa_CheckBox_Year.setChecked(True)
+            else:self.DaMa_CheckBox_Year.setChecked(False)
+            
+            self.DaMa_txtLine_FFT_Frec.setText(str(i[17]))
+              
     def AddinElementComoBoxSeed_DataSet(self,val1):
         self.DaMa_ComBox_Seed_DataSet.addItem(str(val1))
         
-    def AddinElementComoBoxModelData(self):
-        pass
+    def AddinElementComoBoxData_Set(self,val1):
+        self.DaMa_ComBox_DataSet_Id.addItem(str(val1))
         
     def Check_Matching_Seed_DataSet(self,val_1,val_2,val_3,val_4,val_5,val_6,val_7,val_8,
                                     val_9,val_10,val_11,val_12,val_13,val_14,val_15,val_16,val_17):
@@ -762,8 +884,8 @@ class Ui_GUI_LSTM_FORCASTER(object):
         ##Seed_Data; Getting all data 
         query="SELECT * FROM Seed_DataSet"
          
-        self.Model_c.execute(query)
-        All_table_Data=self.Model_c.fetchall()
+        self.Forcaster_DB_c.execute(query)
+        All_table_Data=self.Forcaster_DB_c.fetchall()
         
         for i in All_table_Data: 
             Matching_Row=i[0]
@@ -836,21 +958,39 @@ class Ui_GUI_LSTM_FORCASTER(object):
                                         Close_FFT_C ,Volum_FFT_C ,Day_Wk_N_C ,Month_N_C ,Day_Month_C ,Year_C ,FFT_Frec)
          VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)"""
 
-        self.Model_c.execute(query,(val_1,val_2,val_3,val_4,val_5,val_6,val_7,val_8,val_9,
+        self.Forcaster_DB_c.execute(query,(val_1,val_2,val_3,val_4,val_5,val_6,val_7,val_8,val_9,
                                     val_10,val_11,val_12,val_13,val_14,val_15,val_16,val_17)) 
         
         #Validate changes to our DB 
-        self.Model_DB_conn.commit()
-        print("was created new Seed_dataSet")
+        self.Forcaster_DB_conn.commit()
         
+    def Creare_new_DataSet_in_DB(self,val_1,val_2,val_3):
+        """Date_Time TEXT,
+            Path_DataSet TEXT,
+            Seed_DataSet_id_FRGN INTEGER"""
         
-    def Creare_new_model_in_DB(self):
-        pass
+        query=""" INSERT INTO DataSet (Date_Time,Path_DataSet,Seed_DataSet_id_FRGN)
+         VALUES (?,?,?)"""
+
+        self.Forcaster_DB_c.execute(query,(val_1,val_2,val_3)) 
+        
+        #Validate changes to our DB 
+        self.Forcaster_DB_conn.commit()
     
     ##### Emit thread signals
     
-    def Event_ModelCreationStatus(self):
-        pass
+    def Event_DataSetCreationStatus(self,val):
+        Date_Time,Path_DataSet,Seed_DataSet_id_FRGN=self.DataSet_creator.Get_NewDataSet_Data()
+
+        if val:
+            self.Creare_new_DataSet_in_DB(Date_Time,Path_DataSet,Seed_DataSet_id_FRGN)
+            print("DataSet created Created :'D")
+            DataSetJustCreated=self.DataSet_creator.Get_DataSet_id_Just_Created()
+            self.AddinElementComoBoxData_Set(DataSetJustCreated)
+            index= self.DaMa_ComBox_DataSet_Id.findText(str(DataSetJustCreated),QtCore.Qt.MatchFixedString)
+            self.DaMa_ComBox_DataSet_Id.setCurrentIndex(index)
+            
+            
     def Event_UpdateProgress_ModelCreator(self):
         pass
     def Event_UpdateProgress_string_ModelCreator(self):

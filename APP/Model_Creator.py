@@ -23,11 +23,7 @@ class DL_Model(QThread):
     Update_Progress = pyqtSignal(int)
     Update_Progress_String = pyqtSignal(str)
     Update_ModelCreationStatus = pyqtSignal(bool)
-    
 
-    
-    
-    
     def __init__(self):
         super().__init__()
         keras.backend.clear_session()  # Reseteo sencillo
@@ -85,12 +81,6 @@ class DL_Model(QThread):
         self.Update_Progress_String.emit("Model Data Assigned")
         self.Update_Progress.emit(30)
         #SeedData is set at Set_SeedParam
-        
-        
-        
-        #Note work: to know the next modelid works, this will be used to set the path model name
-        #would be grate if I can test this predict next model id when is empty
-        # Whats next: set the parameters and finally create the model :D
                 
         n_past=int(self.BackDays) #**
         modelPath=self.Path_Model
