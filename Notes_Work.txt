@@ -1,6 +1,3 @@
-Seed Data set is saved but there is a problem:
-even if I didn't changed the config, a new seed Data Seet is created
+Trying to create base data set but said, file doenst exist, I know, i want to create this new completly file :(
 
-
-DataSet are been saved but doesn't show the data like : date time Path seed DataSet id
-missing to created the function combobox changed
+Missing logic to created Data set about seed conditions

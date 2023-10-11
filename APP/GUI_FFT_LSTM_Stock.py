@@ -222,9 +222,11 @@ class Ui_GUI_LSTM_FORCASTER(object):
         self.DaMa_txtLine_DateTime = QtWidgets.QLineEdit(self.Data_Manager_tab)
         self.DaMa_txtLine_DateTime.setGeometry(QtCore.QRect(370, 90, 241, 21))
         self.DaMa_txtLine_DateTime.setObjectName("DaMa_txtLine_DateTime")
+        self.DaMa_txtLine_DateTime.setEnabled(False)
         self.DaMa_txtLine_PathCSV_File = QtWidgets.QLineEdit(self.Data_Manager_tab)
         self.DaMa_txtLine_PathCSV_File.setGeometry(QtCore.QRect(370, 140, 241, 21))
         self.DaMa_txtLine_PathCSV_File.setObjectName("DaMa_txtLine_PathCSV_File")
+        self.DaMa_txtLine_PathCSV_File.setEnabled(False)
         self.DaMa_lbl_DateTime = QtWidgets.QLabel(self.Data_Manager_tab)
         self.DaMa_lbl_DateTime.setGeometry(QtCore.QRect(370, 70, 201, 16))
         self.DaMa_lbl_DateTime.setObjectName("DaMa_lbl_DateTime")
@@ -779,12 +781,19 @@ class Ui_GUI_LSTM_FORCASTER(object):
         else:    
             for j in Last_DataSet_row: 
                 LastDataSetRow=j[0]
+                
+        #SeedData 
+        query="SELECT * FROM Seed_DataSet WHERE SeedDataSet_id=?"
+        self.Forcaster_DB_c.execute(query,(CurrentSeedDataRow,))
+        Last_SetDataSet_row=self.Forcaster_DB_c.fetchall()[0]
+        
         
         #Set the last dataset row
         self.DataSet_creator.Set_Last_DataSet_Crated(LastDataSetRow)
         
-        self.DataSet_creator.Set_SeedParam(CurrentSeedDataRow, Item, BackDays, Open_C, High_C, Low_C, Close_C, Volume_C, Open_FFT_C, High_FFT_C,
-                                           Low_FFT_C, Close_FFT_C, Volum_FFT_C, Day_Wk_N_C, Month_N_C, Day_Month_C, Year_C, FFT_Frec)
+        self.DataSet_creator.Set_SeedParam(Last_SetDataSet_row)
+        
+        self.DataSet_creator.Set_TypeProcessToDo("1") #Process
         
         self.DataSet_creator.start()      
     
@@ -793,7 +802,23 @@ class Ui_GUI_LSTM_FORCASTER(object):
 
     ############ General Fucntions  ############
     def DataSetComboBoxChanged(self):
-        pass
+        Model_Selected=self.DaMa_ComBox_DataSet_Id.currentText()
+        
+        query="SELECT * FROM DataSet WHERE DataSet_id=?"
+        
+        self.Forcaster_DB_c.execute(query,(Model_Selected,))
+        Select_DataSet=self.Forcaster_DB_c.fetchall()
+
+        for i in Select_DataSet:
+            Date_Time_DataSet=i[1]
+            Path_DataSet=i[2]
+            SeedDataSet=i[3]
+        
+        self.DaMa_txtLine_DateTime.setText(str(Date_Time_DataSet))
+        self.DaMa_txtLine_PathCSV_File.setText(str(Path_DataSet))
+        index= self.DaMa_ComBox_Seed_DataSet.findText(str(SeedDataSet),QtCore.Qt.MatchFixedString)
+        self.DaMa_ComBox_Seed_DataSet.setCurrentIndex(index)
+        
     
     def SeedDataSetComboBoxChanged(self):
         Item_Selected=self.DaMa_ComBox_Seed_DataSet.currentText()
@@ -914,31 +939,31 @@ class Ui_GUI_LSTM_FORCASTER(object):
             if int(i[8])==int(val_8): Matching_Val8=True 
             else: Matching_Val8=False
             
-            if int(i[9])==int(val_9): Matching_Val8=True 
+            if int(i[9])==int(val_9): Matching_Val9=True 
             else: Matching_Val9=False
             
-            if int(i[10])==int(val_10): Matching_Val8=True 
+            if int(i[10])==int(val_10): Matching_Val10=True 
             else: Matching_Val10=False
             
-            if int(i[11])==int(val_11): Matching_Val8=True 
+            if int(i[11])==int(val_11): Matching_Val11=True 
             else: Matching_Val11=False
             
-            if int(i[12])==int(val_12): Matching_Val8=True 
+            if int(i[12])==int(val_12): Matching_Val12=True 
             else: Matching_Val12=False
             
-            if int(i[13])==int(val_13): Matching_Val8=True 
+            if int(i[13])==int(val_13): Matching_Val13=True 
             else: Matching_Val13=False
             
-            if int(i[14])==int(val_14): Matching_Val8=True 
+            if int(i[14])==int(val_14): Matching_Val14=True 
             else: Matching_Val14=False
             
-            if int(i[15])==int(val_15): Matching_Val8=True 
+            if int(i[15])==int(val_15): Matching_Val15=True 
             else: Matching_Val15=False
             
-            if int(i[16])==int(val_16): Matching_Val8=True 
+            if int(i[16])==int(val_16): Matching_Val16=True 
             else: Matching_Val16=False
             
-            if int(i[17])==int(val_17): Matching_Val8=True 
+            if int(i[17])==int(val_17): Matching_Val17=True 
             else: Matching_Val17=False
 
             if (Matching_Val1 and Matching_Val2 and Matching_Val3 and Matching_Val4 and Matching_Val5 and Matching_Val6 and Matching_Val7 and Matching_Val8

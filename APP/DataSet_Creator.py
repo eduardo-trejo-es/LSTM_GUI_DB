@@ -1,3 +1,5 @@
+import sys
+sys.path.append("/Users/eduardo/Desktop/GUI_LSTM_FFT/Pakages/DataSetgenPacks")
 
 from PyQt5.QtCore import *
 
@@ -11,16 +13,25 @@ import tensorflow as tf
 from tensorflow import keras
 from tensorflow.python.keras.layers.core import Activation
 
-from datetime import datetime
+from datetime import datetime, date
 import time
 
 ### Check if model is created
 import os.path as path
 
+##DataSet Creator
+
+# import all classes
+from Retriver_and_Processor_Dataset import DatasetGenerator
+
+
+
 class DL_DataSet(QThread):
     Update_Progress = pyqtSignal(int)
     Update_Progress_String = pyqtSignal(str)
     Update_DataSetCreationStatus = pyqtSignal(bool)
+    
+
 
     def __init__(self):
         super().__init__()
@@ -28,30 +39,19 @@ class DL_DataSet(QThread):
         self.Path_DataSet = ""
         self.Seed_DataSet_id_FRGN =0
         self.DataSet_id_Just_Created=0
+        self.dataSet_Gen = DatasetGenerator()
+        
     
-    def Set_SeedParam(self,val_0,val_1,val_2,val_3,val_4,val_5,val_6,val_7,val_8,
-                      val_9,val_10,val_11,val_12,val_13,val_14,val_15,val_16,val_17):
-        self.CurrentSeedDataRow = val_0
-        self.Item = val_1
-        self.BackDays = val_2
-        self.Open_C = val_3
-        self.High_C = val_4
-        self.Low_C = val_5
-        self.Close_C = val_6
-        self.Volume_C = val_7
-        self.Open_FFT_C = val_8
-        self.High_FFT_C = val_9
-        self.Low_FFT_C = val_10
-        self.Close_FFT_C = val_11
-        self.Volum_FFT_C  = val_12
-        self.Day_Wk_N_C  = val_13
-        self.Month_N_C = val_14
-        self.Day_Month_C = val_15
-        self.Year_C = val_16
-        self.FFT_Frec = val_17
-    
+    def Set_SeedParam(self,val1):
+        self.SeedDataSetList=list(val1)
+        self.CurrentSeedDataRow=self.SeedDataSetList[0]
+            
+            
     def Set_Last_DataSet_Crated(self,val):
         self.Last_DataSet_Crated=val
+        
+    def Set_TypeProcessToDo(self,val):
+        self.TypeProcessToDo=val
         
     def Get_NewDataSet_Data(self):
         return self.Date_Time,self.Path_DataSet,self.Seed_DataSet_id_FRGN
@@ -66,8 +66,108 @@ class DL_DataSet(QThread):
         
         self.Update_DataSetCreationStatus.emit(False)
         self.Date_Time = datetime.now().strftime("%d/%m/%Y %H:%M:%S")
+        
         self.Path_DataSet = "DATASET_PATH/TEST"
         self.Seed_DataSet_id_FRGN =self.CurrentSeedDataRow
         self.DataSet_id_Just_Created=self.Last_DataSet_Crated+1
         
-        self.Update_DataSetCreationStatus.emit(True)
+        StartDay="2001-01-02"
+        EndDate=date.today().strftime("%Y-%m-%d")
+        self.ToCreateOrUpdateDataSet(self.DataSet_id_Just_Created,self.SeedDataSetList,StartDay,EndDate,self.TypeProcessToDo)
+
+        
+        if path.exists(self.Path_DataSet):
+            self.Update_DataSetCreationStatus.emit(True)
+            self.Update_Progress_String.emit("DataSet Succesfully created")
+            self.Update_Progress.emit(100)
+        else:
+            self.Update_DataSetCreationStatus.emit(False)
+            self.Update_Progress_String.emit("DataSet was not succesfully created")
+            self.Update_Progress.emit(95)
+        
+        time.sleep(5)
+        self.Update_Progress_String.emit("Ready to create another model")
+        self.Update_Progress.emit(0)
+    
+    def ToCreateOrUpdateDataSet(self,DataSetId,SeedDataSetlist,dateStart,dateEnd,ProcessToDo):
+        
+        
+        print("this is the one: "+str(SeedDataSetlist[1]))
+        
+        itemName=SeedDataSetlist[1]
+        BackDays=SeedDataSetlist[2]
+        Open_C=SeedDataSetlist[3]
+        High_C=SeedDataSetlist[4]
+        Low_C=SeedDataSetlist[5]
+        Close_C=SeedDataSetlist[6]
+        Volume_C=SeedDataSetlist[7]
+        Open_FFT_C=SeedDataSetlist[8]
+        High_FFT_C=SeedDataSetlist[9]
+        Low_FFT_C=SeedDataSetlist[10]
+        Close_FFT_C=SeedDataSetlist[11]
+        Volum_FFT_C=SeedDataSetlist[12]
+        Day_Wk_N_C=SeedDataSetlist[13]
+        Month_N_C=SeedDataSetlist[14]
+        Day_Month_C=SeedDataSetlist[15]
+        Year_C=SeedDataSetlist[16]
+        FFT_Frec=SeedDataSetlist[17]
+         
+        BasePath="APP/DataSets/{}/{}".format(itemName,DataSetId)
+        
+        Original_Path_Retiving=BasePath+"/CRUDE_OIL_Data.csv"
+        Onlyonecolumn=BasePath+"/CRUDE_OIL_Data_onlyClose.csv"
+        LastOnetwice=BasePath+"/CRUDE_OIL_Data_LastOneTwice.csv"
+        DirectionPrice=BasePath+"/CRUDE_OIL_Data_DirePrice.csv"
+        DayNumAddedPath=BasePath+"/CRUDE_OIL_Dataand_DayNum.csv"
+        MonthAddedPath=BasePath+"/CRUDE_OIL_Data_And_month.csv"
+        yearAddedPath=BasePath+"/CRUDE_OIL_Data_And_year.csv"
+        FFTAddedPath=BasePath+"/CRUDE_OIL_CloseFFT_2400_5Backdys.csv"
+        LastPopcolum=BasePath+"/CRUDE_OIL_Close_lastPopcolum.csv"
+
+        if ProcessToDo=="1":
+            self.dataSet_Gen.RetivingDataPrices_Yahoo(itemName,dateStart, dateEnd,Original_Path_Retiving,Original_Path_Retiving)
+        elif ProcessToDo=="0":
+            self.dataSet_Gen.UpdateToday(itemName,Original_Path_Retiving)
+
+        """
+        #columns to pop up
+        #dataSet_Gen.AddRepeatedLastOne(Original_Path_Retiving, LastOnetwice)
+        if OneColum:
+            #Columns to remove
+            columns=['Open','High','Low','Volume']
+        else:
+            #Columns to remove
+            columns=['Open','Volume']
+
+        self.dataSet_Gen.PopListdf(columns,Original_Path_Retiving,Onlyonecolumn)
+
+
+        #dataSet_Gen.AddColumnPRCNTG(Original_Path_Retiving,PRCNTGAddedPath)
+        #if inversed:
+        #    dataSet_Gen.AddColumnInverseDirePrice(Original_Path_Retiving,DirectionPrice)
+        #else: 
+        #    dataSet_Gen.AddColumnDirePrice(Original_Path_Retiving,DirectionPrice)
+
+        self.dataSet_Gen.AddColumnWeekDay(Onlyonecolumn, DayNumAddedPath,False)
+
+        self.dataSet_Gen.AddColumnMothandDay(DayNumAddedPath, MonthAddedPath,False)
+
+        self.dataSet_Gen.AddColumnYear(MonthAddedPath,yearAddedPath)
+        #
+        #Generate new FFT columns done :)
+
+
+        backdaysToconsider=6
+        inicialPath=yearAddedPath
+        FFTNew_FileData=FFTAddedPath
+        Column=["Close",'High','Low']
+        frec=[160]
+
+        self.dataSet_Gen.getTheLastFFTValue(backdaysToconsider,frec,Column,inicialPath, FFTNew_FileData)   
+
+
+        columns=['High','Low']
+
+        self.dataSet_Gen.PopListdf(columns,FFTNew_FileData,LastPopcolum)"""
+        
+        
