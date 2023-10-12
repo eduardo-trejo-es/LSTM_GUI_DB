@@ -18,6 +18,8 @@ import time
 
 ### Check if model is created
 import os.path as path
+import os 
+
 
 ##DataSet Creator
 
@@ -67,16 +69,17 @@ class DL_DataSet(QThread):
         self.Update_DataSetCreationStatus.emit(False)
         self.Date_Time = datetime.now().strftime("%d/%m/%Y %H:%M:%S")
         
-        self.Path_DataSet = "DATASET_PATH/TEST"
+        
         self.Seed_DataSet_id_FRGN =self.CurrentSeedDataRow
         self.DataSet_id_Just_Created=self.Last_DataSet_Crated+1
         
         StartDay="2001-01-02"
         EndDate=date.today().strftime("%Y-%m-%d")
-        self.ToCreateOrUpdateDataSet(self.DataSet_id_Just_Created,self.SeedDataSetList,StartDay,EndDate,self.TypeProcessToDo)
-
+        ObjectiveFilePath=self.ToCreateOrUpdateDataSet(self.DataSet_id_Just_Created,self.SeedDataSetList,StartDay,EndDate,self.TypeProcessToDo)
+        self.Path_DataSet = ObjectiveFilePath
         
-        if path.exists(self.Path_DataSet):
+        #Verify if objective DataSet was created
+        if ObjectiveFilePath:
             self.Update_DataSetCreationStatus.emit(True)
             self.Update_Progress_String.emit("DataSet Succesfully created")
             self.Update_Progress.emit(100)
@@ -89,9 +92,8 @@ class DL_DataSet(QThread):
         self.Update_Progress_String.emit("Ready to create another model")
         self.Update_Progress.emit(0)
     
+    
     def ToCreateOrUpdateDataSet(self,DataSetId,SeedDataSetlist,dateStart,dateEnd,ProcessToDo):
-        
-        
         print("this is the one: "+str(SeedDataSetlist[1]))
         
         itemName=SeedDataSetlist[1]
@@ -112,20 +114,30 @@ class DL_DataSet(QThread):
         Year_C=SeedDataSetlist[16]
         FFT_Frec=SeedDataSetlist[17]
          
-        BasePath="APP/DataSets/{}/{}".format(itemName,DataSetId)
+        ParentPath= "APP/DataSets/"
+        BasePath="{}/Id{}".format(itemName,DataSetId)
+        pathTocreated=path.join(ParentPath,BasePath)
         
-        Original_Path_Retiving=BasePath+"/CRUDE_OIL_Data.csv"
-        Onlyonecolumn=BasePath+"/CRUDE_OIL_Data_onlyClose.csv"
-        LastOnetwice=BasePath+"/CRUDE_OIL_Data_LastOneTwice.csv"
-        DirectionPrice=BasePath+"/CRUDE_OIL_Data_DirePrice.csv"
-        DayNumAddedPath=BasePath+"/CRUDE_OIL_Dataand_DayNum.csv"
-        MonthAddedPath=BasePath+"/CRUDE_OIL_Data_And_month.csv"
-        yearAddedPath=BasePath+"/CRUDE_OIL_Data_And_year.csv"
-        FFTAddedPath=BasePath+"/CRUDE_OIL_CloseFFT_2400_5Backdys.csv"
-        LastPopcolum=BasePath+"/CRUDE_OIL_Close_lastPopcolum.csv"
+        Original_Path_Retiving=pathTocreated+"/CRUDE_OIL_Data.csv"
+        Onlyonecolumn=pathTocreated+"/CRUDE_OIL_Data_onlyClose.csv"
+        LastOnetwice=pathTocreated+"/CRUDE_OIL_Data_LastOneTwice.csv"
+        DirectionPrice=pathTocreated+"/CRUDE_OIL_Data_DirePrice.csv"
+        DayNumAddedPath=pathTocreated+"/CRUDE_OIL_Dataand_DayNum.csv"
+        MonthAddedPath=pathTocreated+"/CRUDE_OIL_Data_And_month.csv"
+        yearAddedPath=pathTocreated+"/CRUDE_OIL_Data_And_year.csv"
+        FFTAddedPath=pathTocreated+"/CRUDE_OIL_CloseFFT_2400_5Backdys.csv"
+        LastPopcolum=pathTocreated+"/CRUDE_OIL_Close_lastPopcolum.csv"
+        
+        #Check is directory exist, otherwise To Create A Directory With Subdirectories
+        
+        if path.exists(pathTocreated):
+            pass
+        else:
+            os.makedirs(pathTocreated)
 
         if ProcessToDo=="1":
-            self.dataSet_Gen.RetivingDataPrices_Yahoo(itemName,dateStart, dateEnd,Original_Path_Retiving,Original_Path_Retiving)
+            addToOld=False
+            self.dataSet_Gen.RetivingDataPrices_Yahoo(itemName,dateStart, dateEnd,Original_Path_Retiving,Original_Path_Retiving,addToOld)
         elif ProcessToDo=="0":
             self.dataSet_Gen.UpdateToday(itemName,Original_Path_Retiving)
 
@@ -169,5 +181,8 @@ class DL_DataSet(QThread):
         columns=['High','Low']
 
         self.dataSet_Gen.PopListdf(columns,FFTNew_FileData,LastPopcolum)"""
+        
+        #Return the resulting DataSet
+        return Original_Path_Retiving
         
         

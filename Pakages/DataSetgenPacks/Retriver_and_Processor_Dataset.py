@@ -8,7 +8,7 @@ import matplotlib.pyplot as plt
 import cmath
 
 class DatasetGenerator:
-    def RetivingDataPrices_Yahoo(self,Name_Item,From, to,csvFileName,csvFileName_New):
+    def RetivingDataPrices_Yahoo(self,Name_Item,From, to,csvFileName,csvFileName_New,addToOld):
         startDate=From
         endDate= to
         name_item= Name_Item
@@ -16,7 +16,7 @@ class DatasetGenerator:
         df=yf.download(name_item,start = startDate, end = endDate,interval='1d',threads = True)
         df.pop("Adj Close")
         
-        self.SavingDataset(df,csvFileName, csvFileName_New, True)
+        self.SavingDataset(df,csvFileName, csvFileName_New, addToOld)
         
     def PopListdf(self,columns,csvFileName, csvFileName_New,):
         df=pd.read_csv(csvFileName, index_col="Date")

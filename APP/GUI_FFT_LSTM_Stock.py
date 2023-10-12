@@ -226,7 +226,6 @@ class Ui_GUI_LSTM_FORCASTER(object):
         self.DaMa_txtLine_PathCSV_File = QtWidgets.QLineEdit(self.Data_Manager_tab)
         self.DaMa_txtLine_PathCSV_File.setGeometry(QtCore.QRect(370, 140, 241, 21))
         self.DaMa_txtLine_PathCSV_File.setObjectName("DaMa_txtLine_PathCSV_File")
-        self.DaMa_txtLine_PathCSV_File.setEnabled(False)
         self.DaMa_lbl_DateTime = QtWidgets.QLabel(self.Data_Manager_tab)
         self.DaMa_lbl_DateTime.setGeometry(QtCore.QRect(370, 70, 201, 16))
         self.DaMa_lbl_DateTime.setObjectName("DaMa_lbl_DateTime")
