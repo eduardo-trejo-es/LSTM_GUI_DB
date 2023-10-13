@@ -1,7 +1,7 @@
-First Data Set created :D :'D
+* Missing logic to created Data set about seed conditions, and created the resulting DataSet
 
-Missing logic to created Data set about seed conditions, and created the resulting DataSet
-
+* Too complicate to added or delete columns in DB, change list queries for dictionary, 
+in this way when I modify db structure, in code the dictionary lables won't changes
 
 
 Interlock FFT:
