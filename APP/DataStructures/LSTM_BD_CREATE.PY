@@ -86,8 +86,7 @@ c.execute("""
             Close_FFT_C INTEGER,
             Volum_FFT_C INTEGER,
             Day_Wk_N_C INTEGER,
-            Month_N_C INTEGER,
-            Day_Month_C INTEGER,
+            Day_MonthNDay_C INTEGER,
             Year_C INTEGER,
             FFT_Frec INTEGER
         )

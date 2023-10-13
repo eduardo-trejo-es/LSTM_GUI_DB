@@ -74,7 +74,8 @@ class DL_DataSet(QThread):
         self.DataSet_id_Just_Created=self.Last_DataSet_Crated+1
         
         StartDay="2001-01-02"
-        EndDate=date.today().strftime("%Y-%m-%d")
+        EndDate="2001-01-15"
+        #EndDate=date.today().strftime("%Y-%m-%d")
         ObjectiveFilePath=self.ToCreateOrUpdateDataSet(self.DataSet_id_Just_Created,self.SeedDataSetList,StartDay,EndDate,self.TypeProcessToDo)
         self.Path_DataSet = ObjectiveFilePath
         
@@ -109,10 +110,9 @@ class DL_DataSet(QThread):
         Close_FFT_C=SeedDataSetlist[11]
         Volum_FFT_C=SeedDataSetlist[12]
         Day_Wk_N_C=SeedDataSetlist[13]
-        Month_N_C=SeedDataSetlist[14]
-        Day_Month_C=SeedDataSetlist[15]
-        Year_C=SeedDataSetlist[16]
-        FFT_Frec=SeedDataSetlist[17]
+        Day_MonthNDay_C=SeedDataSetlist[14]
+        Year_C=SeedDataSetlist[15]
+        FFT_Frec=SeedDataSetlist[16]
          
         ParentPath= "APP/DataSets/"
         BasePath="{}/Id{}".format(itemName,DataSetId)
@@ -141,41 +141,53 @@ class DL_DataSet(QThread):
         elif ProcessToDo=="0":
             self.dataSet_Gen.UpdateToday(itemName,Original_Path_Retiving)
 
-        """
-        #columns to pop up
-        #dataSet_Gen.AddRepeatedLastOne(Original_Path_Retiving, LastOnetwice)
-        if OneColum:
-            #Columns to remove
-            columns=['Open','High','Low','Volume']
+        
+        #columns to pop up # Solution applying a mask 
+        Colums_Selection=[Open_C,High_C,Low_C,Close_C,Volume_C]
+        columns=['Open','High','Low','Close','Volume']
+        ColumnsToPop=[]
+        
+        for i in range(0,len(Colums_Selection)-1):
+            if Colums_Selection[i]==0:
+                ColumnsToPop.append(columns[i])
+        self.dataSet_Gen.PopListdf(ColumnsToPop,Original_Path_Retiving,Onlyonecolumn)
+
+        
+        #To add the day of the week 0=monday, 1=tuesday .... 4= friday
+        if Day_Wk_N_C==1:
+            self.dataSet_Gen.AddColumnWeekDay(Onlyonecolumn, DayNumAddedPath,False)
         else:
-            #Columns to remove
-            columns=['Open','Volume']
+            DayNumAddedPath=Onlyonecolumn
+            
+        #To add the number*100 Month of the year: january = 100, dicember=1200
+        # and Day of the month 1...30 or 1...28 or 1...31
+        if Day_MonthNDay_C==1:
+            self.dataSet_Gen.AddColumnMothandDay(DayNumAddedPath, MonthAddedPath,False)
+        else:
+            MonthAddedPath=DayNumAddedPath
 
-        self.dataSet_Gen.PopListdf(columns,Original_Path_Retiving,Onlyonecolumn)
+        #To add the year
+        if Year_C==1:
+            self.dataSet_Gen.AddColumnYear(MonthAddedPath,yearAddedPath)
+        else:
+            yearAddedPath=MonthAddedPath
+    
 
-
-        #dataSet_Gen.AddColumnPRCNTG(Original_Path_Retiving,PRCNTGAddedPath)
-        #if inversed:
-        #    dataSet_Gen.AddColumnInverseDirePrice(Original_Path_Retiving,DirectionPrice)
-        #else: 
-        #    dataSet_Gen.AddColumnDirePrice(Original_Path_Retiving,DirectionPrice)
-
-        self.dataSet_Gen.AddColumnWeekDay(Onlyonecolumn, DayNumAddedPath,False)
-
-        self.dataSet_Gen.AddColumnMothandDay(DayNumAddedPath, MonthAddedPath,False)
-
-        self.dataSet_Gen.AddColumnYear(MonthAddedPath,yearAddedPath)
-        #
-        #Generate new FFT columns done :)
-
+        """
+        #Generate new FFT columns
+        Colums_Selection=[Open_FFT_C,High_FFT_C,Low_FFT_C,Close_FFT_C,Volum_FFT_C]
+        columns=['Open','High','Low','Close','Volume']
+        ColumnsToFFT=[]
+        for i in range(0,len(Colums_Selection)-1):
+            if Colums_Selection[i]==0:
+                ColumnsToFFT.append(columns[i])
 
         backdaysToconsider=6
         inicialPath=yearAddedPath
         FFTNew_FileData=FFTAddedPath
-        Column=["Close",'High','Low']
-        frec=[160]
+        frec=int(FFT_Frec)
 
-        self.dataSet_Gen.getTheLastFFTValue(backdaysToconsider,frec,Column,inicialPath, FFTNew_FileData)   
+        self.dataSet_Gen.getTheLastFFTValue(backdaysToconsider,frec,ColumnsToFFT,inicialPath, FFTNew_FileData)   
 
 
         columns=['High','Low']

@@ -1,3 +1,8 @@
 First Data Set created :D :'D
 
 Missing logic to created Data set about seed conditions, and created the resulting DataSet
+
+
+
+Interlock FFT:
+if Column Open is unselect, FFT_Open can't not be selected either. same case for all other cases

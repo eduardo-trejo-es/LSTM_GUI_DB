@@ -58,9 +58,11 @@ class DatasetGenerator:
         weekday_Number=[]
         for i in df.index:
             dateIndex.append(i)
+            print(dateIndex)
             d_name = pd.Timestamp(i)
             weekday_Name.append(str(d_name.day_name()))
             weekday_Number.append(d_name.dayofweek)
+            print(weekday_Number)
             
         if DayName_Too:
             df["DayName"]=weekday_Name

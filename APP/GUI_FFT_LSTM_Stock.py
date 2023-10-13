@@ -268,12 +268,9 @@ class Ui_GUI_LSTM_FORCASTER(object):
         self.DaMa_CheckBox_Close_FFT = QtWidgets.QCheckBox(self.Data_Manager_tab)
         self.DaMa_CheckBox_Close_FFT.setGeometry(QtCore.QRect(120, 260, 100, 21))
         self.DaMa_CheckBox_Close_FFT.setObjectName("DaMa_CheckBox_Close_FFT")
-        self.DaMa_CheckBox_Month_Number = QtWidgets.QCheckBox(self.Data_Manager_tab)
-        self.DaMa_CheckBox_Month_Number.setGeometry(QtCore.QRect(240, 220, 111, 20))
-        self.DaMa_CheckBox_Month_Number.setObjectName("DaMa_CheckBox_Month_Number")
-        self.DaMa_CheckBox_DayMonth = QtWidgets.QCheckBox(self.Data_Manager_tab)
-        self.DaMa_CheckBox_DayMonth.setGeometry(QtCore.QRect(240, 240, 100, 20))
-        self.DaMa_CheckBox_DayMonth.setObjectName("DaMa_CheckBox_DayMonth")
+        self.DaMa_CheckBox_Day_MonthNDay_C = QtWidgets.QCheckBox(self.Data_Manager_tab)
+        self.DaMa_CheckBox_Day_MonthNDay_C.setGeometry(QtCore.QRect(240, 240, 100, 20))
+        self.DaMa_CheckBox_Day_MonthNDay_C.setObjectName("DaMa_CheckBox_DayMonth")
         self.DaMa_CheckBox_Year = QtWidgets.QCheckBox(self.Data_Manager_tab)
         self.DaMa_CheckBox_Year.setGeometry(QtCore.QRect(240, 260, 100, 20))
         self.DaMa_CheckBox_Year.setObjectName("DaMa_CheckBox_Year")
@@ -476,8 +473,7 @@ class Ui_GUI_LSTM_FORCASTER(object):
         self.DaMa_CheckBox_High_FFT.setText(_translate("GUI_LSTM_FORCASTER", "High FFT"))
         self.DaMa_CheckBox_Low_FFT.setText(_translate("GUI_LSTM_FORCASTER", "Low FFT"))
         self.DaMa_CheckBox_Close_FFT.setText(_translate("GUI_LSTM_FORCASTER", "Close FFT"))
-        self.DaMa_CheckBox_Month_Number.setText(_translate("GUI_LSTM_FORCASTER", "Month Number"))
-        self.DaMa_CheckBox_DayMonth.setText(_translate("GUI_LSTM_FORCASTER", "DayMonth"))
+        self.DaMa_CheckBox_Day_MonthNDay_C.setText(_translate("GUI_LSTM_FORCASTER", "DayMonth"))
         self.DaMa_CheckBox_Year.setText(_translate("GUI_LSTM_FORCASTER", "Year"))
         self.DaMa_CheckBox_Volume.setText(_translate("GUI_LSTM_FORCASTER", "Volume"))
         self.DaMa_CheckBox_Volume_FFT.setText(_translate("GUI_LSTM_FORCASTER", "Volume FFT"))
@@ -737,11 +733,11 @@ class Ui_GUI_LSTM_FORCASTER(object):
         if self.DaMa_CheckBox_DayNumber.isChecked():Day_Wk_N_C=1
         else:Day_Wk_N_C=0
         
-        if self.DaMa_CheckBox_Month_Number.isChecked():Month_N_C=1
-        else:Month_N_C=0
+        #if self.DaMa_CheckBox_Month_Number.isChecked():Month_N_C=1
+        #else:Month_N_C=0
         
-        if self.DaMa_CheckBox_DayMonth.isChecked(): Day_Month_C=1
-        else: Day_Month_C=0
+        if self.DaMa_CheckBox_Day_MonthNDay_C.isChecked(): Day_MonthNDay_C=1
+        else: Day_MonthNDay_C=0
         
         if self.DaMa_CheckBox_Year.isChecked():Year_C=1
         else:Year_C=0
@@ -750,12 +746,12 @@ class Ui_GUI_LSTM_FORCASTER(object):
         
         #Check if seed data already exist
         matching,matching_row=self.Check_Matching_Seed_DataSet(Item,BackDays,Open_C ,High_C,Low_C,Close_C ,Volume_C,Open_FFT_C ,High_FFT_C ,Low_FFT_C,
-                                                           Close_FFT_C ,Volum_FFT_C ,Day_Wk_N_C ,Month_N_C ,Day_Month_C ,Year_C ,FFT_Frec)
+                                                           Close_FFT_C ,Volum_FFT_C ,Day_Wk_N_C, Day_MonthNDay_C ,Year_C ,FFT_Frec)
         
         #new seed dataSet is created; if at least a feature has been changed
         if matching==False:
             self.Create_new_SeedDataSet_DB(Item,BackDays,Open_C ,High_C,Low_C,Close_C ,Volume_C,Open_FFT_C ,High_FFT_C ,Low_FFT_C,
-                                        Close_FFT_C ,Volum_FFT_C ,Day_Wk_N_C ,Month_N_C ,Day_Month_C ,Year_C ,FFT_Frec)
+                                        Close_FFT_C ,Volum_FFT_C ,Day_Wk_N_C ,Day_MonthNDay_C ,Year_C ,FFT_Frec)
             query="SELECT * FROM Seed_DataSet WHERE SeedDataSet_id=(SELECT max(SeedDataSet_id) FROM Seed_DataSet)"
             self.Forcaster_DB_c.execute(query)
             ContentList=self.Forcaster_DB_c.fetchall()
@@ -866,16 +862,16 @@ class Ui_GUI_LSTM_FORCASTER(object):
             if i[13]==1:self.DaMa_CheckBox_DayNumber.setChecked(True)
             else:self.DaMa_CheckBox_DayNumber.setChecked(False)
             
-            if i[14]==1:self.DaMa_CheckBox_Month_Number.setChecked(True)
-            else:self.DaMa_CheckBox_Month_Number.setChecked(False)
+            #if i[14]==1:self.DaMa_CheckBox_Month_Number.setChecked(True)
+            #else:self.DaMa_CheckBox_Month_Number.setChecked(False)
             
-            if i[15]==1: self.DaMa_CheckBox_DayMonth.setChecked(True)
-            else: self.DaMa_CheckBox_DayMonth.setChecked(False)
+            if i[14]==1: self.DaMa_CheckBox_Day_MonthNDay_C.setChecked(True)
+            else: self.DaMa_CheckBox_Day_MonthNDay_C.setChecked(False)
             
-            if i[16]==1:self.DaMa_CheckBox_Year.setChecked(True)
+            if i[15]==1:self.DaMa_CheckBox_Year.setChecked(True)
             else:self.DaMa_CheckBox_Year.setChecked(False)
             
-            self.DaMa_txtLine_FFT_Frec.setText(str(i[17]))
+            self.DaMa_txtLine_FFT_Frec.setText(str(i[16]))
               
     def AddinElementComoBoxSeed_DataSet(self,val1):
         self.DaMa_ComBox_Seed_DataSet.addItem(str(val1))
@@ -884,7 +880,7 @@ class Ui_GUI_LSTM_FORCASTER(object):
         self.DaMa_ComBox_DataSet_Id.addItem(str(val1))
         
     def Check_Matching_Seed_DataSet(self,val_1,val_2,val_3,val_4,val_5,val_6,val_7,val_8,
-                                    val_9,val_10,val_11,val_12,val_13,val_14,val_15,val_16,val_17):
+                                    val_9,val_10,val_11,val_12,val_13,val_14,val_15,val_16):
         Matching=False
         Matching_Row=0
         Matching_Val1=False
@@ -903,7 +899,6 @@ class Ui_GUI_LSTM_FORCASTER(object):
         Matching_Val14=False
         Matching_Val15=False
         Matching_Val16=False
-        Matching_Val17=False
         
         ##Seed_Data; Getting all data 
         query="SELECT * FROM Seed_DataSet"
@@ -962,12 +957,10 @@ class Ui_GUI_LSTM_FORCASTER(object):
             if int(i[16])==int(val_16): Matching_Val16=True 
             else: Matching_Val16=False
             
-            if int(i[17])==int(val_17): Matching_Val17=True 
-            else: Matching_Val17=False
 
             if (Matching_Val1 and Matching_Val2 and Matching_Val3 and Matching_Val4 and Matching_Val5 and Matching_Val6 and Matching_Val7 and Matching_Val8
                 and Matching_Val9 and Matching_Val10 and Matching_Val11 and Matching_Val12 and Matching_Val13 and Matching_Val14 and Matching_Val15 and 
-                Matching_Val16 and Matching_Val17==True):
+                Matching_Val16):
                 Matching=True
                 break
             else:
@@ -976,14 +969,14 @@ class Ui_GUI_LSTM_FORCASTER(object):
         return Matching,Matching_Row
         
     def Create_new_SeedDataSet_DB(self,val_1,val_2,val_3,val_4,val_5,val_6,val_7,val_8,
-                                    val_9,val_10,val_11,val_12,val_13,val_14,val_15,val_16,val_17):
+                                    val_9,val_10,val_11,val_12,val_13,val_14,val_15,val_16):
         
         query=""" INSERT INTO Seed_DataSet (Item,BackDays,Open_C ,High_C,Low_C,Close_C ,Volume_C,Open_FFT_C ,High_FFT_C ,Low_FFT_C,
-                                        Close_FFT_C ,Volum_FFT_C ,Day_Wk_N_C ,Month_N_C ,Day_Month_C ,Year_C ,FFT_Frec)
-         VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)"""
+                                        Close_FFT_C ,Volum_FFT_C ,Day_Wk_N_C, Day_MonthNDay_C ,Year_C ,FFT_Frec)
+         VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)"""
 
         self.Forcaster_DB_c.execute(query,(val_1,val_2,val_3,val_4,val_5,val_6,val_7,val_8,val_9,
-                                    val_10,val_11,val_12,val_13,val_14,val_15,val_16,val_17)) 
+                                    val_10,val_11,val_12,val_13,val_14,val_15,val_16)) 
         
         #Validate changes to our DB 
         self.Forcaster_DB_conn.commit()
