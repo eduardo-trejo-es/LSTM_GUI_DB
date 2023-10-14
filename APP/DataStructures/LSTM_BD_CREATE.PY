@@ -88,6 +88,6 @@ c.execute("""
             Day_Wk_N_C INTEGER,
             Day_MonthNDay_C INTEGER,
             Year_C INTEGER,
-            FFT_Frec INTEGER
+            FFT_Frec TEXT
         )
     """)

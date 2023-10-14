@@ -192,6 +192,7 @@ class Ui_GUI_LSTM_FORCASTER(object):
         self.DaMa_LoadBar_Progres.setGeometry(QtCore.QRect(150, 340, 411, 41))
         self.DaMa_LoadBar_Progres.setProperty("value", 24)
         self.DaMa_LoadBar_Progres.setObjectName("DaMa_LoadBar_Progres")
+        self.DaMa_LoadBar_Progres.setProperty("value",0)
         self.DaMa_Lbl_Progres = QtWidgets.QLabel(self.Data_Manager_tab)
         self.DaMa_Lbl_Progres.setGeometry(QtCore.QRect(150, 330, 291, 16))
         self.DaMa_Lbl_Progres.setObjectName("DaMa_Lbl_Progres")
@@ -410,6 +411,8 @@ class Ui_GUI_LSTM_FORCASTER(object):
         self.model_creator.Update_Progress_String.connect(self.Event_UpdateProgress_string_ModelCreator)
         ########## Tab DataManagement
         self.DataSet_creator.Update_DataSetCreationStatus.connect(self.Event_DataSetCreationStatus)
+        self.DataSet_creator.Update_Progress.connect(self.Event_UpdateProgress_DataSetCreator)
+        self.DataSet_creator.Update_Progress_String.connect(self.Event_UpdateProgress_string_DataSetCreator)
         
         
          
@@ -694,6 +697,7 @@ class Ui_GUI_LSTM_FORCASTER(object):
     ############### Bottons functions  ################   
     def Create_DataSet(self): 
         matching=False
+        self.DaMa_btn_Create.setEnabled(False)
         CurrentSeedDataRow=0
         Item = self.DaMa_txtLine_Stock_Item.text()
         BackDays = self.DaMa_txtLine_BackDay.text()
@@ -954,7 +958,7 @@ class Ui_GUI_LSTM_FORCASTER(object):
             if int(i[15])==int(val_15): Matching_Val15=True 
             else: Matching_Val15=False
             
-            if int(i[16])==int(val_16): Matching_Val16=True 
+            if str(i[16])==str(val_16): Matching_Val16=True 
             else: Matching_Val16=False
             
 
@@ -1002,20 +1006,20 @@ class Ui_GUI_LSTM_FORCASTER(object):
         if val:
             self.Creare_new_DataSet_in_DB(Date_Time,Path_DataSet,Seed_DataSet_id_FRGN)
             print("DataSet created Created :'D")
+            self.DaMa_btn_Create.setEnabled(True)
             DataSetJustCreated=self.DataSet_creator.Get_DataSet_id_Just_Created()
             self.AddinElementComoBoxData_Set(DataSetJustCreated)
             index= self.DaMa_ComBox_DataSet_Id.findText(str(DataSetJustCreated),QtCore.Qt.MatchFixedString)
             self.DaMa_ComBox_DataSet_Id.setCurrentIndex(index)
             
             
-    def Event_UpdateProgress_ModelCreator(self):
-        pass
-    def Event_UpdateProgress_string_ModelCreator(self):
-        pass
+    def Event_UpdateProgress_DataSetCreator(self,val):
+         self.DaMa_LoadBar_Progres.setProperty("value",val)
+    
+    def Event_UpdateProgress_string_DataSetCreator(self,val):
+        self.DaMa_Lbl_Progres.setText(val)
         
-        
-        
-                      
+                 
 if __name__ == "__main__":
     import sys
     app = QtWidgets.QApplication(sys.argv)

@@ -68,6 +68,8 @@ class DL_DataSet(QThread):
         
         self.Update_DataSetCreationStatus.emit(False)
         self.Date_Time = datetime.now().strftime("%d/%m/%Y %H:%M:%S")
+        self.Update_Progress_String.emit("Initializing DataSet creation")
+        self.Update_Progress.emit(0)
         
         
         self.Seed_DataSet_id_FRGN =self.CurrentSeedDataRow
@@ -76,26 +78,34 @@ class DL_DataSet(QThread):
         StartDay="2001-01-02"
         EndDate="2001-01-15"
         #EndDate=date.today().strftime("%Y-%m-%d")
+        
         ObjectiveFilePath=self.ToCreateOrUpdateDataSet(self.DataSet_id_Just_Created,self.SeedDataSetList,StartDay,EndDate,self.TypeProcessToDo)
         self.Path_DataSet = ObjectiveFilePath
         
         #Verify if objective DataSet was created
         if ObjectiveFilePath:
-            self.Update_DataSetCreationStatus.emit(True)
             self.Update_Progress_String.emit("DataSet Succesfully created")
             self.Update_Progress.emit(100)
+            time.sleep(3)
+            self.Update_Progress_String.emit("Ready to create another DataSet")
+            self.Update_Progress.emit(0)
+            self.Update_DataSetCreationStatus.emit(True)
         else:
-            self.Update_DataSetCreationStatus.emit(False)
             self.Update_Progress_String.emit("DataSet was not succesfully created")
             self.Update_Progress.emit(95)
+            time.sleep(3)
+            self.Update_Progress_String.emit("Ready to create another DataSet")
+            self.Update_Progress.emit(0)
+            self.Update_DataSetCreationStatus.emit(False)
         
-        time.sleep(5)
-        self.Update_Progress_String.emit("Ready to create another model")
-        self.Update_Progress.emit(0)
+        
     
     
     def ToCreateOrUpdateDataSet(self,DataSetId,SeedDataSetlist,dateStart,dateEnd,ProcessToDo):
         print("this is the one: "+str(SeedDataSetlist[1]))
+        
+        self.Update_Progress_String.emit("Creating DataSet")
+        self.Update_Progress.emit(25)
         
         itemName=SeedDataSetlist[1]
         BackDays=SeedDataSetlist[2]
@@ -128,6 +138,9 @@ class DL_DataSet(QThread):
         FFTAddedPath=pathTocreated+"/CRUDE_OIL_CloseFFT_2400_5Backdys.csv"
         LastPopcolum=pathTocreated+"/CRUDE_OIL_Close_lastPopcolum.csv"
         
+        self.Update_Progress_String.emit("DataSet Path created")
+        self.Update_Progress.emit(50)
+        
         #Check is directory exist, otherwise To Create A Directory With Subdirectories
         
         if path.exists(pathTocreated):
@@ -138,63 +151,98 @@ class DL_DataSet(QThread):
         if ProcessToDo=="1":
             addToOld=False
             self.dataSet_Gen.RetivingDataPrices_Yahoo(itemName,dateStart, dateEnd,Original_Path_Retiving,Original_Path_Retiving,addToOld)
+            self.Update_Progress_String.emit("Base DataSet Created created")
+            self.Update_Progress.emit(60)
         elif ProcessToDo=="0":
             self.dataSet_Gen.UpdateToday(itemName,Original_Path_Retiving)
+            self.Update_Progress_String.emit("Base DataSet Updated")
+            self.Update_Progress.emit(60)
+            
+            
 
         
-        #columns to pop up # Solution applying a mask 
+        #columns to pop up # Solution applying a mask
+        Colums_Selection_FFT=[Open_FFT_C,High_FFT_C,Low_FFT_C,Close_FFT_C,Volum_FFT_C] 
         Colums_Selection=[Open_C,High_C,Low_C,Close_C,Volume_C]
         columns=['Open','High','Low','Close','Volume']
         ColumnsToPop=[]
         
-        for i in range(0,len(Colums_Selection)-1):
-            if Colums_Selection[i]==0:
+        for i in range(0,len(Colums_Selection)):
+            print(i)
+            if Colums_Selection[i]==0 and Colums_Selection_FFT[i]==0:
                 ColumnsToPop.append(columns[i])
         self.dataSet_Gen.PopListdf(ColumnsToPop,Original_Path_Retiving,Onlyonecolumn)
+        self.Update_Progress_String.emit("Columns Poped from base dataset")
+        self.Update_Progress.emit(65)
 
-        
         #To add the day of the week 0=monday, 1=tuesday .... 4= friday
         if Day_Wk_N_C==1:
             self.dataSet_Gen.AddColumnWeekDay(Onlyonecolumn, DayNumAddedPath,False)
+            self.dataSet_Gen.PopListdf(ColumnsToPop,Original_Path_Retiving,Onlyonecolumn)
+            self.Update_Progress_String.emit("WeeDay columns added")
+            self.Update_Progress.emit(73)
         else:
             DayNumAddedPath=Onlyonecolumn
+        
+            
             
         #To add the number*100 Month of the year: january = 100, dicember=1200
         # and Day of the month 1...30 or 1...28 or 1...31
         if Day_MonthNDay_C==1:
             self.dataSet_Gen.AddColumnMothandDay(DayNumAddedPath, MonthAddedPath,False)
+            self.Update_Progress_String.emit("Month and month day columns added")
+            self.Update_Progress.emit(80)
         else:
             MonthAddedPath=DayNumAddedPath
 
         #To add the year
         if Year_C==1:
             self.dataSet_Gen.AddColumnYear(MonthAddedPath,yearAddedPath)
+            self.Update_Progress_String.emit("Year column added")
+            self.Update_Progress.emit(85)
         else:
             yearAddedPath=MonthAddedPath
     
 
-        """
+        
         #Generate new FFT columns
-        Colums_Selection=[Open_FFT_C,High_FFT_C,Low_FFT_C,Close_FFT_C,Volum_FFT_C]
+        Colums_Selection_FFT=[Open_FFT_C,High_FFT_C,Low_FFT_C,Close_FFT_C,Volum_FFT_C]
         columns=['Open','High','Low','Close','Volume']
         ColumnsToFFT=[]
-        for i in range(0,len(Colums_Selection)-1):
-            if Colums_Selection[i]==0:
+        for i in range(0,len(columns)):
+            if Colums_Selection_FFT[i]==1:
                 ColumnsToFFT.append(columns[i])
 
         backdaysToconsider=6
         inicialPath=yearAddedPath
         FFTNew_FileData=FFTAddedPath
-        frec=int(FFT_Frec)
+        frec=self.Convert(FFT_Frec)
+        
+        
+        self.Update_Progress_String.emit("Adding FFT columns columns added")
+        self.Update_Progress.emit(90)
+        self.dataSet_Gen.getTheLastFFTValue(backdaysToconsider,frec,ColumnsToFFT,inicialPath, FFTNew_FileData)
 
-        self.dataSet_Gen.getTheLastFFTValue(backdaysToconsider,frec,ColumnsToFFT,inicialPath, FFTNew_FileData)   
-
-
-        columns=['High','Low']
-
-        self.dataSet_Gen.PopListdf(columns,FFTNew_FileData,LastPopcolum)"""
+        Colums_Selection=[Open_C,High_C,Low_C,Close_C,Volume_C]
+        columns=['Open','High','Low','Close','Volume']
+        ColumnsToPop=[]
+        
+        
+        self.Update_Progress_String.emit("Popping last columns...")
+        for i in range(0,len(Colums_Selection)):
+            if Colums_Selection[i]==0:
+                ColumnsToPop.append(columns[i])
+        self.dataSet_Gen.PopListdf(ColumnsToPop,FFTNew_FileData,LastPopcolum)
+        self.Update_Progress_String.emit("Final DataSet Created :)")
+        self.Update_Progress.emit(100)
         
         #Return the resulting DataSet
         return Original_Path_Retiving
-        
+    
+    def Convert(self,string1):
+        FinalList=[]
+        li = list(string1.split(","))
+        for i in li:
+            FinalList.append(int(i))
+        return FinalList
         
