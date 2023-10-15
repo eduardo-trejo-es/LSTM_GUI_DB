@@ -18,6 +18,7 @@ sys.path.append("APP/Pakages/Seed_Model")
 from PyQt5 import QtCore, QtGui, QtWidgets
 import sqlite3
 
+from TrainnerScript import DL_Trainner
 from Model_Creator import DL_Model
 from DataSet_Creator import DL_DataSet
 
@@ -37,6 +38,8 @@ class Ui_GUI_LSTM_FORCASTER(object):
         self.Forcaster_DB_c = self.Forcaster_DB_conn.cursor()
         
         ### Classes 
+        # Trainnign room
+        self.trainner = DL_Trainner()
         # Model Creator
         self.model_creator = DL_Model() 
         # DataSet creator
@@ -146,21 +149,16 @@ class Ui_GUI_LSTM_FORCASTER(object):
         self.ForC_lbl_or.setGeometry(QtCore.QRect(320, 53, 21, 16))
         self.ForC_lbl_or.setObjectName("ForC_lbl_or")
         self.Tabs.addTab(self.Forcasting_Tab, "")
-        
         self.Model_Trainner_Tab = QtWidgets.QWidget()
         self.Model_Trainner_Tab.setObjectName("Model_Trainner_Tab")
-        
         self.MoTr_lbl_chooseModel = QtWidgets.QLabel(self.Model_Trainner_Tab)
-        self.MoTr_lbl_chooseModel.setGeometry(QtCore.QRect(110, 30, 111, 16))
+        self.MoTr_lbl_chooseModel.setGeometry(QtCore.QRect(70, 30, 111, 16))
         self.MoTr_lbl_chooseModel.setObjectName("MoTr_lbl_chooseModel")
         self.MoTr_lbl_DataSet = QtWidgets.QLabel(self.Model_Trainner_Tab)
-        self.MoTr_lbl_DataSet.setGeometry(QtCore.QRect(110, 80, 60, 16))
+        self.MoTr_lbl_DataSet.setGeometry(QtCore.QRect(70, 80, 60, 16))
         self.MoTr_lbl_DataSet.setObjectName("MoTr_lbl_DataSet")
-        self.MoTr_txtLine_DataSet = QtWidgets.QLineEdit(self.Model_Trainner_Tab)
-        self.MoTr_txtLine_DataSet.setGeometry(QtCore.QRect(110, 100, 311, 21))
-        self.MoTr_txtLine_DataSet.setObjectName("MoTr_txtLine_DataSet")
         self.MoTr_btn_Totrain = QtWidgets.QPushButton(self.Model_Trainner_Tab)
-        self.MoTr_btn_Totrain.setGeometry(QtCore.QRect(470, 60, 141, 51))
+        self.MoTr_btn_Totrain.setGeometry(QtCore.QRect(470, 30, 141, 51))
         self.MoTr_btn_Totrain.setObjectName("MoTr_btn_Totrain")
         self.MoTr_Plaintxt_CMDTraining = QtWidgets.QPlainTextEdit(self.Model_Trainner_Tab)
         self.MoTr_Plaintxt_CMDTraining.setGeometry(QtCore.QRect(10, 210, 661, 171))
@@ -169,17 +167,38 @@ class Ui_GUI_LSTM_FORCASTER(object):
         self.MoTr_lbl_CMD_training.setGeometry(QtCore.QRect(10, 190, 161, 16))
         self.MoTr_lbl_CMD_training.setObjectName("MoTr_lbl_CMD_training")
         self.MoTr_txtLine_PercentDataSet = QtWidgets.QLineEdit(self.Model_Trainner_Tab)
-        self.MoTr_txtLine_PercentDataSet.setGeometry(QtCore.QRect(110, 150, 61, 21))
+        self.MoTr_txtLine_PercentDataSet.setGeometry(QtCore.QRect(70, 150, 61, 21))
         self.MoTr_txtLine_PercentDataSet.setObjectName("MoTr_txtLine_PercentDataSet")
         self.MoTr_lbl_PercentDataset = QtWidgets.QLabel(self.Model_Trainner_Tab)
-        self.MoTr_lbl_PercentDataset.setGeometry(QtCore.QRect(110, 130, 111, 16))
+        self.MoTr_lbl_PercentDataset.setGeometry(QtCore.QRect(70, 130, 111, 16))
         self.MoTr_lbl_PercentDataset.setObjectName("MoTr_lbl_PercentDataset")
         self.MoTr_ComBox_ChooseModel = QtWidgets.QComboBox(self.Model_Trainner_Tab)
-        self.MoTr_ComBox_ChooseModel.setGeometry(QtCore.QRect(106, 50, 311, 26))
+        self.MoTr_ComBox_ChooseModel.setGeometry(QtCore.QRect(70, 50, 111, 26))
         self.MoTr_ComBox_ChooseModel.setObjectName("MoTr_ComBox_ChooseModel")
+        self.MoTr_btn_Cancel_train = QtWidgets.QPushButton(self.Model_Trainner_Tab)
+        self.MoTr_btn_Cancel_train.setGeometry(QtCore.QRect(470, 90, 141, 51))
+        self.MoTr_btn_Cancel_train.setObjectName("MoTr_btn_Cancel_train")
+        self.MoTr_ComBox_Column_T_Predict = QtWidgets.QComboBox(self.Model_Trainner_Tab)
+        self.MoTr_ComBox_Column_T_Predict.setGeometry(QtCore.QRect(270, 50, 81, 26))
+        self.MoTr_ComBox_Column_T_Predict.setObjectName("MoTr_ComBox_Column_T_Predict")
+        self.MoTr_ComBox_Column_T_Predict.addItem("")
+        self.MoTr_ComBox_Column_T_Predict.addItem("")
+        self.MoTr_ComBox_Column_T_Predict.addItem("")
+        self.MoTr_ComBox_Column_T_Predict.addItem("")
+        self.MoTr_ComBox_Column_T_Predict.addItem("")
+        self.MoTr_lbl_ColumnPredict = QtWidgets.QLabel(self.Model_Trainner_Tab)
+        self.MoTr_lbl_ColumnPredict.setGeometry(QtCore.QRect(270, 30, 111, 16))
+        self.MoTr_lbl_ColumnPredict.setObjectName("MoTr_lbl_ColumnPredict")
+        self.MoTr_txtLine_ephocs = QtWidgets.QLineEdit(self.Model_Trainner_Tab)
+        self.MoTr_txtLine_ephocs.setGeometry(QtCore.QRect(270, 100, 81, 21))
+        self.MoTr_txtLine_ephocs.setObjectName("MoTr_txtLine_ephocs")
+        self.MoTr_lbl_DataSet_2 = QtWidgets.QLabel(self.Model_Trainner_Tab)
+        self.MoTr_lbl_DataSet_2.setGeometry(QtCore.QRect(270, 80, 60, 16))
+        self.MoTr_lbl_DataSet_2.setObjectName("MoTr_lbl_DataSet_2")
+        self.MoTr_ComBox_DataSet = QtWidgets.QComboBox(self.Model_Trainner_Tab)
+        self.MoTr_ComBox_DataSet.setGeometry(QtCore.QRect(70, 100, 111, 26))
+        self.MoTr_ComBox_DataSet.setObjectName("MoTr_ComBox_DataSet")
         self.Tabs.addTab(self.Model_Trainner_Tab, "")
-        
-        
         self.Data_Manager_tab = QtWidgets.QWidget()
         self.Data_Manager_tab.setObjectName("Data_Manager_tab")
         self.DaMa_lbl_Seed_DataSet = QtWidgets.QLabel(self.Data_Manager_tab)
@@ -196,15 +215,9 @@ class Ui_GUI_LSTM_FORCASTER(object):
         self.DaMa_Lbl_Progres = QtWidgets.QLabel(self.Data_Manager_tab)
         self.DaMa_Lbl_Progres.setGeometry(QtCore.QRect(150, 330, 291, 16))
         self.DaMa_Lbl_Progres.setObjectName("DaMa_Lbl_Progres")
-        
-        
-        
         self.DaMa_lbl_DataSetId = QtWidgets.QLabel(self.Data_Manager_tab)
         self.DaMa_lbl_DataSetId.setGeometry(QtCore.QRect(370, 20, 91, 16))
-        self.DaMa_lbl_DataSetId.setObjectName("DaMa_lbl_DataSetId")
-
-        
-        
+        self.DaMa_lbl_DataSetId.setObjectName("DaMa_lbl_DataSetId")    
         self.DaMa_btn_Create = QtWidgets.QPushButton(self.Data_Manager_tab)
         self.DaMa_btn_Create.setGeometry(QtCore.QRect(370, 200, 113, 101))
         self.DaMa_btn_Create.setObjectName("DaMa_btn_Create")
@@ -395,39 +408,47 @@ class Ui_GUI_LSTM_FORCASTER(object):
         self.Tabs.setCurrentIndex(4)
         QtCore.QMetaObject.connectSlotsByName(GUI_LSTM_FORCASTER)
         
+    
         
-        #---------- GENERAL EMIT SIGNALS ---------
-        ########## Tab Model Creator
+        #----------- TAB MODEL TRAINNING  -------------
+        ############ General Emit Signals
+        #self.Model_C_ComBox_Int_Seed_Data.currentIndexChanged.connect(self.SeedDataComboBoxChanged)
+        #self.Model_C_ComBox_Int_Model.currentIndexChanged.connect(self.ModelsComboBoxChanged)
+        ############ Thread Emit Signals
+        self.trainner.Update_TrainningProcssStatus.connect(self.Event_TrainningStatus)
+        self.trainner.Update_Progress.connect(self.Event_UpdateProgress_TrainningProcess)
+        self.trainner.Update_Progress_String.connect(self.Event_UpdateProgress_string_Trainning_Process)
+        #####  Buttons calls ##### 
+        self.MoTr_btn_Totrain.clicked.connect(self.Start_Trainning)
+        self.MoTr_btn_Cancel_train.clicked.connect(self.Cancel_Trainning)
+        
+        
+        #---------- TAB MODEL CREATOR  ------------
+        ############ General Emit Signals
         self.Model_C_ComBox_Int_Seed_Data.currentIndexChanged.connect(self.SeedDataComboBoxChanged)
         self.Model_C_ComBox_Int_Model.currentIndexChanged.connect(self.ModelsComboBoxChanged)
-        ########## Tab DataManagement
-        self.DaMa_ComBox_Seed_DataSet.currentIndexChanged.connect(self.SeedDataSetComboBoxChanged)
-        self.DaMa_ComBox_DataSet_Id.currentIndexChanged.connect(self.DataSetComboBoxChanged)
-            
-        #---------THREAD EMIT SIGNALS -----------
-        ########## Tab Model Creator
+        ############ Thread Emit Signals
         self.model_creator.Update_ModelCreationStatus.connect(self.Event_ModelCreationStatus)
         self.model_creator.Update_Progress.connect(self.Event_UpdateProgress_ModelCreator)
         self.model_creator.Update_Progress_String.connect(self.Event_UpdateProgress_string_ModelCreator)
-        ########## Tab DataManagement
+        #####  Buttons calls ##### 
+        self.Model_C_PB_Create_M.clicked.connect(self.Create_New_Model)
+        
+        
+        #---------- TAB DATA MANAGEMENT  ------------
+        ############ General Emit Signals
+        self.DaMa_ComBox_Seed_DataSet.currentIndexChanged.connect(self.SeedDataSetComboBoxChanged)
+        self.DaMa_ComBox_DataSet_Id.currentIndexChanged.connect(self.DataSetComboBoxChanged)
+        
+        ############ Thread Emit Signals
         self.DataSet_creator.Update_DataSetCreationStatus.connect(self.Event_DataSetCreationStatus)
         self.DataSet_creator.Update_Progress.connect(self.Event_UpdateProgress_DataSetCreator)
         self.DataSet_creator.Update_Progress_String.connect(self.Event_UpdateProgress_string_DataSetCreator)
         
-        
-         
-         #####  Buttons calls #####
-    
-            ### Tab Model creator  
-        self.Model_C_PB_Create_M.clicked.connect(self.Create_New_Model)
-        
-            ### Data Manager
+        #####  Buttons calls #####   
         self.DaMa_btn_Create.clicked.connect(self.Create_DataSet)
-        self.DaMa_btn_Update.clicked.connect(self.Update_DataSet)
-       
-        
-            ### TabAppComments
-        #self.AppCom_PB_Clear.clicked.connect(self.AppCom_Clear)
+        self.DaMa_btn_Update.clicked.connect(self.Update_DataSet)     
+         
         
 
     def retranslateUi(self, GUI_LSTM_FORCASTER):
@@ -454,7 +475,17 @@ class Ui_GUI_LSTM_FORCASTER(object):
         self.MoTr_lbl_DataSet.setText(_translate("GUI_LSTM_FORCASTER", "DataSet"))
         self.MoTr_btn_Totrain.setText(_translate("GUI_LSTM_FORCASTER", "To train"))
         self.MoTr_lbl_CMD_training.setText(_translate("GUI_LSTM_FORCASTER", "CMD training process"))
-        self.MoTr_lbl_PercentDataset.setText(_translate("GUI_LSTM_FORCASTER", "% Data to test"))
+        self.MoTr_txtLine_PercentDataSet.setText(_translate("GUI_LSTM_FORCASTER", "96"))
+        self.MoTr_lbl_PercentDataset.setText(_translate("GUI_LSTM_FORCASTER", "% Data To used"))
+        self.MoTr_btn_Cancel_train.setText(_translate("GUI_LSTM_FORCASTER", "Cancel"))
+        self.MoTr_ComBox_Column_T_Predict.setItemText(0, _translate("GUI_LSTM_FORCASTER", "Open"))
+        self.MoTr_ComBox_Column_T_Predict.setItemText(1, _translate("GUI_LSTM_FORCASTER", "High"))
+        self.MoTr_ComBox_Column_T_Predict.setItemText(2, _translate("GUI_LSTM_FORCASTER", "Low"))
+        self.MoTr_ComBox_Column_T_Predict.setItemText(3, _translate("GUI_LSTM_FORCASTER", "Close"))
+        self.MoTr_ComBox_Column_T_Predict.setItemText(4, _translate("GUI_LSTM_FORCASTER", "Volume"))
+        self.MoTr_lbl_ColumnPredict.setText(_translate("GUI_LSTM_FORCASTER", "Column to predict"))
+        self.MoTr_txtLine_ephocs.setText(_translate("GUI_LSTM_FORCASTER", "50"))
+        self.MoTr_lbl_DataSet_2.setText(_translate("GUI_LSTM_FORCASTER", "ephocs"))
         self.Tabs.setTabText(self.Tabs.indexOf(self.Model_Trainner_Tab), _translate("GUI_LSTM_FORCASTER", "Model Trainner"))
         self.DaMa_lbl_Seed_DataSet.setText(_translate("GUI_LSTM_FORCASTER", "Seed DataSet Id"))
         self.DaMa_btn_Update.setText(_translate("GUI_LSTM_FORCASTER", "Update"))
@@ -652,7 +683,7 @@ class Ui_GUI_LSTM_FORCASTER(object):
         #Validate changes to our DB 
         self.Forcaster_DB_conn.commit()
 
-    def Creare_new_model_in_DB(self,val_1,val_2,val_3,val_4,val_5):
+    def Creare_new_model_in_DB(self,val_1,val_2,val_3,val_4,val_5,val_6,val_7):
 
         """date_Time TEXT,
         Path_Model TEXT,
@@ -660,10 +691,9 @@ class Ui_GUI_LSTM_FORCASTER(object):
         Seed_Data_id_FRGN INTEGER,
         DataSet_id_FRGN INTEGER"""
         
-        query=""" INSERT INTO Models (date_Time,Path_Model, N_epochs_Done,Seed_Data_id_FRGN,DataSet_id_FRGN)
-         VALUES (?,?,?,?,?)"""
-
-        self.Forcaster_DB_c.execute(query,(val_1,val_2,val_3,val_4,val_5)) 
+        query=""" INSERT INTO Models (date_Time,Path_Model, N_epochs_Done,Seed_Data_id_FRGN,DataSet_id_FRGN,Forcasting_Result_id_FRGN,Colm_T_Predict)
+         VALUES (?,?,?,?,?,?,?)"""
+        self.Forcaster_DB_c.execute(query,(val_1,val_2,val_3,val_4,val_5,val_6,val_7)) 
         
         #Validate changes to our DB 
         self.Forcaster_DB_conn.commit()
@@ -671,12 +701,12 @@ class Ui_GUI_LSTM_FORCASTER(object):
     ##### Emit thread signals
     
     def Event_ModelCreationStatus(self,val):
-        date_Time,Path_Model,N_epochs_Done,Seed_Data_id_FRGN,DataSet_id_FRGN=self.model_creator.Get_NewModelData()
+        date_Time,Path_Model,N_epochs_Done,Seed_Data_id_FRGN,DataSet_id_FRGN,Forcasting_Result_id_FRGN,Colm_T_Predict=self.model_creator.Get_NewModelData()
         NewModelStatus=self.model_creator.GetModelCreationStatus()
         print(NewModelStatus)
 
         if val:
-            self.Creare_new_model_in_DB(date_Time,Path_Model,N_epochs_Done,Seed_Data_id_FRGN,DataSet_id_FRGN)
+            self.Creare_new_model_in_DB(date_Time,Path_Model,N_epochs_Done,Seed_Data_id_FRGN,DataSet_id_FRGN,Forcasting_Result_id_FRGN,Colm_T_Predict)
             print("Model Created :'D")
             modelJustCreated=self.model_creator.Get_Last_model_Create()+1
             self.AddinElementComoBoxModelData(modelJustCreated)
@@ -1019,6 +1049,30 @@ class Ui_GUI_LSTM_FORCASTER(object):
     def Event_UpdateProgress_string_DataSetCreator(self,val):
         self.DaMa_Lbl_Progres.setText(val)
         
+        
+    ###########################################
+    #           TAB Model Trainning           #
+    ###########################################
+    
+    ############### Bottons functions  ################ 
+    def Start_Trainning(self):
+        self.trainner.start()
+    
+    def Cancel_Trainning(self):
+        pass
+    
+    ############ General Fucntions  ############
+    
+    ##### Emit thread signals
+    
+    def Event_TrainningStatus(self):
+        pass
+    
+    def Event_UpdateProgress_TrainningProcess(self):
+        pass
+    
+    def Event_UpdateProgress_string_Trainning_Process(self):
+        pass
                  
 if __name__ == "__main__":
     import sys

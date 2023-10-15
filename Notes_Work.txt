@@ -1,8 +1,13 @@
-* Missing logic to created Data set about seed conditions, and created the resulting DataSet
+* Tab trainning
+    - Thread created
+    - all function missing
+    - all set and get data to/from GUI objects
+
+* Tab predict
 
 * Too complicate to added or delete columns in DB, change list queries for dictionary, 
 in this way when I modify db structure, in code the dictionary lables won't changes
 
 
 Interlock FFT:
-if Column Open is unselect, FFT_Open can't not be selected either. same case for all other cases
+Limits for values

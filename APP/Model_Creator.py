@@ -32,6 +32,8 @@ class DL_Model(QThread):
         self.Path_Model=""
         self.N_epochs_Done=0
         self.DataSet_id_FRGN=0
+        self.Forcasting_Result_id_FRGN=0
+        self.Colm_T_Predict=0
         self.ModelCreationStatus=False
         self.n_future=1
         
@@ -51,7 +53,7 @@ class DL_Model(QThread):
         
         
     def Get_NewModelData(self):
-        return self.date_Time,self.Path_Model,self.N_epochs_Done,self.Seed_Data_id_FRGN,self.DataSet_id_FRGN
+        return self.date_Time,self.Path_Model,self.N_epochs_Done,self.Seed_Data_id_FRGN,self.DataSet_id_FRGN,self.Forcasting_Result_id_FRGN,self.Colm_T_Predict
     
     def GetModelCreationStatus(self):
         return self.ModelCreationStatus

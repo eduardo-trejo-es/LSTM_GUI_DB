@@ -30,7 +30,7 @@
      <enum>QTabWidget::North</enum>
     </property>
     <property name="currentIndex">
-     <number>3</number>
+     <number>2</number>
     </property>
     <property name="movable">
      <bool>false</bool>
@@ -293,7 +293,7 @@
      <widget class="QLabel" name="MoTr_lbl_chooseModel">
       <property name="geometry">
        <rect>
-        <x>110</x>
+        <x>70</x>
         <y>30</y>
         <width>111</width>
         <height>16</height>
@@ -306,7 +306,7 @@
      <widget class="QLabel" name="MoTr_lbl_DataSet">
       <property name="geometry">
        <rect>
-        <x>110</x>
+        <x>70</x>
         <y>80</y>
         <width>60</width>
         <height>16</height>
@@ -316,21 +316,11 @@
        <string>DataSet</string>
       </property>
      </widget>
-     <widget class="QLineEdit" name="MoTr_txtLine_DataSet">
-      <property name="geometry">
-       <rect>
-        <x>110</x>
-        <y>100</y>
-        <width>311</width>
-        <height>21</height>
-       </rect>
-      </property>
-     </widget>
      <widget class="QPushButton" name="MoTr_btn_Totrain">
       <property name="geometry">
        <rect>
         <x>470</x>
-        <y>60</y>
+        <y>30</y>
         <width>141</width>
         <height>51</height>
        </rect>
@@ -365,32 +355,132 @@
      <widget class="QLineEdit" name="MoTr_txtLine_PercentDataSet">
       <property name="geometry">
        <rect>
-        <x>110</x>
+        <x>70</x>
         <y>150</y>
         <width>61</width>
         <height>21</height>
        </rect>
       </property>
+      <property name="text">
+       <string>96</string>
+      </property>
      </widget>
      <widget class="QLabel" name="MoTr_lbl_PercentDataset">
       <property name="geometry">
        <rect>
-        <x>110</x>
+        <x>70</x>
         <y>130</y>
         <width>111</width>
         <height>16</height>
        </rect>
       </property>
       <property name="text">
-       <string>% Data to test</string>
+       <string>% Data To used</string>
       </property>
      </widget>
      <widget class="QComboBox" name="MoTr_ComBox_ChooseModel">
       <property name="geometry">
        <rect>
-        <x>106</x>
+        <x>70</x>
         <y>50</y>
-        <width>311</width>
+        <width>111</width>
+        <height>26</height>
+       </rect>
+      </property>
+     </widget>
+     <widget class="QPushButton" name="MoTr_btn_Cancel_train">
+      <property name="geometry">
+       <rect>
+        <x>470</x>
+        <y>90</y>
+        <width>141</width>
+        <height>51</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Cancel</string>
+      </property>
+     </widget>
+     <widget class="QComboBox" name="MoTr_ComBox_Column_T_Predict">
+      <property name="geometry">
+       <rect>
+        <x>270</x>
+        <y>50</y>
+        <width>81</width>
+        <height>26</height>
+       </rect>
+      </property>
+      <item>
+       <property name="text">
+        <string>Open</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>High</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>Low</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>Close</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>Volume</string>
+       </property>
+      </item>
+     </widget>
+     <widget class="QLabel" name="MoTr_lbl_ColumnPredict">
+      <property name="geometry">
+       <rect>
+        <x>270</x>
+        <y>30</y>
+        <width>111</width>
+        <height>16</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Column to predict</string>
+      </property>
+     </widget>
+     <widget class="QLineEdit" name="MoTr_txtLine_ephocs">
+      <property name="geometry">
+       <rect>
+        <x>270</x>
+        <y>100</y>
+        <width>81</width>
+        <height>21</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>50</string>
+      </property>
+     </widget>
+     <widget class="QLabel" name="MoTr_lbl_DataSet_2">
+      <property name="geometry">
+       <rect>
+        <x>270</x>
+        <y>80</y>
+        <width>60</width>
+        <height>16</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>ephocs</string>
+      </property>
+     </widget>
+     <widget class="QComboBox" name="MoTr_ComBox_DataSet">
+      <property name="geometry">
+       <rect>
+        <x>70</x>
+        <y>100</y>
+        <width>111</width>
         <height>26</height>
        </rect>
       </property>

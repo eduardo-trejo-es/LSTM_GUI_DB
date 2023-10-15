@@ -21,10 +21,11 @@ c.execute("""
             N_epochs_Done INTEGER,
             Seed_Data_id_FRGN INTEGER,
             DataSet_id_FRGN INTEGER,
-            Training_Resul_FRGN INTEGER,
+            Forcasting_Result_id_FRGN INTEGER,
+            Colm_T_Predict,
             FOREIGN KEY(DataSet_id_FRGN) REFERENCES DataSet(DataSet_id),
             FOREIGN KEY(Seed_Data_id_FRGN) REFERENCES Seed_Data(Seed_Data_id),
-            FOREIGN KEY(Training_Resul_FRGN) REFERENCES Forcasting_Resul(Forcasting_Resul_id)
+            FOREIGN KEY(Forcasting_Result_id_FRGN) REFERENCES Forcasting_Resul(Forcasting_Resul_id)
         )
         """)
 
