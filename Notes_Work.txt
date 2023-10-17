@@ -8,6 +8,8 @@
 * Too complicate to added or delete columns in DB, change list queries for dictionary, 
 in this way when I modify db structure, in code the dictionary lables won't changes
 
+* A new global function to update object was create, and of curse some other function were created because of it
+
 
 Interlock FFT:
 Limits for values

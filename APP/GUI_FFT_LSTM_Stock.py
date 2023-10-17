@@ -47,29 +47,13 @@ class Ui_GUI_LSTM_FORCASTER(object):
         
         ## global var init
         
-        ##Seed_Data; Getting all data 
-        query="SELECT * FROM Seed_Data"
+        self.GetSeedDataModel()
+
+        self.GetModelTable()
+                
+        self.GetSeed_DataSet()
         
-        self.Forcaster_DB_c.execute(query)
-        self.SeedData_SLCT_all=self.Forcaster_DB_c.fetchall()
-        
-        ## model Data; getting all data
-        query="SELECT * FROM Models"
-        
-        self.Forcaster_DB_c.execute(query)
-        self.ModelsData_SLCT_all=self.Forcaster_DB_c.fetchall()
-        
-        ## SeedDataSet; Getting all data
-        query="SELECT * FROM Seed_DataSet"
-        
-        self.Forcaster_DB_c.execute(query)
-        self.SeedDataSet_all=self.Forcaster_DB_c.fetchall()
-        
-        ## DataSet; Getting all data
-        query="SELECT * FROM DataSet"
-        
-        self.Forcaster_DB_c.execute(query)
-        self.DataSet_all=self.Forcaster_DB_c.fetchall()
+        self.GetDataSetTable()
         
         
     
@@ -172,9 +156,13 @@ class Ui_GUI_LSTM_FORCASTER(object):
         self.MoTr_lbl_PercentDataset = QtWidgets.QLabel(self.Model_Trainner_Tab)
         self.MoTr_lbl_PercentDataset.setGeometry(QtCore.QRect(70, 130, 111, 16))
         self.MoTr_lbl_PercentDataset.setObjectName("MoTr_lbl_PercentDataset")
+        
         self.MoTr_ComBox_ChooseModel = QtWidgets.QComboBox(self.Model_Trainner_Tab)
         self.MoTr_ComBox_ChooseModel.setGeometry(QtCore.QRect(70, 50, 111, 26))
         self.MoTr_ComBox_ChooseModel.setObjectName("MoTr_ComBox_ChooseModel")
+        
+        
+        
         self.MoTr_btn_Cancel_train = QtWidgets.QPushButton(self.Model_Trainner_Tab)
         self.MoTr_btn_Cancel_train.setGeometry(QtCore.QRect(470, 90, 141, 51))
         self.MoTr_btn_Cancel_train.setObjectName("MoTr_btn_Cancel_train")
@@ -306,11 +294,7 @@ class Ui_GUI_LSTM_FORCASTER(object):
         self.DaMa_ComBox_Seed_DataSet = QtWidgets.QComboBox(self.Data_Manager_tab)
         self.DaMa_ComBox_Seed_DataSet.setGeometry(QtCore.QRect(60, 40, 101, 26))
         self.DaMa_ComBox_Seed_DataSet.setObjectName("DaMa_ComBox_Seed_DataSet")
-        self.DaMa_ComBox_Seed_DataSet.clear() #When starting app, combobox is updated
-        for i in self.SeedDataSet_all: #ComboBox is updated
-            Current_Row=i[0]
-            self.DaMa_ComBox_Seed_DataSet.addItem(str(Current_Row))
-        self.SeedDataSetComboBoxChanged() 
+        
         
         self.Tabs.addTab(self.Data_Manager_tab, "")
         
@@ -380,10 +364,7 @@ class Ui_GUI_LSTM_FORCASTER(object):
         self.Model_C_ComBox_Int_Model = QtWidgets.QComboBox(self.ModCrtion)
         self.Model_C_ComBox_Int_Model.setGeometry(QtCore.QRect(280, 280, 141, 25))
         self.Model_C_ComBox_Int_Model.setObjectName("Model_C_ComBox_Int_Model")
-        self.Model_C_ComBox_Int_Model.clear()
-        for i in self.ModelsData_SLCT_all: #ComboBox is updated
-            Current_Row=i[0]
-            self.Model_C_ComBox_Int_Model.addItem(str(Current_Row))
+        
         self.Model_C_LBL_Int_Seed_Data = QtWidgets.QLabel(self.ModCrtion)
         self.Model_C_LBL_Int_Seed_Data.setGeometry(QtCore.QRect(195, 10, 180, 26))
         self.Model_C_LBL_Int_Seed_Data.setObjectName("Model_C_LBL_Int_Seed_Data")   
@@ -408,7 +389,8 @@ class Ui_GUI_LSTM_FORCASTER(object):
         self.Tabs.setCurrentIndex(4)
         QtCore.QMetaObject.connectSlotsByName(GUI_LSTM_FORCASTER)
         
-    
+        ### INIT Function calls
+        self.UpdateLocalObjects()
         
         #----------- TAB MODEL TRAINNING  -------------
         ############ General Emit Signals
@@ -527,6 +509,43 @@ class Ui_GUI_LSTM_FORCASTER(object):
         self.Model_C_LBL_BackDays.setText(_translate("GUI_LSTM_FORCASTER", "#BackDays"))
         self.Tabs.setTabText(self.Tabs.indexOf(self.ModCrtion), _translate("GUI_LSTM_FORCASTER", "Model Creation"))
         
+    ###########################################
+    #              Global Functions           #
+    ###########################################
+    def UpdateLocalObjects(self):
+    
+        #### Tranning tab
+        self.TrainningTab_UpdateComboxModel_ID()
+        
+        #### Data Mananer Tab
+        self.DataManagerTab_UpdateComboxDataSet_ID()
+        
+        self.DataManagerTab_UpdateComboxSeedDataSet_ID()
+        
+        ####   Model creator tab   ####
+        self.ModelTab_UpdateComboBoxModel_ID()
+    
+    def GetModelTable(self):
+        query="SELECT * FROM Models"
+        self.Forcaster_DB_c.execute(query)
+        self.ModelsData_SLCT_all=self.Forcaster_DB_c.fetchall()
+        
+    def GetDataSetTable(self):
+        query="SELECT * FROM DataSet"
+        self.Forcaster_DB_c.execute(query)
+        self.DataSet_all=self.Forcaster_DB_c.fetchall()
+        
+    def GetSeedDataModel(self):
+        query="SELECT * FROM Seed_Data" #This is seed model
+        self.Forcaster_DB_c.execute(query)
+        self.SeedData_SLCT_all=self.Forcaster_DB_c.fetchall()
+        
+    def GetSeed_DataSet(self):
+        query="SELECT * FROM Seed_DataSet"
+        self.Forcaster_DB_c.execute(query)
+        self.SeedDataSet_all=self.Forcaster_DB_c.fetchall()
+        
+    
     
     ###########################################
     #              TAB Model Creator          #
@@ -583,6 +602,13 @@ class Ui_GUI_LSTM_FORCASTER(object):
         self.model_creator.start()
         
     ############ General Fucntions  ############   
+    def ModelTab_UpdateComboBoxModel_ID(self):
+        self.Model_C_ComBox_Int_Model.clear()
+        self.GetModelTable()
+        for i in self.ModelsData_SLCT_all: #ComboBox is updated
+            Current_Row=i[0]
+            self.Model_C_ComBox_Int_Model.addItem(str(Current_Row))
+    
     def ModelsComboBoxChanged(self):
         Model_Selected=self.Model_C_ComBox_Int_Model.currentText()
         
@@ -615,7 +641,8 @@ class Ui_GUI_LSTM_FORCASTER(object):
             self.Model_C_txtLine_Colums.setText(str(i[1]))
     
     def AddinElementComoBoxDataSeed(self,val1):
-        self.Model_C_ComBox_Int_Seed_Data.addItem(str(val1))
+        #self.Model_C_ComBox_Int_Seed_Data.addItem(str(val1))
+        self.UpdateLocalObjects()
     
     def AddinElementComoBoxModelData(self,val1):
         self.Model_C_ComBox_Int_Model.addItem(str(val1))
@@ -830,6 +857,24 @@ class Ui_GUI_LSTM_FORCASTER(object):
         pass
 
     ############ General Fucntions  ############
+    def DataManagerTab_UpdateComboxDataSet_ID(self):
+        self.DaMa_ComBox_DataSet_Id.clear() #When starting app, combobox is updated
+        self.GetDataSetTable()
+        for i in self.DataSet_all: #ComboBox is updated
+            Current_Row=i[0]
+            self.DaMa_ComBox_DataSet_Id.addItem(str(Current_Row))
+        #self.SeedDataSetComboBoxChanged() 
+        
+    def DataManagerTab_UpdateComboxSeedDataSet_ID(self):
+        self.DaMa_ComBox_Seed_DataSet.clear() #When starting app, combobox is updated
+        self.GetSeed_DataSet()
+        for i in self.SeedDataSet_all: #ComboBox is updated
+            Current_Row=i[0]
+            self.DaMa_ComBox_Seed_DataSet.addItem(str(Current_Row))
+        #self.SeedDataSetComboBoxChanged() 
+        
+    
+    
     def DataSetComboBoxChanged(self):
         Model_Selected=self.DaMa_ComBox_DataSet_Id.currentText()
         
@@ -1062,6 +1107,13 @@ class Ui_GUI_LSTM_FORCASTER(object):
         pass
     
     ############ General Fucntions  ############
+    
+    def TrainningTab_UpdateComboxModel_ID(self):
+            self.MoTr_ComBox_ChooseModel.clear()
+            self.GetModelTable()
+            for i in self.ModelsData_SLCT_all: #ComboBox is updated
+                Current_Row=i[0]
+                self.MoTr_ComBox_ChooseModel.addItem(str(Current_Row))
     
     ##### Emit thread signals
     
