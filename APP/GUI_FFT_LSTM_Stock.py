@@ -18,7 +18,7 @@ sys.path.append("APP/Pakages/Seed_Model")
 from PyQt5 import QtCore, QtGui, QtWidgets
 import sqlite3
 
-from TrainnerScript import DL_Trainner
+from Model_Trainner import DL_Trainner
 from Model_Creator import DL_Model
 from DataSet_Creator import DL_DataSet
 
@@ -516,10 +516,10 @@ class Ui_GUI_LSTM_FORCASTER(object):
     
         #### Tranning tab
         self.TrainningTab_UpdateComboxModel_ID()
+        self.TrainningTab_UpdateComboxDataSet_ID()
         
         #### Data Mananer Tab
         self.DataManagerTab_UpdateComboxDataSet_ID()
-        
         self.DataManagerTab_UpdateComboxSeedDataSet_ID()
         
         ####   Model creator tab   ####
@@ -603,7 +603,7 @@ class Ui_GUI_LSTM_FORCASTER(object):
         
     ############ General Fucntions  ############   
     def ModelTab_UpdateComboBoxModel_ID(self):
-        self.Model_C_ComBox_Int_Model.clear()
+        #self.Model_C_ComBox_Int_Model.clear()
         self.GetModelTable()
         for i in self.ModelsData_SLCT_all: #ComboBox is updated
             Current_Row=i[0]
@@ -739,6 +739,7 @@ class Ui_GUI_LSTM_FORCASTER(object):
             self.AddinElementComoBoxModelData(modelJustCreated)
             index= self.Model_C_ComBox_Int_Model.findText(str(modelJustCreated),QtCore.Qt.MatchFixedString)
             self.Model_C_ComBox_Int_Model.setCurrentIndex(index)
+            self.UpdateLocalObjects()
                 
     def Event_UpdateProgress_ModelCreator(self,val):
         self.Model_C_LdBar.setProperty("value",val)
@@ -858,36 +859,47 @@ class Ui_GUI_LSTM_FORCASTER(object):
 
     ############ General Fucntions  ############
     def DataManagerTab_UpdateComboxDataSet_ID(self):
-        self.DaMa_ComBox_DataSet_Id.clear() #When starting app, combobox is updated
+        #self.DaMa_ComBox_DataSet_Id.clear() #When starting app, combobox is updated
         self.GetDataSetTable()
         for i in self.DataSet_all: #ComboBox is updated
             Current_Row=i[0]
-            self.DaMa_ComBox_DataSet_Id.addItem(str(Current_Row))
+            index= self.DaMa_ComBox_DataSet_Id.findText(str(Current_Row),QtCore.Qt.MatchFixedString)
+            if index==-1:
+                self.DaMa_ComBox_DataSet_Id.addItem(str(Current_Row))
+            
         #self.SeedDataSetComboBoxChanged() 
         
     def DataManagerTab_UpdateComboxSeedDataSet_ID(self):
-        self.DaMa_ComBox_Seed_DataSet.clear() #When starting app, combobox is updated
+        #self.DaMa_ComBox_Seed_DataSet.clear() #When starting app, combobox is updated
         self.GetSeed_DataSet()
         for i in self.SeedDataSet_all: #ComboBox is updated
             Current_Row=i[0]
-            self.DaMa_ComBox_Seed_DataSet.addItem(str(Current_Row))
+            index= self.DaMa_ComBox_Seed_DataSet.findText(str(Current_Row),QtCore.Qt.MatchFixedString)
+            if index==-1:
+                self.DaMa_ComBox_Seed_DataSet.addItem(str(Current_Row))
+            
         #self.SeedDataSetComboBoxChanged() 
         
-    
-    
     def DataSetComboBoxChanged(self):
-        Model_Selected=self.DaMa_ComBox_DataSet_Id.currentText()
-        
+        DatasSet_Selected=self.DaMa_ComBox_DataSet_Id.currentText()
+        print(DatasSet_Selected)
         query="SELECT * FROM DataSet WHERE DataSet_id=?"
         
-        self.Forcaster_DB_c.execute(query,(Model_Selected,))
+        self.Forcaster_DB_c.execute(query,(DatasSet_Selected,))
         Select_DataSet=self.Forcaster_DB_c.fetchall()
+        
+        print(Select_DataSet)
 
         for i in Select_DataSet:
             Date_Time_DataSet=i[1]
             Path_DataSet=i[2]
             SeedDataSet=i[3]
         
+        print(Date_Time_DataSet)
+        print(Path_DataSet)
+        print(SeedDataSet)
+        
+    
         self.DaMa_txtLine_DateTime.setText(str(Date_Time_DataSet))
         self.DaMa_txtLine_PathCSV_File.setText(str(Path_DataSet))
         index= self.DaMa_ComBox_Seed_DataSet.findText(str(SeedDataSet),QtCore.Qt.MatchFixedString)
@@ -976,7 +988,7 @@ class Ui_GUI_LSTM_FORCASTER(object):
         Matching_Val12=False
         Matching_Val13=False
         Matching_Val14=False
-        Matching_Val15=False
+        Matching_Val15=Falsex
         Matching_Val16=False
         
         ##Seed_Data; Getting all data 
@@ -1086,6 +1098,7 @@ class Ui_GUI_LSTM_FORCASTER(object):
             self.AddinElementComoBoxData_Set(DataSetJustCreated)
             index= self.DaMa_ComBox_DataSet_Id.findText(str(DataSetJustCreated),QtCore.Qt.MatchFixedString)
             self.DaMa_ComBox_DataSet_Id.setCurrentIndex(index)
+            self.UpdateLocalObjects()
             
             
     def Event_UpdateProgress_DataSetCreator(self,val):
@@ -1109,11 +1122,25 @@ class Ui_GUI_LSTM_FORCASTER(object):
     ############ General Fucntions  ############
     
     def TrainningTab_UpdateComboxModel_ID(self):
-            self.MoTr_ComBox_ChooseModel.clear()
-            self.GetModelTable()
-            for i in self.ModelsData_SLCT_all: #ComboBox is updated
-                Current_Row=i[0]
+        #self.MoTr_ComBox_ChooseModel.clear()
+        self.GetModelTable()
+        for i in self.ModelsData_SLCT_all: #ComboBox is updated
+            Current_Row=i[0]
+            index= self.MoTr_ComBox_ChooseModel.findText(str(Current_Row),QtCore.Qt.MatchFixedString)
+            if index==-1:
                 self.MoTr_ComBox_ChooseModel.addItem(str(Current_Row))
+            
+            
+    def TrainningTab_UpdateComboxDataSet_ID(self):
+        #self.MoTr_ComBox_DataSet.clear()
+        self.GetDataSetTable()
+        for i in self.DataSet_all: #ComboBox is updated
+            Current_Row=i[0]
+            index= self.DaMa_ComBox_Seed_DataSet.findText(str(Current_Row),QtCore.Qt.MatchFixedString)
+            if index==-1:
+                self.MoTr_ComBox_DataSet.addItem(str(Current_Row))
+
+        
     
     ##### Emit thread signals
     
