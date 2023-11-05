@@ -21,6 +21,10 @@ import tensorflow as tf
 from tensorflow import keras
 from tensorflow.python.keras.layers.core import Activation
 
+import warnings
+
+
+
 class Model_Trainer:
 
   def __init__(self):
@@ -144,13 +148,13 @@ class Model_Trainer:
     losses = pd.DataFrame(model.history.history)
     model.save(modelPath,save_format="h5")
     
-    
-    losses.plot()
-    plt.show()
+
+    #losses.plot()
+    #plt.show()
     
     Training_result="done... ;)"
     
-    return Training_result
+    return Training_result, losses
 
 
     #######    Model evaluation      ########

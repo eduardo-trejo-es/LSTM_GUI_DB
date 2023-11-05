@@ -6,6 +6,7 @@ from Trainer_Predicting_Esamble import Model_Trainer
 import pandas as pd
 import numpy as np
 from matplotlib import pyplot as plt
+import time
 
 from PyQt5.QtCore import *
 
@@ -14,6 +15,7 @@ class DL_Trainner(QThread):
     Update_Progress = pyqtSignal(int)
     Update_Progress_String = pyqtSignal(str)
     Update_TrainningProcssStatus = pyqtSignal(bool)
+
 
     def __init__(self):
         super().__init__()
@@ -35,6 +37,9 @@ class DL_Trainner(QThread):
         self.percentageData=val
     def SetNp_pasdays(self,val):
         self.Np_pasdays=val
+        
+    def Getlosses(self):
+        return self.losses
     
     def run(self):
         print("Hello world trainnig Scrip running :)")
@@ -52,6 +57,14 @@ class DL_Trainner(QThread):
         print(Data_CSV)
         print(percentageData)
         print(Np_pasdays)
-        training_result=self.trainer_model.to_train(int(ColumToforcast),int(numEpochs),Model_Path,Data_CSV,int(percentageData),int(Np_pasdays))
+        training_result,self.losses=self.trainer_model.to_train(int(ColumToforcast),int(numEpochs),Model_Path,Data_CSV,int(percentageData),int(Np_pasdays))
+        
+        self.Update_Progress_String.emit("DataSet Succesfully created")
+        self.Update_Progress.emit(100)
+        time.sleep(3)
+        self.Update_Progress_String.emit("Ready to create another DataSet")
+        self.Update_Progress.emit(0)
+        self.Update_TrainningProcssStatus.emit(True)
+
 
         

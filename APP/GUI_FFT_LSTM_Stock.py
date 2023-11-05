@@ -14,6 +14,7 @@ sys.path.append("APP/Pakages/Seed_Model")
 #from Trainer_Predicting_Esamble import Model_Trainer
 #from Forcaster_Model import Forcast_Data
 #from Forcaster_Model_DateFromToForcast import Forcast_Data
+import matplotlib.pyplot as plt
 
 
 from PyQt5 import QtCore, QtGui, QtWidgets
@@ -1135,7 +1136,10 @@ class Ui_GUI_LSTM_FORCASTER(object):
         DataSetMarried=int(Model_Selected_Row[5])
         ColmTPredictMarried=int(Model_Selected_Row[7])
         
-        Columns_Index=self.Mapping_DataSetColums(DataSet_Id,Colum_To_Predict)
+        Columns_Index=self.Mapping_DataSetColums(DataSet_Id,Colum_To_Predict,True)
+        
+        print("this is de colums Index to predict")
+        print(Columns_Index)
         
         #Missing to do a mapping DataSetMarried and COlumns to predrict
         
@@ -1195,26 +1199,34 @@ class Ui_GUI_LSTM_FORCASTER(object):
             if index==-1:
                 self.MoTr_ComBox_DataSet.addItem(str(Current_Row))
                 
-    def Mapping_DataSetColums(self,DataSetId,ColumnSelected):
+    def Mapping_DataSetColums(self,DataSetId,ColumnSelected,InputName_Chose):
+        
+        ## if inputName_Chose true the return value is an int index
+        ## if false return value is a string column name value  
+        
         ## Getting the DB row DataSet 
         query="SELECT * FROM DataSet WHERE DataSet_id=?"
         self.Forcaster_DB_c.execute(query,(DataSetId,))
         Model_Selected_Row=self.Forcaster_DB_c.fetchall()[0]
         
         DataSetPath=Model_Selected_Row[2]
-
+        
         all_df=pd.read_csv(DataSetPath,index_col=0)
         ColumnsList=all_df.columns
         
-        index=0
-        for i in ColumnsList:
-            if ColumnSelected == i:
-                break
-            index+=1
+        if InputName_Chose:
         
-        return(index)
-        
-        
+            Colum=0
+            for i in ColumnsList:
+                if ColumnSelected == i:
+                    break
+                Colum+=1
+        else:
+            Colum=""
+            Colum=str(ColumnsList[ColumnSelected])
+        return Colum
+    
+            
         ## Need to get the data set path using the DB with DataSet_Id then
         ## Need to get the data in a pandas data frame Then
         ## Map the colum possition using Colum_To_Predict 
@@ -1238,18 +1250,25 @@ class Ui_GUI_LSTM_FORCASTER(object):
             ### if has already a DataSet married to, let's bring it on
             index= self.MoTr_ComBox_DataSet.findText(str(DataSetMarried),QtCore.Qt.MatchFixedString)
             self.MoTr_ComBox_DataSet.setCurrentIndex(index)
-        
+            
             
         if ColmTPredictMarried>0:
             ### if has already a Colum to predict married to, let's bring it on
-            index= self.MoTr_ComBox_Column_T_Predict.findText(str(ColmTPredictMarried),QtCore.Qt.MatchFixedString)
+            Column_Name=self.Mapping_DataSetColums(DataSetMarried,ColmTPredictMarried,False)
+            print(Column_Name)
+            index= self.MoTr_ComBox_Column_T_Predict.findText(str(Column_Name),QtCore.Qt.MatchFixedString)
             self.MoTr_ComBox_Column_T_Predict.setCurrentIndex(index)
         
     
     ##### Emit thread signals
     
-    def Event_TrainningStatus(self):
-        pass
+    def Event_TrainningStatus(self,val):
+        losses=self.trainner.Getlosses()
+        if val:
+            #Update the N_epoch done
+            
+            losses.plot()
+            plt.show()
     
     def Event_UpdateProgress_TrainningProcess(self):
         pass

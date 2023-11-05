@@ -237,7 +237,7 @@ class DL_DataSet(QThread):
         self.Update_Progress.emit(100)
         
         #Return the resulting DataSet
-        return Original_Path_Retiving,LastPopcolum
+        return LastPopcolum
     
     def Convert(self,string1):
         FinalList=[]

@@ -1,10 +1,16 @@
 **** Working on def Mapping_Colums and  def Model_To_Train_ComboBoxChanged(self): ***
 
+++ Training 
+ to show the ephocs done par model add object in GUI
+ to show progress in var
+ button cancel missing function
+
+ 
 ++ to add model creation
-at model table added colums "ephocs done" and "ephocs to do"
+
 
 ++ to add to dataset creation
-add columns  Original_Path_Retiving,!LastPopcolum¡
+add columns  Original_Path_Retiving,!LastPopcolum¡ ** only saved the last
 
 What is the
 1.- about the model choosed, the available data will be use full
