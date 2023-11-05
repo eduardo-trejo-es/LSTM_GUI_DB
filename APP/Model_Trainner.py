@@ -45,5 +45,13 @@ class DL_Trainner(QThread):
         Data_CSV=self.Data_CSV
         percentageData=self.percentageData
         Np_pasdays=self.Np_pasdays
-        training_result=self.trainer_model.to_train(ColumToforcast,numEpochs,Model_Path,Data_CSV,percentageData,Np_pasdays)
+        
+        print(ColumToforcast)
+        print(numEpochs)
+        print(Model_Path)
+        print(Data_CSV)
+        print(percentageData)
+        print(Np_pasdays)
+        training_result=self.trainer_model.to_train(int(ColumToforcast),int(numEpochs),Model_Path,Data_CSV,int(percentageData),int(Np_pasdays))
+
         

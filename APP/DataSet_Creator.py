@@ -76,7 +76,7 @@ class DL_DataSet(QThread):
         self.DataSet_id_Just_Created=self.Last_DataSet_Crated+1
         
         StartDay="2001-01-02"
-        EndDate="2001-01-15"
+        EndDate="2001-06-15"
         #EndDate=date.today().strftime("%Y-%m-%d")
         
         ObjectiveFilePath=self.ToCreateOrUpdateDataSet(self.DataSet_id_Just_Created,self.SeedDataSetList,StartDay,EndDate,self.TypeProcessToDo)
@@ -204,7 +204,6 @@ class DL_DataSet(QThread):
             yearAddedPath=MonthAddedPath
     
 
-        
         #Generate new FFT columns
         Colums_Selection_FFT=[Open_FFT_C,High_FFT_C,Low_FFT_C,Close_FFT_C,Volum_FFT_C]
         columns=['Open','High','Low','Close','Volume']
@@ -223,6 +222,7 @@ class DL_DataSet(QThread):
         self.Update_Progress.emit(90)
         self.dataSet_Gen.getTheLastFFTValue(backdaysToconsider,frec,ColumnsToFFT,inicialPath, FFTNew_FileData)
 
+        Colums_FFT_Selection=[Open_FFT_C,High_FFT_C,Low_FFT_C,Close_FFT_C,Volum_FFT_C]
         Colums_Selection=[Open_C,High_C,Low_C,Close_C,Volume_C]
         columns=['Open','High','Low','Close','Volume']
         ColumnsToPop=[]
@@ -230,14 +230,14 @@ class DL_DataSet(QThread):
         
         self.Update_Progress_String.emit("Popping last columns...")
         for i in range(0,len(Colums_Selection)):
-            if Colums_Selection[i]==0:
+            if Colums_Selection[i]==0 and Colums_FFT_Selection[i]==1:
                 ColumnsToPop.append(columns[i])
         self.dataSet_Gen.PopListdf(ColumnsToPop,FFTNew_FileData,LastPopcolum)
         self.Update_Progress_String.emit("Final DataSet Created :)")
         self.Update_Progress.emit(100)
         
         #Return the resulting DataSet
-        return Original_Path_Retiving
+        return Original_Path_Retiving,LastPopcolum
     
     def Convert(self,string1):
         FinalList=[]

@@ -15,8 +15,12 @@ sys.path.append("APP/Pakages/Seed_Model")
 #from Forcaster_Model import Forcast_Data
 #from Forcaster_Model_DateFromToForcast import Forcast_Data
 
+
 from PyQt5 import QtCore, QtGui, QtWidgets
 import sqlite3
+
+import pandas as pd
+import numpy as np
 
 from Model_Trainner import DL_Trainner
 from Model_Creator import DL_Model
@@ -144,11 +148,12 @@ class Ui_GUI_LSTM_FORCASTER(object):
         self.MoTr_btn_Totrain = QtWidgets.QPushButton(self.Model_Trainner_Tab)
         self.MoTr_btn_Totrain.setGeometry(QtCore.QRect(470, 30, 141, 51))
         self.MoTr_btn_Totrain.setObjectName("MoTr_btn_Totrain")
-        self.MoTr_Plaintxt_CMDTraining = QtWidgets.QPlainTextEdit(self.Model_Trainner_Tab)
-        self.MoTr_Plaintxt_CMDTraining.setGeometry(QtCore.QRect(10, 210, 661, 171))
-        self.MoTr_Plaintxt_CMDTraining.setObjectName("MoTr_Plaintxt_CMDTraining")
+        self.MoTr_LoadBar_CMDTraining = QtWidgets.QProgressBar(self.Model_Trainner_Tab)
+        self.MoTr_LoadBar_CMDTraining.setGeometry(QtCore.QRect(120, 250, 411, 41))
+        self.MoTr_LoadBar_CMDTraining.setProperty("value", 0)
+        self.MoTr_LoadBar_CMDTraining.setObjectName("MoTr_LoadBar_CMDTraining")
         self.MoTr_lbl_CMD_training = QtWidgets.QLabel(self.Model_Trainner_Tab)
-        self.MoTr_lbl_CMD_training.setGeometry(QtCore.QRect(10, 190, 161, 16))
+        self.MoTr_lbl_CMD_training.setGeometry(QtCore.QRect(120, 230, 370, 16))
         self.MoTr_lbl_CMD_training.setObjectName("MoTr_lbl_CMD_training")
         self.MoTr_txtLine_PercentDataSet = QtWidgets.QLineEdit(self.Model_Trainner_Tab)
         self.MoTr_txtLine_PercentDataSet.setGeometry(QtCore.QRect(70, 150, 61, 21))
@@ -156,7 +161,6 @@ class Ui_GUI_LSTM_FORCASTER(object):
         self.MoTr_lbl_PercentDataset = QtWidgets.QLabel(self.Model_Trainner_Tab)
         self.MoTr_lbl_PercentDataset.setGeometry(QtCore.QRect(70, 130, 111, 16))
         self.MoTr_lbl_PercentDataset.setObjectName("MoTr_lbl_PercentDataset")
-        
         self.MoTr_ComBox_ChooseModel = QtWidgets.QComboBox(self.Model_Trainner_Tab)
         self.MoTr_ComBox_ChooseModel.setGeometry(QtCore.QRect(70, 50, 111, 26))
         self.MoTr_ComBox_ChooseModel.setObjectName("MoTr_ComBox_ChooseModel")
@@ -394,7 +398,7 @@ class Ui_GUI_LSTM_FORCASTER(object):
         
         #----------- TAB MODEL TRAINNING  -------------
         ############ General Emit Signals
-        #self.Model_C_ComBox_Int_Seed_Data.currentIndexChanged.connect(self.SeedDataComboBoxChanged)
+        self.MoTr_ComBox_ChooseModel.currentIndexChanged.connect(self.Model_To_Train_ComboBoxChanged)
         #self.Model_C_ComBox_Int_Model.currentIndexChanged.connect(self.ModelsComboBoxChanged)
         ############ Thread Emit Signals
         self.trainner.Update_TrainningProcssStatus.connect(self.Event_TrainningStatus)
@@ -988,7 +992,7 @@ class Ui_GUI_LSTM_FORCASTER(object):
         Matching_Val12=False
         Matching_Val13=False
         Matching_Val14=False
-        Matching_Val15=Falsex
+        Matching_Val15=False
         Matching_Val16=False
         
         ##Seed_Data; Getting all data 
@@ -1114,10 +1118,61 @@ class Ui_GUI_LSTM_FORCASTER(object):
     
     ############### Bottons functions  ################ 
     def Start_Trainning(self):
+        
+        #Getting data form GUI
+        Id_modelSelect=self.MoTr_ComBox_ChooseModel.currentText()
+        Colum_To_Predict=self.MoTr_ComBox_Column_T_Predict.currentText()
+        DataSet_Id=self.MoTr_ComBox_DataSet.currentText()
+        N_Epohc=self.MoTr_txtLine_ephocs.text()
+        N_PercentData=self.MoTr_txtLine_PercentDataSet.text()        
+        
+        ## Getting the DB row model 
+        query="SELECT * FROM Models WHERE Model_id=?"
+        self.Forcaster_DB_c.execute(query,(Id_modelSelect,))
+        Model_Selected_Row=self.Forcaster_DB_c.fetchall()[0]
+        
+        ModelPath=Model_Selected_Row[2]
+        DataSetMarried=int(Model_Selected_Row[5])
+        ColmTPredictMarried=int(Model_Selected_Row[7])
+        
+        Columns_Index=self.Mapping_DataSetColums(DataSet_Id,Colum_To_Predict)
+        
+        #Missing to do a mapping DataSetMarried and COlumns to predrict
+        
+        #in case not dataset and column married to model 
+        if DataSetMarried==0 and ColmTPredictMarried==0:
+            query="UPDATE Models SET DataSet_id_FRGN = ?,Colm_T_Predict=? WHERE Model_id=?"
+            self.Forcaster_DB_c.execute(query,(DataSet_Id,Columns_Index,Id_modelSelect))
+            self.Forcaster_DB_conn.commit()
+        else:
+            print("This model is already married to a Dataset and a Column ")
+            
+        ## Getting the DB row DataSet 
+        query="SELECT * FROM DataSet WHERE DataSet_id=?"
+        self.Forcaster_DB_c.execute(query,(DataSet_Id,))
+        DataSet_Selected_Row=self.Forcaster_DB_c.fetchall()[0]
+        
+        dataSetPath=DataSet_Selected_Row[2]
+        dataSetSeed=str(DataSet_Selected_Row[3])
+        
+        ## Getting the DB row seed DataSet 
+        query="SELECT * FROM Seed_DataSet WHERE SeedDataSet_id=?"
+        self.Forcaster_DB_c.execute(query,(dataSetSeed,))
+        SeedDataSet_Selected_Row=self.Forcaster_DB_c.fetchall()[0]
+        
+        DataSetBackDays=SeedDataSet_Selected_Row[2]
+        
+        self.trainner.SetColumToForcast(Columns_Index) #from function mappe colum considering the data set
+        self.trainner.SetnumEpochs(N_Epohc) #from GUI direct
+        self.trainner.SetModel_Path(ModelPath) #from DB model
+        self.trainner.SetData_CSV(dataSetPath) #From DB DataSet
+        self.trainner.SetpercentageData(N_PercentData) # directly from gui
+        self.trainner.SetNp_pasdays(DataSetBackDays) #from data set choosed - from ** Seed dataset **
         self.trainner.start()
     
-    def Cancel_Trainning(self):
-        pass
+    def Cancel_Trainning(self):   
+        #This button may also breake the data set and columns marriage
+        pass 
     
     ############ General Fucntions  ############
     
@@ -1139,7 +1194,56 @@ class Ui_GUI_LSTM_FORCASTER(object):
             index= self.DaMa_ComBox_Seed_DataSet.findText(str(Current_Row),QtCore.Qt.MatchFixedString)
             if index==-1:
                 self.MoTr_ComBox_DataSet.addItem(str(Current_Row))
+                
+    def Mapping_DataSetColums(self,DataSetId,ColumnSelected):
+        ## Getting the DB row DataSet 
+        query="SELECT * FROM DataSet WHERE DataSet_id=?"
+        self.Forcaster_DB_c.execute(query,(DataSetId,))
+        Model_Selected_Row=self.Forcaster_DB_c.fetchall()[0]
+        
+        DataSetPath=Model_Selected_Row[2]
 
+        all_df=pd.read_csv(DataSetPath,index_col=0)
+        ColumnsList=all_df.columns
+        
+        index=0
+        for i in ColumnsList:
+            if ColumnSelected == i:
+                break
+            index+=1
+        
+        return(index)
+        
+        
+        ## Need to get the data set path using the DB with DataSet_Id then
+        ## Need to get the data in a pandas data frame Then
+        ## Map the colum possition using Colum_To_Predict 
+            
+    ##### Emit general signals
+    def Model_To_Train_ComboBoxChanged(self):
+        Id_modelSelect=self.MoTr_ComBox_ChooseModel.currentText()
+        Colum_To_Predict=self.MoTr_ComBox_Column_T_Predict.currentText()
+        DataSet_Id=self.MoTr_ComBox_DataSet.currentText()
+        print(Id_modelSelect)
+        print(type(Id_modelSelect))
+        ## Getting the DB row model 
+        query="SELECT * FROM Models WHERE Model_id=?"
+        self.Forcaster_DB_c.execute(query,(Id_modelSelect,))
+        Model_Selected_Row=self.Forcaster_DB_c.fetchall()[0]
+        
+        DataSetMarried=int(Model_Selected_Row[5])
+        ColmTPredictMarried=int(Model_Selected_Row[7])
+        
+        if DataSetMarried>0:
+            ### if has already a DataSet married to, let's bring it on
+            index= self.MoTr_ComBox_DataSet.findText(str(DataSetMarried),QtCore.Qt.MatchFixedString)
+            self.MoTr_ComBox_DataSet.setCurrentIndex(index)
+        
+            
+        if ColmTPredictMarried>0:
+            ### if has already a Colum to predict married to, let's bring it on
+            index= self.MoTr_ComBox_Column_T_Predict.findText(str(ColmTPredictMarried),QtCore.Qt.MatchFixedString)
+            self.MoTr_ComBox_Column_T_Predict.setCurrentIndex(index)
         
     
     ##### Emit thread signals

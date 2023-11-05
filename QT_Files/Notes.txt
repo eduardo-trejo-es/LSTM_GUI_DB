@@ -1,7 +1,13 @@
+**** Working on def Mapping_Colums and  def Model_To_Train_ComboBoxChanged(self): ***
+
+++ to add model creation
+at model table added colums "ephocs done" and "ephocs to do"
+
+++ to add to dataset creation
+add columns  Original_Path_Retiving,!LastPopcolum¡
 
 What is the
 1.- about the model choosed, the available data will be use full
-
 
 About data set
 2.- Button to update dataset, check box to data data
@@ -9,6 +15,11 @@ About data set
 4.- Select Dataset to affect
 5.- Asing a model to a data set, relationship is one to one, new model new dataset, 
     once I choosed a model, a dataset will be automatically selected too
+
+
+At model creation
+
+the combo box int_model reapeting data, doubuling
 
 
 
