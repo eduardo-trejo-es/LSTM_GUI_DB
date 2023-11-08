@@ -37,6 +37,12 @@ class DL_Trainner(QThread):
         self.percentageData=val
     def SetNp_pasdays(self,val):
         self.Np_pasdays=val
+    
+    def SetEpochs_done(self,val):
+        self.Epochs_done=val
+    
+    def GetEpochs_done(self):
+        return self.Epochs_done
         
     def Getlosses(self):
         return self.losses
@@ -59,8 +65,9 @@ class DL_Trainner(QThread):
         print(Np_pasdays)
         training_result,self.losses=self.trainer_model.to_train(int(ColumToforcast),int(numEpochs),Model_Path,Data_CSV,int(percentageData),int(Np_pasdays))
         
-        self.Update_Progress_String.emit("DataSet Succesfully created")
+        self.Update_Progress_String.emit("Trainning finished")
         self.Update_Progress.emit(100)
+        self.SetEpochs_done(numEpochs)
         time.sleep(3)
         self.Update_Progress_String.emit("Ready to create another DataSet")
         self.Update_Progress.emit(0)

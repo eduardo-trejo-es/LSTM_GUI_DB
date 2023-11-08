@@ -182,12 +182,22 @@ class Ui_GUI_LSTM_FORCASTER(object):
         self.MoTr_lbl_ColumnPredict = QtWidgets.QLabel(self.Model_Trainner_Tab)
         self.MoTr_lbl_ColumnPredict.setGeometry(QtCore.QRect(270, 30, 111, 16))
         self.MoTr_lbl_ColumnPredict.setObjectName("MoTr_lbl_ColumnPredict")
+        
+        self.MoTr_lbl_ephocs = QtWidgets.QLabel(self.Model_Trainner_Tab)
+        self.MoTr_lbl_ephocs.setGeometry(QtCore.QRect(270, 80, 91, 16))
+        self.MoTr_lbl_ephocs.setObjectName("MoTr_lbl_ephocs")
         self.MoTr_txtLine_ephocs = QtWidgets.QLineEdit(self.Model_Trainner_Tab)
         self.MoTr_txtLine_ephocs.setGeometry(QtCore.QRect(270, 100, 81, 21))
         self.MoTr_txtLine_ephocs.setObjectName("MoTr_txtLine_ephocs")
-        self.MoTr_lbl_DataSet_2 = QtWidgets.QLabel(self.Model_Trainner_Tab)
-        self.MoTr_lbl_DataSet_2.setGeometry(QtCore.QRect(270, 80, 60, 16))
-        self.MoTr_lbl_DataSet_2.setObjectName("MoTr_lbl_DataSet_2")
+        
+        self.MoTr_lbl_ephocs_done = QtWidgets.QLabel(self.Model_Trainner_Tab)
+        self.MoTr_lbl_ephocs_done.setGeometry(QtCore.QRect(270, 130, 91, 16))
+        self.MoTr_lbl_ephocs_done.setObjectName("MoTr_lbl_ephocs_done")
+        self.MoTr_txtLine_ephocs_done = QtWidgets.QLineEdit(self.Model_Trainner_Tab)
+        self.MoTr_txtLine_ephocs_done.setGeometry(QtCore.QRect(270, 150, 81, 21))
+        self.MoTr_txtLine_ephocs_done.setObjectName("MoTr_txtLine_ephocs_done")
+        self.MoTr_txtLine_ephocs_done.setEnabled(False)
+        
         self.MoTr_ComBox_DataSet = QtWidgets.QComboBox(self.Model_Trainner_Tab)
         self.MoTr_ComBox_DataSet.setGeometry(QtCore.QRect(70, 100, 111, 26))
         self.MoTr_ComBox_DataSet.setObjectName("MoTr_ComBox_DataSet")
@@ -471,8 +481,14 @@ class Ui_GUI_LSTM_FORCASTER(object):
         self.MoTr_ComBox_Column_T_Predict.setItemText(3, _translate("GUI_LSTM_FORCASTER", "Close"))
         self.MoTr_ComBox_Column_T_Predict.setItemText(4, _translate("GUI_LSTM_FORCASTER", "Volume"))
         self.MoTr_lbl_ColumnPredict.setText(_translate("GUI_LSTM_FORCASTER", "Column to predict"))
+        
+        self.MoTr_lbl_ephocs.setText(_translate("GUI_LSTM_FORCASTER", "ephocs to do"))
         self.MoTr_txtLine_ephocs.setText(_translate("GUI_LSTM_FORCASTER", "50"))
-        self.MoTr_lbl_DataSet_2.setText(_translate("GUI_LSTM_FORCASTER", "ephocs"))
+        
+        self.MoTr_lbl_ephocs_done.setText(_translate("GUI_LSTM_FORCASTER", "ephocs done"))
+        self.MoTr_txtLine_ephocs_done.setText(_translate("GUI_LSTM_FORCASTER", "0"))
+        
+        
         self.Tabs.setTabText(self.Tabs.indexOf(self.Model_Trainner_Tab), _translate("GUI_LSTM_FORCASTER", "Model Trainner"))
         self.DaMa_lbl_Seed_DataSet.setText(_translate("GUI_LSTM_FORCASTER", "Seed DataSet Id"))
         self.DaMa_btn_Update.setText(_translate("GUI_LSTM_FORCASTER", "Update"))
@@ -1121,7 +1137,7 @@ class Ui_GUI_LSTM_FORCASTER(object):
     def Start_Trainning(self):
         
         #Getting data form GUI
-        Id_modelSelect=self.MoTr_ComBox_ChooseModel.currentText()
+        self.Current_Trainning_Id_modelSelect=self.MoTr_ComBox_ChooseModel.currentText()
         Colum_To_Predict=self.MoTr_ComBox_Column_T_Predict.currentText()
         DataSet_Id=self.MoTr_ComBox_DataSet.currentText()
         N_Epohc=self.MoTr_txtLine_ephocs.text()
@@ -1129,7 +1145,7 @@ class Ui_GUI_LSTM_FORCASTER(object):
         
         ## Getting the DB row model 
         query="SELECT * FROM Models WHERE Model_id=?"
-        self.Forcaster_DB_c.execute(query,(Id_modelSelect,))
+        self.Forcaster_DB_c.execute(query,(self.Current_Trainning_Id_modelSelect,))
         Model_Selected_Row=self.Forcaster_DB_c.fetchall()[0]
         
         ModelPath=Model_Selected_Row[2]
@@ -1146,7 +1162,7 @@ class Ui_GUI_LSTM_FORCASTER(object):
         #in case not dataset and column married to model 
         if DataSetMarried==0 and ColmTPredictMarried==0:
             query="UPDATE Models SET DataSet_id_FRGN = ?,Colm_T_Predict=? WHERE Model_id=?"
-            self.Forcaster_DB_c.execute(query,(DataSet_Id,Columns_Index,Id_modelSelect))
+            self.Forcaster_DB_c.execute(query,(DataSet_Id,Columns_Index,self.Current_Trainning_Id_modelSelect))
             self.Forcaster_DB_conn.commit()
         else:
             print("This model is already married to a Dataset and a Column ")
@@ -1243,8 +1259,11 @@ class Ui_GUI_LSTM_FORCASTER(object):
         self.Forcaster_DB_c.execute(query,(Id_modelSelect,))
         Model_Selected_Row=self.Forcaster_DB_c.fetchall()[0]
         
+        ephocs_done=str(Model_Selected_Row[3])
         DataSetMarried=int(Model_Selected_Row[5])
         ColmTPredictMarried=int(Model_Selected_Row[7])
+        
+        self.MoTr_txtLine_ephocs_done.setText(ephocs_done)
         
         if DataSetMarried>0:
             ### if has already a DataSet married to, let's bring it on
@@ -1264,9 +1283,27 @@ class Ui_GUI_LSTM_FORCASTER(object):
     
     def Event_TrainningStatus(self,val):
         losses=self.trainner.Getlosses()
+        epochs_done=int(self.trainner.GetEpochs_done())
+        Id_modelSelect=self.Current_Trainning_Id_modelSelect
+        
         if val:
             #Update the N_epoch done
+                #Get the N epochs done in bd
+            query="SELECT * FROM Models WHERE Model_id=?"
+            self.Forcaster_DB_c.execute(query,(Id_modelSelect,))
+            Model_Selected_Row=self.Forcaster_DB_c.fetchall()[0]
             
+            ephocs_in_Bd=int(Model_Selected_Row[3])
+                
+                # add saved ephos done + new done epochs
+            Total_Epochs_done=ephocs_in_Bd+epochs_done
+                # save in bd
+            query="UPDATE Models SET N_epochs_Done = ? WHERE Model_id=?"
+            self.Forcaster_DB_c.execute(query,(Total_Epochs_done,Id_modelSelect))
+            self.Forcaster_DB_conn.commit()
+            self.MoTr_txtLine_ephocs_done.setText(str(Total_Epochs_done))
+            
+            #Show the loss plot
             losses.plot()
             plt.show()
     

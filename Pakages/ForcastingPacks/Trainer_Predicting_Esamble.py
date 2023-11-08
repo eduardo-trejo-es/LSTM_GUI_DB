@@ -15,7 +15,7 @@ from tensorflow.keras.models import Sequential
 from tensorflow.keras.layers import LSTM
 from tensorflow.keras.layers import Dense, Dropout
 
-from tensorflow.keras.callbacks import EarlyStopping
+from tensorflow.keras.callbacks import EarlyStopping, LambdaCallback
 
 import tensorflow as tf
 from tensorflow import keras
@@ -140,8 +140,12 @@ class Model_Trainer:
     #------------------------- Training model --------------------------------
     
     early_stop= EarlyStopping(monitor='mean_squared_error',mode='min',verbose=1,patience=25)
+    # Print the batch number at the beginning of every batch.
     
-    model.fit(x=trainX,y=y_data, epochs=NumEpochs, batch_size=15, validation_data=(testingX,testing_y_data),callbacks=[early_stop])
+    ephoc_print_callback = LambdaCallback(on_epoch_end=lambda ephoc,logs: self.End_ephoc_event(ephoc))
+    #ephoc_print_callback = LambdaCallback(on_epoch_end=lambda ephoc,logs: print("this is number ephoc: "+str(ephoc)))
+    
+    model.fit(x=trainX,y=y_data, epochs=NumEpochs, batch_size=15, validation_data=(testingX,testing_y_data),callbacks=[early_stop,ephoc_print_callback])
     #history = model.fit(trainX,y=y_data, epochs=125, batch_size=15)
 
 
@@ -155,141 +159,150 @@ class Model_Trainer:
     Training_result="done... ;)"
     
     return Training_result, losses
+  
+  def End_ephoc_event(self,current_ephoc):
+    print("this is number ephoc: "+str(current_ephoc))
+    
+  def Set_Current_Ephoc(self,val):
+    current_ephoc
+    
+    
+      
 
 
     #######    Model evaluation      ########
-    def Model_evaluation(self):
-      from sklearn.metrics import mean_squared_error,mean_absolute_error,explained_variance_score
-      import math
+  def Model_evaluation(self):
+    """from sklearn.metrics import mean_squared_error,mean_absolute_error,explained_variance_score
+    import math
 
-      starBatch=1
-      endbatch=0
+    starBatch=1
+    endbatch=0
 
-      Batch_to_predict=testingX[testingX.shape[0]-starBatch:testingX.shape[0]-endbatch]
+    Batch_to_predict=testingX[testingX.shape[0]-starBatch:testingX.shape[0]-endbatch]
 
+    print(Batch_to_predict.shape)
+
+    print(testingX.shape)
+
+
+    #########        Evaluation funtion  #########3
+
+
+    #Mean square error of testing data
+
+    #DataSet unseen before
+
+    #Nota: Se obtuvo un error del 15% aprox. para los 5 features para el dataset no visto y ya visto
+
+    y_data_testing={ 
+      "dense": testingY_Open,
+      "dense_1": testingY_High,
+      "dense_2": testingY_Low,
+      "dense_3": testingY_Close,
+      "dense_4": testingY_Volume,
+    }
+
+    mean_square_error_testin_DS=model.evaluate(testingX,y_data_testing,verbose=0)
+
+    mean_square_error_testing_DS_nparray=np.array(mean_square_error_testin_DS)
+    mean_square_error_testing_DS_nparray=mean_square_error_testing_DS_nparray[0:5]
+    mean_square_error_testing_DS_nparray_reshaped=np.reshape(mean_square_error_testing_DS_nparray,(1,5))
+
+    #mean_square_error_training_DS_reshaped=np.array(mean_square_error_training_DS)
+    testing_DS_scaled_Back = scaler.inverse_transform(mean_square_error_testing_DS_nparray_reshaped)
+
+    for i in testing_DS_scaled_Back[0]:
+      print(math.sqrt(i))
+      
+    y_data_taining_eval={ 
+      "dense": trainY_Open,
+      "dense_1": trainY_High,
+      "dense_2": trainY_Low,
+      "dense_3": trainY_Close,
+      "dense_4": trainY_Volume,
+    }
+
+    #######          Evaluation Using the model      ##############
+
+
+    N_Days_to_predict=14
+    Prediction_Saved=[]
+    #testingX=np.array(testingX)
+
+    for i in range(N_Days_to_predict):
+      prediction = model.predict(Batch_to_predict) #the input is a 30 units of time batch
+      prediction_Reshaped=np.reshape(prediction,(1,1,5))
+      Batch_to_predict=np.append(Batch_to_predict,prediction_Reshaped, axis=1)
+      Batch_to_predict=np.delete(Batch_to_predict,0,1)
       print(Batch_to_predict.shape)
+      Prediction_Saved.append(prediction_Reshaped[0])
+      
+      
+    predict_Open=[]
+    predict_High=[]
+    predict_Low=[]
+    predict_Close=[]
+    predict_Volume=[]
 
-      print(testingX.shape)
+    #Splitting data with scaling back
+    for i in range(N_Days_to_predict):
+      y_pred_future = Prediction_Saved[i]
+      predict_Open.append(y_pred_future[0][0])
+      predict_High.append(y_pred_future[0][1])
+      predict_Low.append(y_pred_future[0][2])
+      predict_Close.append(y_pred_future[0][3])
+      predict_Volume.append(y_pred_future[0][4])
+      
+      
+    ####      Getting the candle chart   #####
 
+    BatchUsed_Dates=DS_dates_finished_X[len(DS_dates_finished_X)-starBatch:len(DS_dates_finished_X)-endbatch]
 
-      #########        Evaluation funtion  #########3
-
-
-      #Mean square error of testing data
-
-      #DataSet unseen before
-
-      #Nota: Se obtuvo un error del 15% aprox. para los 5 features para el dataset no visto y ya visto
-
-      y_data_testing={ 
-        "dense": testingY_Open,
-        "dense_1": testingY_High,
-        "dense_2": testingY_Low,
-        "dense_3": testingY_Close,
-        "dense_4": testingY_Volume,
-      }
-
-      mean_square_error_testin_DS=model.evaluate(testingX,y_data_testing,verbose=0)
-
-      mean_square_error_testing_DS_nparray=np.array(mean_square_error_testin_DS)
-      mean_square_error_testing_DS_nparray=mean_square_error_testing_DS_nparray[0:5]
-      mean_square_error_testing_DS_nparray_reshaped=np.reshape(mean_square_error_testing_DS_nparray,(1,5))
-
-      #mean_square_error_training_DS_reshaped=np.array(mean_square_error_training_DS)
-      testing_DS_scaled_Back = scaler.inverse_transform(mean_square_error_testing_DS_nparray_reshaped)
-
-      for i in testing_DS_scaled_Back[0]:
-        print(math.sqrt(i))
-        
-      y_data_taining_eval={ 
-        "dense": trainY_Open,
-        "dense_1": trainY_High,
-        "dense_2": trainY_Low,
-        "dense_3": trainY_Close,
-        "dense_4": trainY_Volume,
-      }
-
-      #######          Evaluation Using the model      ##############
+    lastTimedate=BatchUsed_Dates[0][BatchUsed_Dates.shape[1]-1:]
+    lastTimedate=lastTimedate[0]
 
 
-      N_Days_to_predict=14
-      Prediction_Saved=[]
-      #testingX=np.array(testingX)
+    import pandas as pd
+    import numpy as np
 
-      for i in range(N_Days_to_predict):
-        prediction = model.predict(Batch_to_predict) #the input is a 30 units of time batch
-        prediction_Reshaped=np.reshape(prediction,(1,1,5))
-        Batch_to_predict=np.append(Batch_to_predict,prediction_Reshaped, axis=1)
-        Batch_to_predict=np.delete(Batch_to_predict,0,1)
-        print(Batch_to_predict.shape)
-        Prediction_Saved.append(prediction_Reshaped[0])
-        
-        
-      predict_Open=[]
-      predict_High=[]
-      predict_Low=[]
-      predict_Close=[]
-      predict_Volume=[]
-
-      #Splitting data with scaling back
-      for i in range(N_Days_to_predict):
-        y_pred_future = Prediction_Saved[i]
-        predict_Open.append(y_pred_future[0][0])
-        predict_High.append(y_pred_future[0][1])
-        predict_Low.append(y_pred_future[0][2])
-        predict_Close.append(y_pred_future[0][3])
-        predict_Volume.append(y_pred_future[0][4])
-        
-        
-      ####      Getting the candle chart   #####
-
-      BatchUsed_Dates=DS_dates_finished_X[len(DS_dates_finished_X)-starBatch:len(DS_dates_finished_X)-endbatch]
-
-      lastTimedate=BatchUsed_Dates[0][BatchUsed_Dates.shape[1]-1:]
-      lastTimedate=lastTimedate[0]
+    BatchForcasted_Dates=[]
+    for i in range(0,N_Days_to_predict):
+      BatchForcasted_Dates.append(pd.Timestamp(np.datetime64(lastTimedate)))
+      lastTimedate=np.datetime64(lastTimedate) + np.timedelta64(1, 'h')
 
 
-      import pandas as pd
-      import numpy as np
+    AllPrediction_DS_scaled_Back=[]
+    for i in Prediction_Saved:
+      AllPrediction_DS_scaled_Back.append(scaler.inverse_transform(i))
+      
+      
+    predict_Open=[]
+    predict_High=[]
+    predict_Low=[]
+    predict_Close=[]
+    predict_Volume=[]
 
-      BatchForcasted_Dates=[]
-      for i in range(0,N_Days_to_predict):
-        BatchForcasted_Dates.append(pd.Timestamp(np.datetime64(lastTimedate)))
-        lastTimedate=np.datetime64(lastTimedate) + np.timedelta64(1, 'h')
+    #Splitting data with scaling back
+    for i in range(N_Days_to_predict):
+      y_pred_future = AllPrediction_DS_scaled_Back[i]
+      predict_Open.append(y_pred_future[0][0])
+      predict_High.append(y_pred_future[0][1])
+      predict_Low.append(y_pred_future[0][2])
+      predict_Close.append(y_pred_future[0][3])
+      predict_Volume.append(y_pred_future[0][4])
+      
+      
+    #--------  data shape it's (x days, 6 columns)
+    # Convert timestamp to date
+    df_forecast = pd.DataFrame({'Open':predict_Open,'High':predict_High, 'Low':predict_Low,'Close':predict_Close,'Volume':predict_Volume}, index=BatchForcasted_Dates)
 
-
-      AllPrediction_DS_scaled_Back=[]
-      for i in Prediction_Saved:
-        AllPrediction_DS_scaled_Back.append(scaler.inverse_transform(i))
-        
-        
-      predict_Open=[]
-      predict_High=[]
-      predict_Low=[]
-      predict_Close=[]
-      predict_Volume=[]
-
-      #Splitting data with scaling back
-      for i in range(N_Days_to_predict):
-        y_pred_future = AllPrediction_DS_scaled_Back[i]
-        predict_Open.append(y_pred_future[0][0])
-        predict_High.append(y_pred_future[0][1])
-        predict_Low.append(y_pred_future[0][2])
-        predict_Close.append(y_pred_future[0][3])
-        predict_Volume.append(y_pred_future[0][4])
-        
-        
-      #--------  data shape it's (x days, 6 columns)
-      # Convert timestamp to date
-      df_forecast = pd.DataFrame({'Open':predict_Open,'High':predict_High, 'Low':predict_Low,'Close':predict_Close,'Volume':predict_Volume}, index=BatchForcasted_Dates)
-
-      df_forecast.index.name="Date"
+    df_forecast.index.name="Date"
 
 
 
-      import mplfinance as mpf
-      title_chart="Twtr"
-      mpf.plot(df_forecast, type='candle',title=title_chart, style='charles')
+    import mplfinance as mpf
+    title_chart="Twtr"
+    mpf.plot(df_forecast, type='candle',title=title_chart, style='charles')"""
       
   def Split3DimData(self,DataSet,percentageTrainig):
       percentageTrainDataset = 0
