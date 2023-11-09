@@ -854,6 +854,7 @@ class Ui_GUI_LSTM_FORCASTER(object):
         query="SELECT * FROM DataSet WHERE DataSet_id=(SELECT max(DataSet_id) FROM DataSet)"
         self.Forcaster_DB_c.execute(query)
         Last_DataSet_row=self.Forcaster_DB_c.fetchall()
+        
         if Last_DataSet_row==[]:
             LastDataSetRow=0
         else:    
