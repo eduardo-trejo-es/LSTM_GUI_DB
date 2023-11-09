@@ -30,7 +30,7 @@
      <enum>QTabWidget::North</enum>
     </property>
     <property name="currentIndex">
-     <number>4</number>
+     <number>1</number>
     </property>
     <property name="movable">
      <bool>false</bool>
@@ -110,7 +110,7 @@
       <property name="geometry">
        <rect>
         <x>140</x>
-        <y>240</y>
+        <y>273</y>
         <width>391</width>
         <height>61</height>
        </rect>
@@ -119,34 +119,24 @@
        <number>24</number>
       </property>
      </widget>
-     <widget class="QComboBox" name="ForC_ComBox_DateFrom">
-      <property name="geometry">
-       <rect>
-        <x>50</x>
-        <y>50</y>
-        <width>221</width>
-        <height>26</height>
-       </rect>
-      </property>
-     </widget>
      <widget class="QLabel" name="ForC_lbl_DateFrom">
       <property name="geometry">
        <rect>
         <x>50</x>
-        <y>30</y>
-        <width>60</width>
+        <y>90</y>
+        <width>121</width>
         <height>16</height>
        </rect>
       </property>
       <property name="text">
-       <string>Date from</string>
+       <string>Data precentage %</string>
       </property>
      </widget>
      <widget class="QPushButton" name="ForC_btn_StartForcasting">
       <property name="geometry">
        <rect>
         <x>350</x>
-        <y>110</y>
+        <y>153</y>
         <width>221</width>
         <height>101</height>
        </rect>
@@ -159,7 +149,7 @@
       <property name="geometry">
        <rect>
         <x>370</x>
-        <y>50</y>
+        <y>100</y>
         <width>111</width>
         <height>20</height>
        </rect>
@@ -172,7 +162,7 @@
       <property name="geometry">
        <rect>
         <x>140</x>
-        <y>230</y>
+        <y>273</y>
         <width>171</width>
         <height>16</height>
        </rect>
@@ -185,7 +175,7 @@
       <property name="geometry">
        <rect>
         <x>50</x>
-        <y>110</y>
+        <y>153</y>
         <width>251</width>
         <height>91</height>
        </rect>
@@ -249,7 +239,7 @@
      <widget class="QLineEdit" name="ForC_txtLine_TailBackDays">
       <property name="geometry">
        <rect>
-        <x>490</x>
+        <x>370</x>
         <y>50</y>
         <width>113</width>
         <height>21</height>
@@ -272,17 +262,40 @@
        <string>Tail backdays</string>
       </property>
      </widget>
-     <widget class="QLabel" name="ForC_lbl_or">
+     <widget class="QComboBox" name="ForC_ComBox_Model_To_used">
       <property name="geometry">
        <rect>
-        <x>320</x>
+        <x>50</x>
         <y>53</y>
-        <width>21</width>
+        <width>221</width>
+        <height>26</height>
+       </rect>
+      </property>
+     </widget>
+     <widget class="QLabel" name="ForC_lbl_Model_To_used">
+      <property name="geometry">
+       <rect>
+        <x>50</x>
+        <y>33</y>
+        <width>91</width>
         <height>16</height>
        </rect>
       </property>
       <property name="text">
-       <string>Or</string>
+       <string>Model to use</string>
+      </property>
+     </widget>
+     <widget class="QLineEdit" name="ForC_txtLine_TailBackDays_2">
+      <property name="geometry">
+       <rect>
+        <x>50</x>
+        <y>110</y>
+        <width>113</width>
+        <height>21</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>100</string>
       </property>
      </widget>
     </widget>

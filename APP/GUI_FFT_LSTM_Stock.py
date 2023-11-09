@@ -11,6 +11,7 @@ import sys
 sys.path.append("APP/Pakages/DataSetgenPacks")
 sys.path.append("APP/Pakages/ForcastingPacks")
 sys.path.append("APP/Pakages/Seed_Model")
+
 #from Trainer_Predicting_Esamble import Model_Trainer
 #from Forcaster_Model import Forcast_Data
 #from Forcaster_Model_DateFromToForcast import Forcast_Data
@@ -26,6 +27,7 @@ import numpy as np
 from Model_Trainner import DL_Trainner
 from Model_Creator import DL_Model
 from DataSet_Creator import DL_DataSet
+from Model_Forcast import DL_Forcast
 
 #To see easy the db file is to drag bdfiel into:  https://inloop.github.io/sqlite-viewer/
 #or by using the command c.execute('SELECT * FROM estudiantes")
@@ -49,6 +51,8 @@ class Ui_GUI_LSTM_FORCASTER(object):
         self.model_creator = DL_Model() 
         # DataSet creator
         self.DataSet_creator = DL_DataSet() 
+        # Model forcaster
+        self.Forcaster = DL_Forcast()
         
         ## global var init
         
@@ -95,26 +99,39 @@ class Ui_GUI_LSTM_FORCASTER(object):
         self.Forcasting_Tab = QtWidgets.QWidget()
         self.Forcasting_Tab.setObjectName("Forcasting_Tab")
         self.ForC_Loadbar_Forcast = QtWidgets.QProgressBar(self.Forcasting_Tab)
-        self.ForC_Loadbar_Forcast.setGeometry(QtCore.QRect(140, 240, 391, 61))
-        self.ForC_Loadbar_Forcast.setProperty("value", 24)
+        self.ForC_Loadbar_Forcast.setGeometry(QtCore.QRect(140, 273, 391, 61))
+        self.ForC_Loadbar_Forcast.setProperty("value", 0)
         self.ForC_Loadbar_Forcast.setObjectName("ForC_Loadbar_Forcast")
-        self.ForC_ComBox_DateFrom = QtWidgets.QComboBox(self.Forcasting_Tab)
-        self.ForC_ComBox_DateFrom.setGeometry(QtCore.QRect(50, 50, 221, 26))
-        self.ForC_ComBox_DateFrom.setObjectName("ForC_ComBox_DateFrom")
-        self.ForC_lbl_DateFrom = QtWidgets.QLabel(self.Forcasting_Tab)
-        self.ForC_lbl_DateFrom.setGeometry(QtCore.QRect(50, 30, 60, 16))
-        self.ForC_lbl_DateFrom.setObjectName("ForC_lbl_DateFrom")
+        
+        
+        self.ForC_lbl_Model_To_used = QtWidgets.QLabel(self.Forcasting_Tab)
+        self.ForC_lbl_Model_To_used.setGeometry(QtCore.QRect(50, 33, 60, 16))
+        self.ForC_lbl_Model_To_used.setObjectName("ForC_lbl_DateFrom")
+        
+        self.ForC_ComBox_Model_To_used = QtWidgets.QComboBox(self.Forcasting_Tab)
+        self.ForC_ComBox_Model_To_used.setGeometry(QtCore.QRect(50, 53, 221, 26))
+        self.ForC_ComBox_Model_To_used.setObjectName("ForC_ComBox_DateFrom")
+        
+        self.ForC_lbl_DataPrecentage = QtWidgets.QLabel(self.Forcasting_Tab)
+        self.ForC_lbl_DataPrecentage.setGeometry(QtCore.QRect(50, 90, 121, 16))
+        self.ForC_lbl_DataPrecentage.setObjectName("ForC_lbl_DataPrecentage")
+        
+        self.ForC_txtLine_DataPrecentage = QtWidgets.QLineEdit(self.Forcasting_Tab)
+        self.ForC_txtLine_DataPrecentage.setGeometry(QtCore.QRect(50, 110, 113, 21))
+        self.ForC_txtLine_DataPrecentage.setObjectName("ForC_txtLine_DataPrecentage")
+        
+        
         self.ForC_btn_StartForcasting = QtWidgets.QPushButton(self.Forcasting_Tab)
-        self.ForC_btn_StartForcasting.setGeometry(QtCore.QRect(350, 110, 221, 101))
+        self.ForC_btn_StartForcasting.setGeometry(QtCore.QRect(350, 153, 221, 101))
         self.ForC_btn_StartForcasting.setObjectName("ForC_btn_StartForcasting")
         self.ForC_radioButton_GetGraph = QtWidgets.QRadioButton(self.Forcasting_Tab)
-        self.ForC_radioButton_GetGraph.setGeometry(QtCore.QRect(370, 50, 111, 20))
+        self.ForC_radioButton_GetGraph.setGeometry(QtCore.QRect(370, 100, 111, 20))
         self.ForC_radioButton_GetGraph.setObjectName("ForC_radioButton_GetGraph")
-        self.label_6 = QtWidgets.QLabel(self.Forcasting_Tab)
-        self.label_6.setGeometry(QtCore.QRect(140, 230, 171, 16))
-        self.label_6.setObjectName("label_6")
+        self.ForC_lbl_loadBar = QtWidgets.QLabel(self.Forcasting_Tab)
+        self.ForC_lbl_loadBar.setGeometry(QtCore.QRect(140, 273, 171, 16))
+        self.ForC_lbl_loadBar.setObjectName("ForC_lbl_loadBar")
         self.ForC_Gbox_ForcastResul = QtWidgets.QGroupBox(self.Forcasting_Tab)
-        self.ForC_Gbox_ForcastResul.setGeometry(QtCore.QRect(50, 110, 251, 91))
+        self.ForC_Gbox_ForcastResul.setGeometry(QtCore.QRect(50, 153, 251, 91))
         self.ForC_Gbox_ForcastResul.setObjectName("ForC_Gbox_ForcastResul")
         self.label_13 = QtWidgets.QLabel(self.ForC_Gbox_ForcastResul)
         self.label_13.setGeometry(QtCore.QRect(10, 30, 121, 16))
@@ -128,12 +145,18 @@ class Ui_GUI_LSTM_FORCASTER(object):
         self.ForC_lbl_TomorrowPrice = QtWidgets.QLabel(self.ForC_Gbox_ForcastResul)
         self.ForC_lbl_TomorrowPrice.setGeometry(QtCore.QRect(130, 61, 101, 16))
         self.ForC_lbl_TomorrowPrice.setObjectName("ForC_lbl_TomorrowPrice")
-        self.ForC_txtLine_TailBackDays = QtWidgets.QLineEdit(self.Forcasting_Tab)
-        self.ForC_txtLine_TailBackDays.setGeometry(QtCore.QRect(490, 50, 113, 21))
-        self.ForC_txtLine_TailBackDays.setObjectName("ForC_txtLine_TailBackDays")
+        
+        
+        
+        
         self.ForC_lbl_TailBackDays = QtWidgets.QLabel(self.Forcasting_Tab)
         self.ForC_lbl_TailBackDays.setGeometry(QtCore.QRect(370, 30, 121, 16))
         self.ForC_lbl_TailBackDays.setObjectName("ForC_lbl_TailBackDays")
+        self.ForC_txtLine_TailBackDays = QtWidgets.QLineEdit(self.Forcasting_Tab)
+        self.ForC_txtLine_TailBackDays.setGeometry(QtCore.QRect(370, 50, 113, 21))
+        self.ForC_txtLine_TailBackDays.setObjectName("ForC_txtLine_TailBackDays")
+        
+        
         self.ForC_lbl_or = QtWidgets.QLabel(self.Forcasting_Tab)
         self.ForC_lbl_or.setGeometry(QtCore.QRect(320, 53, 21, 16))
         self.ForC_lbl_or.setObjectName("ForC_lbl_or")
@@ -407,6 +430,18 @@ class Ui_GUI_LSTM_FORCASTER(object):
         ### INIT Function calls
         self.UpdateLocalObjects()
         
+        #----------- TAB MODEL FORCASTING  -------------
+        ############ General Emit Signals
+        #self.MoTr_ComBox_ChooseModel.currentIndexChanged.connect(self.Model_To_Train_ComboBoxChanged)
+        #self.Model_C_ComBox_Int_Model.currentIndexChanged.connect(self.ModelsComboBoxChanged)
+        ############ Thread Emit Signals
+        self.Forcaster.Update_ForcastingProcsStatus.connect(self.Event_ForcastingStatus)
+        #self.Forcaster.Update_Progress.connect(self.Event_UpdateProgress_ForcastingProcess)
+        #self.Forcaster.Update_Progress_String.connect(self.Event_UpdateProgress_string_Forcasting_Process)
+        #####  Buttons calls ##### 
+        self.ForC_btn_StartForcasting.clicked.connect(self.Start_Forcasting)
+        #self.MoTr_btn_Cancel_train.clicked.connect(self.Cancel_Trainning)
+        
         #----------- TAB MODEL TRAINNING  -------------
         ############ General Emit Signals
         self.MoTr_ComBox_ChooseModel.currentIndexChanged.connect(self.Model_To_Train_ComboBoxChanged)
@@ -455,16 +490,22 @@ class Ui_GUI_LSTM_FORCASTER(object):
         self.BaCon_lbl_DatasetBelongs.setText(_translate("GUI_LSTM_FORCASTER", "Dataset that belongs to model"))
         self.BaCon_btn_SetConfig.setText(_translate("GUI_LSTM_FORCASTER", "Set Config"))
         self.Tabs.setTabText(self.Tabs.indexOf(self.BasicConf_Tab), _translate("GUI_LSTM_FORCASTER", "Basic Config"))
-        self.ForC_lbl_DateFrom.setText(_translate("GUI_LSTM_FORCASTER", "Date from"))
+        
+        self.ForC_lbl_Model_To_used.setText(_translate("GUI_LSTM_FORCASTER", "Date from"))
+        self.ForC_lbl_DataPrecentage.setText(_translate("GUI_LSTM_FORCASTER", "Data precentage %"))
+        
         self.ForC_btn_StartForcasting.setText(_translate("GUI_LSTM_FORCASTER", "START FORCASTING"))
         self.ForC_radioButton_GetGraph.setText(_translate("GUI_LSTM_FORCASTER", "Get the graph?"))
-        self.label_6.setText(_translate("GUI_LSTM_FORCASTER", "Ready to forcast"))
+        self.ForC_lbl_loadBar.setText(_translate("GUI_LSTM_FORCASTER", "Ready to forcast"))
         self.ForC_Gbox_ForcastResul.setTitle(_translate("GUI_LSTM_FORCASTER", "Forcast Result Close"))
         self.label_13.setText(_translate("GUI_LSTM_FORCASTER", "Today Close price:"))
         self.label_5.setText(_translate("GUI_LSTM_FORCASTER", "Tomorrow forcast:"))
         self.ForC_lbl_TodayPrice.setText(_translate("GUI_LSTM_FORCASTER", "2334"))
         self.ForC_lbl_TomorrowPrice.setText(_translate("GUI_LSTM_FORCASTER", "234"))
+        
         self.ForC_txtLine_TailBackDays.setText(_translate("GUI_LSTM_FORCASTER", "200"))
+        self.ForC_txtLine_DataPrecentage.setText(_translate("GUI_LSTM_FORCASTER", "100"))
+        
         self.ForC_lbl_TailBackDays.setText(_translate("GUI_LSTM_FORCASTER", "Tail backdays"))
         self.ForC_lbl_or.setText(_translate("GUI_LSTM_FORCASTER", "Or"))
         self.Tabs.setTabText(self.Tabs.indexOf(self.Forcasting_Tab), _translate("GUI_LSTM_FORCASTER", "Forcasting"))
@@ -1312,6 +1353,54 @@ class Ui_GUI_LSTM_FORCASTER(object):
         pass
     
     def Event_UpdateProgress_string_Trainning_Process(self):
+        pass
+    
+    ###########################################
+    #           TAB Model Forcasting          #
+    ###########################################
+    
+    ############### Bottons functions  ################ 
+    def Start_Forcasting(self):
+        ## Getting data from GUI
+        Model_To_use = self.ForC_ComBox_Model_To_used.currentText()
+        Back_Days_To_Do= self.ForC_txtLine_TailBackDays.text()
+        Data_Precentage= self.ForC_txtLine_DataPrecentage.text()
+        Get_The_Graph= self.ForC_radioButton_GetGraph.isChecked()# return a False or True
+        
+        print(Model_To_use)
+        print(Back_Days_To_Do)
+        print(Data_Precentage)
+        print(Get_The_Graph)
+        
+        
+        
+        #Data need to be able to forcast
+        self.Forcaster.Set_data_frame_Path() #From DB Table model
+        self.Forcaster.Set_all_colums_Data_CSV()#From DB (to define is not in DB table) model
+        self.Forcaster.Set_backdaysConsideredToBForcasted() #GUI
+        self.Forcaster.Set_BackDays() ## From DB table model
+        self.Forcaster.Set_percentageData() #GUI
+        self.Forcaster.Set_FFtUsedQ() # From DB tbale "model" then table "DataSet" then "Seed_DataSet" if FFT used True else False
+        self.Forcaster.Set_FFTUsed("APP/ModelForcast/CL=F/Id22")  #From DB (to define is not in DB table) model
+        
+        self.Forcaster.start()
+    
+    ############ General Fucntions  ###########
+    def ForcastingTab_UpdateComboxModel_ID(self):
+        pass
+    
+    ##### Emit general signals
+    def Model_To_Forcast_ComboBoxChanged(self):
+        pass
+    
+    ##### Emit thread signals
+    def Event_ForcastingStatus(self,val):
+        pass
+        
+    def Event_UpdateProgress_ForcastingProcess(self):
+        pass
+    
+    def Event_UpdateProgress_string_Forcasting_Process(self):
         pass
                  
 if __name__ == "__main__":
