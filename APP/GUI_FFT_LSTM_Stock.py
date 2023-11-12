@@ -1367,6 +1367,37 @@ class Ui_GUI_LSTM_FORCASTER(object):
         Data_Precentage= self.ForC_txtLine_DataPrecentage.text()
         Get_The_Graph= self.ForC_radioButton_GetGraph.isChecked()# return a False or True
         
+        #Getting the Model table
+        query="SELECT * FROM Models WHERE DataSet_id=?"
+        self.Forcaster_DB_c.execute(query,(Model_To_use,))
+        Model_Selected_Row=self.Forcaster_DB_c.fetchall()[0]
+        
+        #=Model_Selected_Row[2]
+        #=str(Model_Selected_Row[3])
+
+        #Getting the DataSet Table
+        query="SELECT * FROM DataSet WHERE DataSet_id=?"
+        self.Forcaster_DB_c.execute(query,(Model_To_use,))
+        Model_Selected_Row=self.Forcaster_DB_c.fetchall()[0]
+        
+        #=Model_Selected_Row[2]
+        #=str(Model_Selected_Row[3])
+        
+        #Getting the Seed DataSet table
+        query="SELECT * FROM DataSet WHERE DataSet_id=?"
+        self.Forcaster_DB_c.execute(query,(Model_To_use,))
+        Model_Selected_Row=self.Forcaster_DB_c.fetchall()[0]
+        
+        #=Model_Selected_Row[2]
+        #=str(Model_Selected_Row[3])
+        
+        
+        
+        
+        #item_name= #From DataSet table
+        #model_Id= #From Models table
+        Forcastpath="APP/ModelForcast/"+item_name+"/"+model_Id
+        
         print(Model_To_use)
         print(Back_Days_To_Do)
         print(Data_Precentage)
@@ -1377,11 +1408,11 @@ class Ui_GUI_LSTM_FORCASTER(object):
         #Data need to be able to forcast
         self.Forcaster.Set_data_frame_Path() #From DB Table model
         self.Forcaster.Set_all_colums_Data_CSV()#From DB (to define is not in DB table) model
-        self.Forcaster.Set_backdaysConsideredToBForcasted() #GUI
+        self.Forcaster.Set_backdaysConsideredToBForcasted(int(Back_Days_To_Do)) #GUI
         self.Forcaster.Set_BackDays() ## From DB table model
-        self.Forcaster.Set_percentageData() #GUI
+        self.Forcaster.Set_percentageData(int(Data_Precentage)) #GUI
         self.Forcaster.Set_FFtUsedQ() # From DB tbale "model" then table "DataSet" then "Seed_DataSet" if FFT used True else False
-        self.Forcaster.Set_FFTUsed("APP/ModelForcast/CL=F/Id22")  #From DB (to define is not in DB table) model
+        self.Forcaster.Set_forcastPath("APP/ModelForcast/CL=F/Id22")  #From DB (to define is not in DB table) model
         
         self.Forcaster.start()
     

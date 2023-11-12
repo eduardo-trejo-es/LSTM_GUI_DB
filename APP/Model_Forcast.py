@@ -21,7 +21,7 @@ class DL_Forcast(QThread):
 
     def __init__(self):
         super().__init__()
-        self.forcaster =Forcast_Data(Model_Path)
+        #self.forcaster =Forcast_Data(Model_Path)
         
     def Set_ColumToforcast(self,val):
         self.ColumToforcast=val
@@ -51,8 +51,8 @@ class DL_Forcast(QThread):
     def Set_FFtUsedQ(self,val):
         self.FFtUsedQ=val
     
-    def Set_FFTUsed(self,val):
-        self.FFTUsed=val
+    def Set_forcastPath(self,val):
+        self.forcastPath=val
         
     def run(self):
         print("Forcast thread running")
@@ -156,4 +156,4 @@ class DL_Forcast(QThread):
         #print(ensambly_np.shape)
         # to convert to CSV
 
-        Final_Allandforcast.to_csv(path_or_buf=forcastPath,index=True)
+        Final_Allandforcast.to_csv(path_or_buf=self.forcastPath,index=True)
