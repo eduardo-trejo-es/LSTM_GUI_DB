@@ -30,7 +30,7 @@
      <enum>QTabWidget::North</enum>
     </property>
     <property name="currentIndex">
-     <number>1</number>
+     <number>4</number>
     </property>
     <property name="movable">
      <bool>false</bool>
@@ -1168,16 +1168,6 @@
        <string>Colums_N</string>
       </property>
      </widget>
-     <widget class="QLineEdit" name="Model_C_txtLine_Int_Model">
-      <property name="geometry">
-       <rect>
-        <x>280</x>
-        <y>280</y>
-        <width>141</width>
-        <height>25</height>
-       </rect>
-      </property>
-     </widget>
      <widget class="QLabel" name="Model_C_LBL_Int_Model">
       <property name="geometry">
        <rect>
@@ -1197,6 +1187,16 @@
         <x>20</x>
         <y>30</y>
         <width>131</width>
+        <height>26</height>
+       </rect>
+      </property>
+     </widget>
+     <widget class="QComboBox" name="Model_C_ComBox_Int_Model">
+      <property name="geometry">
+       <rect>
+        <x>280</x>
+        <y>280</y>
+        <width>311</width>
         <height>26</height>
        </rect>
       </property>
