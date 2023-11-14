@@ -19,20 +19,20 @@ c.execute("""
             date_Time TEXT,
             Path_Model TEXT,
             N_epochs_Done INTEGER,
-            Seed_Data_id_FRGN INTEGER,
+            Seed_Model_id_FRGN INTEGER,
             DataSet_id_FRGN INTEGER,
             Forcasting_Result_id_FRGN INTEGER,
             Colm_T_Predict,
             FOREIGN KEY(DataSet_id_FRGN) REFERENCES DataSet(DataSet_id),
-            FOREIGN KEY(Seed_Data_id_FRGN) REFERENCES Seed_Data(Seed_Data_id),
+            FOREIGN KEY(Seed_Model_id_FRGN) REFERENCES Seed_Data(Seed_Model_id),
             FOREIGN KEY(Forcasting_Result_id_FRGN) REFERENCES Forcasting_Resul(Forcasting_Resul_id)
         )
         """)
 
 #
 c.execute("""
-        CREATE TABLE Seed_Data(
-            Seed_Data_id INTEGER PRIMARY KEY AUTOINCREMENT,
+        CREATE TABLE Seed_Model(
+            Seed_Model_id INTEGER PRIMARY KEY AUTOINCREMENT,
             Columns_N INTEGER,
             LSTM_1_N_Units INTEGER,
             LSTM_2_N_Units INTEGER,

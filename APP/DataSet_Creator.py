@@ -128,15 +128,15 @@ class DL_DataSet(QThread):
         BasePath="{}/Id{}".format(itemName,DataSetId)
         pathTocreated=path.join(ParentPath,BasePath)
         
-        Original_Path_Retiving=pathTocreated+"/CRUDE_OIL_Data.csv"
-        Onlyonecolumn=pathTocreated+"/CRUDE_OIL_Data_onlyClose.csv"
-        LastOnetwice=pathTocreated+"/CRUDE_OIL_Data_LastOneTwice.csv"
-        DirectionPrice=pathTocreated+"/CRUDE_OIL_Data_DirePrice.csv"
-        DayNumAddedPath=pathTocreated+"/CRUDE_OIL_Dataand_DayNum.csv"
-        MonthAddedPath=pathTocreated+"/CRUDE_OIL_Data_And_month.csv"
-        yearAddedPath=pathTocreated+"/CRUDE_OIL_Data_And_year.csv"
-        FFTAddedPath=pathTocreated+"/CRUDE_OIL_CloseFFT_2400_5Backdys.csv"
-        LastPopcolum=pathTocreated+"/CRUDE_OIL_Close_lastPopcolum.csv"
+        Original_Path_Retiving=pathTocreated+"/BaseDataSet.csv"
+        Onlyonecolumn=pathTocreated+"/DataSetPopingUp.csv"
+        LastOnetwice=pathTocreated+"/DataSet_LastOneTwice.csv"
+        DirectionPrice=pathTocreated+"/DataSet_DirePrice.csv"
+        DayNumAddedPath=pathTocreated+"/DataSet_DayNum.csv"
+        MonthAddedPath=pathTocreated+"/DataSet_month.csv"
+        yearAddedPath=pathTocreated+"/DataSet_year.csv"
+        FFTAddedPath=pathTocreated+"/DataSet_FFTColumns.csv"
+        LastPopcolum=pathTocreated+"/DataSet_lastPoppingColums.csv"
         
         self.Update_Progress_String.emit("DataSet Path created")
         self.Update_Progress.emit(50)

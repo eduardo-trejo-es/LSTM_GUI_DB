@@ -433,7 +433,6 @@ class Ui_GUI_LSTM_FORCASTER(object):
         #----------- TAB MODEL FORCASTING  -------------
         ############ General Emit Signals
         #self.MoTr_ComBox_ChooseModel.currentIndexChanged.connect(self.Model_To_Train_ComboBoxChanged)
-        #self.Model_C_ComBox_Int_Model.currentIndexChanged.connect(self.ModelsComboBoxChanged)
         ############ Thread Emit Signals
         self.Forcaster.Update_ForcastingProcsStatus.connect(self.Event_ForcastingStatus)
         #self.Forcaster.Update_Progress.connect(self.Event_UpdateProgress_ForcastingProcess)
@@ -445,7 +444,7 @@ class Ui_GUI_LSTM_FORCASTER(object):
         #----------- TAB MODEL TRAINNING  -------------
         ############ General Emit Signals
         self.MoTr_ComBox_ChooseModel.currentIndexChanged.connect(self.Model_To_Train_ComboBoxChanged)
-        #self.Model_C_ComBox_Int_Model.currentIndexChanged.connect(self.ModelsComboBoxChanged)
+        
         ############ Thread Emit Signals
         self.trainner.Update_TrainningProcssStatus.connect(self.Event_TrainningStatus)
         self.trainner.Update_Progress.connect(self.Event_UpdateProgress_TrainningProcess)
@@ -556,6 +555,7 @@ class Ui_GUI_LSTM_FORCASTER(object):
         self.DaMa_CheckBox_Volume.setText(_translate("GUI_LSTM_FORCASTER", "Volume"))
         self.DaMa_CheckBox_Volume_FFT.setText(_translate("GUI_LSTM_FORCASTER", "Volume FFT"))
         self.Tabs.setTabText(self.Tabs.indexOf(self.Data_Manager_tab), _translate("GUI_LSTM_FORCASTER", "Data manager"))
+        
         self.Model_C_LBL_Progres.setText(_translate("GUI_LSTM_FORCASTER", "Ready"))
         self.Model_C_LdBar.setProperty("value",0)
         self.Model_C_PB_Create_M.setText(_translate("GUI_LSTM_FORCASTER", "Create model"))
@@ -598,7 +598,7 @@ class Ui_GUI_LSTM_FORCASTER(object):
         self.DataSet_all=self.Forcaster_DB_c.fetchall()
         
     def GetSeedDataModel(self):
-        query="SELECT * FROM Seed_Data" #This is seed model
+        query="SELECT * FROM Seed_Model" #This is seed model
         self.Forcaster_DB_c.execute(query)
         self.SeedData_SLCT_all=self.Forcaster_DB_c.fetchall()
         
@@ -633,7 +633,7 @@ class Ui_GUI_LSTM_FORCASTER(object):
         #new seed data is created; if at least a feature has been changed
         if matching==False:
             self.Create_new_DataSeed_DB(Colums,LSTM1_Units,LSTM2_Units,LryDcoeff,Lyr_Dns,Lyr_Dn_Rgzr,OptAdam_Co,BackDays)
-            query="SELECT * FROM Seed_Data WHERE Seed_Data_id=(SELECT max(Seed_Data_id) FROM Seed_Data)"
+            query="SELECT * FROM Seed_Model WHERE Seed_Model_id=(SELECT max(Seed_Model_id) FROM Seed_Model)"
             self.Forcaster_DB_c.execute(query)
             ContentList=self.Forcaster_DB_c.fetchall()
             for i in ContentList: 
@@ -665,11 +665,13 @@ class Ui_GUI_LSTM_FORCASTER(object):
         
     ############ General Fucntions  ############   
     def ModelTab_UpdateComboBoxModel_ID(self):
-        #self.Model_C_ComBox_Int_Model.clear()
+        #self.Model_C_ComBox_Int_Model.clear() not cleaning up
         self.GetModelTable()
         for i in self.ModelsData_SLCT_all: #ComboBox is updated
             Current_Row=i[0]
-            self.Model_C_ComBox_Int_Model.addItem(str(Current_Row))
+            index= self.Model_C_ComBox_Int_Model.findText(str(Current_Row),QtCore.Qt.MatchFixedString)
+            if index<0:
+                self.Model_C_ComBox_Int_Model.addItem(str(Current_Row))
     
     def ModelsComboBoxChanged(self):
         Model_Selected=self.Model_C_ComBox_Int_Model.currentText()
@@ -687,7 +689,7 @@ class Ui_GUI_LSTM_FORCASTER(object):
     def SeedDataComboBoxChanged(self):
         Item_Selected=self.Model_C_ComBox_Int_Seed_Data.currentText()
         
-        query="SELECT * FROM Seed_Data WHERE Seed_Data_id=?"
+        query="SELECT * FROM Seed_Model WHERE Seed_Model_id=?"
         
         self.Forcaster_DB_c.execute(query,(Item_Selected,))
         Select_SeedData=self.Forcaster_DB_c.fetchall()
@@ -703,7 +705,7 @@ class Ui_GUI_LSTM_FORCASTER(object):
             self.Model_C_txtLine_Colums.setText(str(i[1]))
     
     def AddinElementComoBoxDataSeed(self,val1):
-        #self.Model_C_ComBox_Int_Seed_Data.addItem(str(val1))
+        self.Model_C_ComBox_Int_Seed_Data.addItem(str(val1))
         self.UpdateLocalObjects()
     
     def AddinElementComoBoxModelData(self,val1):
@@ -722,7 +724,7 @@ class Ui_GUI_LSTM_FORCASTER(object):
         Matching_Val8=False
         
         ##Seed_Data; Getting all data 
-        query="SELECT * FROM Seed_Data"
+        query="SELECT * FROM Seed_Model"
          
         self.Forcaster_DB_c.execute(query)
         All_table_Data=self.Forcaster_DB_c.fetchall()
@@ -764,7 +766,7 @@ class Ui_GUI_LSTM_FORCASTER(object):
         
     def Create_new_DataSeed_DB(self,val_1,val_2,val_3,val_4,val_5,val_6,val_7,val_8):
         
-        query=""" INSERT INTO Seed_Data (Columns_N,LSTM_1_N_Units, LSTM_2_N_Units,Lyr_Drop_Coeff,Lyr_Dns_N_Units,Lyr_Dns_Rgzr_Coeff,Optmzer_Adam_Coeff,BackDays)
+        query=""" INSERT INTO Seed_Model (Columns_N,LSTM_1_N_Units, LSTM_2_N_Units,Lyr_Drop_Coeff,Lyr_Dns_N_Units,Lyr_Dns_Rgzr_Coeff,Optmzer_Adam_Coeff,BackDays)
          VALUES (?,?,?,?,?,?,?,?)"""
 
         self.Forcaster_DB_c.execute(query,(val_1,val_2,val_3,val_4,val_5,val_6,val_7,val_8)) 
@@ -777,10 +779,10 @@ class Ui_GUI_LSTM_FORCASTER(object):
         """date_Time TEXT,
         Path_Model TEXT,
         N_epochs_Done INTEGER,
-        Seed_Data_id_FRGN INTEGER,
+        Seed_Model_id_FRGN INTEGER,
         DataSet_id_FRGN INTEGER"""
         
-        query=""" INSERT INTO Models (date_Time,Path_Model, N_epochs_Done,Seed_Data_id_FRGN,DataSet_id_FRGN,Forcasting_Result_id_FRGN,Colm_T_Predict)
+        query=""" INSERT INTO Models (date_Time,Path_Model, N_epochs_Done,Seed_Model_id_FRGN,DataSet_id_FRGN,Forcasting_Result_id_FRGN,Colm_T_Predict)
          VALUES (?,?,?,?,?,?,?)"""
         self.Forcaster_DB_c.execute(query,(val_1,val_2,val_3,val_4,val_5,val_6,val_7)) 
         
@@ -790,12 +792,12 @@ class Ui_GUI_LSTM_FORCASTER(object):
     ##### Emit thread signals
     
     def Event_ModelCreationStatus(self,val):
-        date_Time,Path_Model,N_epochs_Done,Seed_Data_id_FRGN,DataSet_id_FRGN,Forcasting_Result_id_FRGN,Colm_T_Predict=self.model_creator.Get_NewModelData()
+        date_Time,Path_Model,N_epochs_Done,Seed_Model_id_FRGN,DataSet_id_FRGN,Forcasting_Result_id_FRGN,Colm_T_Predict=self.model_creator.Get_NewModelData()
         NewModelStatus=self.model_creator.GetModelCreationStatus()
         print(NewModelStatus)
 
         if val:
-            self.Creare_new_model_in_DB(date_Time,Path_Model,N_epochs_Done,Seed_Data_id_FRGN,DataSet_id_FRGN,Forcasting_Result_id_FRGN,Colm_T_Predict)
+            self.Creare_new_model_in_DB(date_Time,Path_Model,N_epochs_Done,Seed_Model_id_FRGN,DataSet_id_FRGN,Forcasting_Result_id_FRGN,Colm_T_Predict)
             print("Model Created :'D")
             modelJustCreated=self.model_creator.Get_Last_model_Create()+1
             self.AddinElementComoBoxModelData(modelJustCreated)
@@ -1367,36 +1369,45 @@ class Ui_GUI_LSTM_FORCASTER(object):
         Data_Precentage= self.ForC_txtLine_DataPrecentage.text()
         Get_The_Graph= self.ForC_radioButton_GetGraph.isChecked()# return a False or True
         
+        FFTwereUsed=False #To define if FFT columns existe in Dataset, this is because first 5 rows are lost to generated them 
+        
         #Getting the Model table
-        query="SELECT * FROM Models WHERE DataSet_id=?"
+        query="SELECT * FROM Models WHERE Model_id=?"
         self.Forcaster_DB_c.execute(query,(Model_To_use,))
         Model_Selected_Row=self.Forcaster_DB_c.fetchall()[0]
         
-        #=Model_Selected_Row[2]
-        #=str(Model_Selected_Row[3])
+        Path_DataSet=Model_Selected_Row[2]
+        DataSet_Id=int(Model_Selected_Row[5])
 
         #Getting the DataSet Table
         query="SELECT * FROM DataSet WHERE DataSet_id=?"
-        self.Forcaster_DB_c.execute(query,(Model_To_use,))
+        self.Forcaster_DB_c.execute(query,(DataSet_Id,))
         Model_Selected_Row=self.Forcaster_DB_c.fetchall()[0]
         
-        #=Model_Selected_Row[2]
-        #=str(Model_Selected_Row[3])
+        DataSet_Path=Model_Selected_Row[2]
+        SeedDataSet_id=int(Model_Selected_Row[3])
         
         #Getting the Seed DataSet table
-        query="SELECT * FROM DataSet WHERE DataSet_id=?"
-        self.Forcaster_DB_c.execute(query,(Model_To_use,))
+        query="SELECT * FROM Seed_DataSet WHERE SeedDataSet_id=?"
+        self.Forcaster_DB_c.execute(query,(SeedDataSet_id,))
         Model_Selected_Row=self.Forcaster_DB_c.fetchall()[0]
         
-        #=Model_Selected_Row[2]
-        #=str(Model_Selected_Row[3])
+        ItemName=Model_Selected_Row[1]
+        BackDays=Model_Selected_Row[2]
+        Open_FFT_C=int(Model_Selected_Row[8])
+        High_FFT_C=int(Model_Selected_Row[9])
+        Low_FFT_C=int(Model_Selected_Row[10])
+        Close_FFT_C=int(Model_Selected_Row[11])
+        Volum_FFT_C=int(Model_Selected_Row[12])
+        
+        #ANswering question, there are FFT columns in DataSet?
+        if (Open_FFT_C==1) or (High_FFT_C==1) or (Low_FFT_C==1)or(Close_FFT_C==1) or (Volum_FFT_C==1):FFTwereUsed=True
+        else:FFTwereUsed=False
         
         
-        
-        
-        #item_name= #From DataSet table
-        #model_Id= #From Models table
-        Forcastpath="APP/ModelForcast/"+item_name+"/"+model_Id
+        #Defining Path files 
+        Forcastpath="APP/ModelForcast/"+ItemName+"/"+"Model_"+Model_To_use
+        BaseDataSet="APP/DataSets/"+ItemName+"/BaseDataSet.csv"
         
         print(Model_To_use)
         print(Back_Days_To_Do)
@@ -1404,15 +1415,14 @@ class Ui_GUI_LSTM_FORCASTER(object):
         print(Get_The_Graph)
         
         
-        
         #Data need to be able to forcast
-        self.Forcaster.Set_data_frame_Path() #From DB Table model
-        self.Forcaster.Set_all_colums_Data_CSV()#From DB (to define is not in DB table) model
+        self.Forcaster.Set_data_frame_Path(DataSet_Path) 
+        self.Forcaster.Set_all_colums_Data_CSV(BaseDataSet)
         self.Forcaster.Set_backdaysConsideredToBForcasted(int(Back_Days_To_Do)) #GUI
-        self.Forcaster.Set_BackDays() ## From DB table model
+        self.Forcaster.Set_BackDays(int(BackDays)) ## From DB table model
         self.Forcaster.Set_percentageData(int(Data_Precentage)) #GUI
-        self.Forcaster.Set_FFtUsedQ() # From DB tbale "model" then table "DataSet" then "Seed_DataSet" if FFT used True else False
-        self.Forcaster.Set_forcastPath("APP/ModelForcast/CL=F/Id22")  #From DB (to define is not in DB table) model
+        self.Forcaster.Set_FFtUsedQ(FFTwereUsed) # From DB tbale "model" then table "DataSet" then "Seed_DataSet" if FFT used True else False
+        self.Forcaster.Set_forcastPath(Forcastpath)
         
         self.Forcaster.start()
     
