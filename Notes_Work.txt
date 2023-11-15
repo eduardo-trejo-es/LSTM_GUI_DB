@@ -13,6 +13,7 @@ in this way when I modify db structure, in code the dictionary lables won't chan
 
 * A new global function to update object was create, and of curse some other function were created because of it
 
+*Create a Tab to evaluate forcasting using the forcast_result
 
 Interlock FFT:
 Limits for values

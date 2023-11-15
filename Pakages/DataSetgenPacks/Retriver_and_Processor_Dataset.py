@@ -22,6 +22,8 @@ class DatasetGenerator:
         df=pd.read_csv(csvFileName, index_col="Date")
         Column=columns
         for i in Column:
+            print(i)
+            print(type(i))
             df.pop(i)
         self.SavingDataset(df,csvFileName, csvFileName_New,False)
               

@@ -146,9 +146,6 @@ class Ui_GUI_LSTM_FORCASTER(object):
         self.ForC_lbl_TomorrowPrice.setGeometry(QtCore.QRect(130, 61, 101, 16))
         self.ForC_lbl_TomorrowPrice.setObjectName("ForC_lbl_TomorrowPrice")
         
-        
-        
-        
         self.ForC_lbl_TailBackDays = QtWidgets.QLabel(self.Forcasting_Tab)
         self.ForC_lbl_TailBackDays.setGeometry(QtCore.QRect(370, 30, 121, 16))
         self.ForC_lbl_TailBackDays.setObjectName("ForC_lbl_TailBackDays")
@@ -189,8 +186,6 @@ class Ui_GUI_LSTM_FORCASTER(object):
         self.MoTr_ComBox_ChooseModel.setGeometry(QtCore.QRect(70, 50, 111, 26))
         self.MoTr_ComBox_ChooseModel.setObjectName("MoTr_ComBox_ChooseModel")
         
-        
-        
         self.MoTr_btn_Cancel_train = QtWidgets.QPushButton(self.Model_Trainner_Tab)
         self.MoTr_btn_Cancel_train.setGeometry(QtCore.QRect(470, 90, 141, 51))
         self.MoTr_btn_Cancel_train.setObjectName("MoTr_btn_Cancel_train")
@@ -224,6 +219,11 @@ class Ui_GUI_LSTM_FORCASTER(object):
         self.MoTr_ComBox_DataSet = QtWidgets.QComboBox(self.Model_Trainner_Tab)
         self.MoTr_ComBox_DataSet.setGeometry(QtCore.QRect(70, 100, 111, 26))
         self.MoTr_ComBox_DataSet.setObjectName("MoTr_ComBox_DataSet")
+        self.MoTr_ComBox_DataSet.clear()
+        #for i in self.DataSet_all: #ComboBox is updated
+        #    Current_Row=i[0]
+        #    self.MoTr_ComBox_DataSet.addItem(str(Current_Row))    
+        
         self.Tabs.addTab(self.Model_Trainner_Tab, "")
         self.Data_Manager_tab = QtWidgets.QWidget()
         self.Data_Manager_tab.setObjectName("Data_Manager_tab")
@@ -325,13 +325,14 @@ class Ui_GUI_LSTM_FORCASTER(object):
         self.DaMa_ComBox_DataSet_Id.setGeometry(QtCore.QRect(370, 40, 101, 26))
         self.DaMa_ComBox_DataSet_Id.setObjectName("DaMa_ComBox_DataSet_Id")
         self.DaMa_ComBox_DataSet_Id.clear() #When starting app, combobox is updated
-        for i in self.DataSet_all: #ComboBox is updated
-            Current_Row=i[0]
-            self.DaMa_ComBox_DataSet_Id.addItem(str(Current_Row))
         
         self.DaMa_ComBox_Seed_DataSet = QtWidgets.QComboBox(self.Data_Manager_tab)
         self.DaMa_ComBox_Seed_DataSet.setGeometry(QtCore.QRect(60, 40, 101, 26))
         self.DaMa_ComBox_Seed_DataSet.setObjectName("DaMa_ComBox_Seed_DataSet")
+        self.DaMa_ComBox_Seed_DataSet.clear()
+        #for i in self.SeedDataSet_all: #ComboBox is updated
+        #    Current_Row=i[0]
+        #    self.DaMa_ComBox_Seed_DataSet.addItem(str(Current_Row))
         
         
         self.Tabs.addTab(self.Data_Manager_tab, "")
@@ -413,7 +414,6 @@ class Ui_GUI_LSTM_FORCASTER(object):
         for i in self.SeedData_SLCT_all: #ComboBox is updated
             Current_Row=i[0]
             self.Model_C_ComBox_Int_Seed_Data.addItem(str(Current_Row))
-        self.SeedDataComboBoxChanged() 
         
         self.Tabs.addTab(self.ModCrtion, "")
         
@@ -490,7 +490,7 @@ class Ui_GUI_LSTM_FORCASTER(object):
         self.BaCon_btn_SetConfig.setText(_translate("GUI_LSTM_FORCASTER", "Set Config"))
         self.Tabs.setTabText(self.Tabs.indexOf(self.BasicConf_Tab), _translate("GUI_LSTM_FORCASTER", "Basic Config"))
         
-        self.ForC_lbl_Model_To_used.setText(_translate("GUI_LSTM_FORCASTER", "Date from"))
+        self.ForC_lbl_Model_To_used.setText(_translate("GUI_LSTM_FORCASTER", "Model To use"))
         self.ForC_lbl_DataPrecentage.setText(_translate("GUI_LSTM_FORCASTER", "Data precentage %"))
         
         self.ForC_btn_StartForcasting.setText(_translate("GUI_LSTM_FORCASTER", "START FORCASTING"))
@@ -576,6 +576,9 @@ class Ui_GUI_LSTM_FORCASTER(object):
     ###########################################
     def UpdateLocalObjects(self):
     
+        #### Forcasting tab
+        self.ForcastingTab_UpdateComboxModel_ID()
+        
         #### Tranning tab
         self.TrainningTab_UpdateComboxModel_ID()
         self.TrainningTab_UpdateComboxDataSet_ID()
@@ -591,16 +594,16 @@ class Ui_GUI_LSTM_FORCASTER(object):
         query="SELECT * FROM Models"
         self.Forcaster_DB_c.execute(query)
         self.ModelsData_SLCT_all=self.Forcaster_DB_c.fetchall()
+    
+    def GetSeedDataModel(self):
+        query="SELECT * FROM Seed_Model" #This is seed model
+        self.Forcaster_DB_c.execute(query)
+        self.SeedData_SLCT_all=self.Forcaster_DB_c.fetchall()
         
     def GetDataSetTable(self):
         query="SELECT * FROM DataSet"
         self.Forcaster_DB_c.execute(query)
         self.DataSet_all=self.Forcaster_DB_c.fetchall()
-        
-    def GetSeedDataModel(self):
-        query="SELECT * FROM Seed_Model" #This is seed model
-        self.Forcaster_DB_c.execute(query)
-        self.SeedData_SLCT_all=self.Forcaster_DB_c.fetchall()
         
     def GetSeed_DataSet(self):
         query="SELECT * FROM Seed_DataSet"
@@ -639,7 +642,7 @@ class Ui_GUI_LSTM_FORCASTER(object):
             for i in ContentList: 
                 CurrentSeedDataRow=i[0]
             #Adding to Combo Box the data seed just created
-            self.AddinElementComoBoxDataSeed(CurrentSeedDataRow)
+            self.AddinElementComoBoxDataSeed()
         else:
             CurrentSeedDataRow=matching_row
         
@@ -704,8 +707,7 @@ class Ui_GUI_LSTM_FORCASTER(object):
             self.Model_C_txtLine_BackDays.setText(str(i[8]))
             self.Model_C_txtLine_Colums.setText(str(i[1]))
     
-    def AddinElementComoBoxDataSeed(self,val1):
-        self.Model_C_ComBox_Int_Seed_Data.addItem(str(val1))
+    def AddinElementComoBoxDataSeed(self):
         self.UpdateLocalObjects()
     
     def AddinElementComoBoxModelData(self,val1):
@@ -884,7 +886,7 @@ class Ui_GUI_LSTM_FORCASTER(object):
             for i in ContentList: 
                 CurrentSeedDataRow=i[0]
             #Adding to Combo Box the data seed just created
-            self.AddinElementComoBoxSeed_DataSet(CurrentSeedDataRow)
+            self.AddinElementComoBoxSeed_DataSet()
         else:
             CurrentSeedDataRow=matching_row
             
@@ -947,23 +949,15 @@ class Ui_GUI_LSTM_FORCASTER(object):
         
     def DataSetComboBoxChanged(self):
         DatasSet_Selected=self.DaMa_ComBox_DataSet_Id.currentText()
-        print(DatasSet_Selected)
         query="SELECT * FROM DataSet WHERE DataSet_id=?"
         
         self.Forcaster_DB_c.execute(query,(DatasSet_Selected,))
         Select_DataSet=self.Forcaster_DB_c.fetchall()
-        
-        print(Select_DataSet)
-
+    
         for i in Select_DataSet:
             Date_Time_DataSet=i[1]
             Path_DataSet=i[2]
-            SeedDataSet=i[3]
-        
-        print(Date_Time_DataSet)
-        print(Path_DataSet)
-        print(SeedDataSet)
-        
+            SeedDataSet=i[3]    
     
         self.DaMa_txtLine_DateTime.setText(str(Date_Time_DataSet))
         self.DaMa_txtLine_PathCSV_File.setText(str(Path_DataSet))
@@ -1029,11 +1023,13 @@ class Ui_GUI_LSTM_FORCASTER(object):
             
             self.DaMa_txtLine_FFT_Frec.setText(str(i[16]))
               
-    def AddinElementComoBoxSeed_DataSet(self,val1):
-        self.DaMa_ComBox_Seed_DataSet.addItem(str(val1))
+    def AddinElementComoBoxSeed_DataSet(self):
+        self.UpdateLocalObjects()
+        #self.DaMa_ComBox_Seed_DataSet.addItem(str(val1))
         
-    def AddinElementComoBoxData_Set(self,val1):
-        self.DaMa_ComBox_DataSet_Id.addItem(str(val1))
+    def AddinElementComoBoxData_Set(self):
+        self.UpdateLocalObjects()
+        #self.DaMa_ComBox_DataSet_Id.addItem(str(val1))
         
     def Check_Matching_Seed_DataSet(self,val_1,val_2,val_3,val_4,val_5,val_6,val_7,val_8,
                                     val_9,val_10,val_11,val_12,val_13,val_14,val_15,val_16):
@@ -1160,11 +1156,10 @@ class Ui_GUI_LSTM_FORCASTER(object):
             print("DataSet created Created :'D")
             self.DaMa_btn_Create.setEnabled(True)
             DataSetJustCreated=self.DataSet_creator.Get_DataSet_id_Just_Created()
-            self.AddinElementComoBoxData_Set(DataSetJustCreated)
+            self.AddinElementComoBoxData_Set()
             index= self.DaMa_ComBox_DataSet_Id.findText(str(DataSetJustCreated),QtCore.Qt.MatchFixedString)
             self.DaMa_ComBox_DataSet_Id.setCurrentIndex(index)
             self.UpdateLocalObjects()
-            
             
     def Event_UpdateProgress_DataSetCreator(self,val):
          self.DaMa_LoadBar_Progres.setProperty("value",val)
@@ -1255,7 +1250,7 @@ class Ui_GUI_LSTM_FORCASTER(object):
         self.GetDataSetTable()
         for i in self.DataSet_all: #ComboBox is updated
             Current_Row=i[0]
-            index= self.DaMa_ComBox_Seed_DataSet.findText(str(Current_Row),QtCore.Qt.MatchFixedString)
+            index= self.MoTr_ComBox_DataSet.findText(str(Current_Row),QtCore.Qt.MatchFixedString)
             if index==-1:
                 self.MoTr_ComBox_DataSet.addItem(str(Current_Row))
                 
@@ -1414,7 +1409,6 @@ class Ui_GUI_LSTM_FORCASTER(object):
         print(Data_Precentage)
         print(Get_The_Graph)
         
-        
         #Data need to be able to forcast
         self.Forcaster.Set_data_frame_Path(DataSet_Path) 
         self.Forcaster.Set_all_colums_Data_CSV(BaseDataSet)
@@ -1428,7 +1422,26 @@ class Ui_GUI_LSTM_FORCASTER(object):
     
     ############ General Fucntions  ###########
     def ForcastingTab_UpdateComboxModel_ID(self):
-        pass
+        self.GetModelTable()
+        for i in self.ModelsData_SLCT_all: #ComboBox is updated
+            Current_Row=i[0]
+            index= self.ForC_ComBox_Model_To_used.findText(str(Current_Row),QtCore.Qt.MatchFixedString)
+            if index==-1:
+                self.ForC_ComBox_Model_To_used.addItem(str(Current_Row))
+    
+    
+    def Write_Over_the_Forcasting_Evaluation_table(self):
+        """Date_time TEXT,
+        Total_Movement_Right INTEGER,
+        Total_Movement_Right_Per100 REAL,
+        Rows_Considered INTEGER,
+        Total_Diff_Mag_earned REAL,
+        Total_Diff_earned_Per100 REAL,
+        Total_Diff_Mag_lose REAL,
+        Total_Diff_lose_Per100 REAL,
+        Total_Mag_Mvmnts REAL,
+        Real_Mag_earned REAL,
+        Real_earned_Per100 REAL"""
     
     ##### Emit general signals
     def Model_To_Forcast_ComboBoxChanged(self):
