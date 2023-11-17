@@ -4,12 +4,12 @@
     - all set and get data to/from GUI objects
 
 * Tab predict
+    - Save the forcasted picture too
+
+    I was adding forcast creation data to table DB 
 
 * Too complicate to added or delete columns in DB, change list queries for dictionary, 
 in this way when I modify db structure, in code the dictionary lables won't changes
-
-
-*Change at  models table the column name:Seed_Data_id_FRGN for Seed_Model_id_FRGN
 
 * A new global function to update object was create, and of curse some other function were created because of it
 

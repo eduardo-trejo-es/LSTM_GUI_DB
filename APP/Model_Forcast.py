@@ -18,9 +18,20 @@ class DL_Forcast(QThread):
     Update_ForcastingProcsStatus = pyqtSignal(bool)
 
 
+
     def __init__(self):
         super().__init__()
         #self.forcaster =Forcast_Data(Model_Path)
+        self.Total_Movement_Right=0
+        self.Total_Movement_Right_Per100=0
+        self.Total_Diff_Mag_earned=0
+        self.Total_Diff_earned_Per100=0
+        self.Total_Diff_Mag_lose=0
+        self.Total_Diff_lose_Per100=0
+        self.Total_Mag_Mvmnts=0
+        self.Real_Mag_earned=0
+        self.Real_earned_Per100=0
+        self.Real_earned_Per100=0
         
     def Set_ColumToforcast(self,val):
         self.ColumToforcast=val
@@ -52,16 +63,36 @@ class DL_Forcast(QThread):
     
     def Set_forcastPath(self,val):
         self.forcastPath=val
+    
+    def Set_ModelPath(self,val):
+        self.Model_Path=val
+        
+    def Set_Model_id_Used(self,val):
+        self.Model_Id_Used=val
+        
+    def Get_ColumForcast(self):       
+        return self.ColumnForcast
+    
+    def Get_ColumReal(self):
+        return self.ColumReal
+    
+    def Get_NewForcastingData(self):
+        return (self.date_Time,self.Total_Movement_Right,self.Total_Movement_Right_Per100,
+                self.Rows_Considered,self.Total_Diff_Mag_earned,self.Total_Diff_earned_Per100,
+                self.Total_Diff_Mag_lose,self.Total_Diff_lose_Per100,self.Total_Mag_Mvmnts,
+                self.Real_Mag_earned,self.Real_earned_Per100,self.Real_earned_Per100,self.Model_id_FRGN)
         
     def run(self):
         print("Forcast thread running")
+        self.forcaster = Forcast_Data(self.Model_Path)
 
         ########## forcasting instuctions below #######
         Data_CSV=self.data_frame_Path
         all_colums_Data_CSV= self.all_colums_Data_CSV# Need To add to Table_Original or just determinate
-        backdaysConsideredToBForcasted=self.backdaysConsideredToBForcasted
-        backdaysConsidered=self.BackDays
-        percentageData=self.percentageData
+        backdaysConsideredToBForcasted=int(self.backdaysConsideredToBForcasted)
+        backdaysConsidered=int(self.BackDays)
+        ColumToForcast=int(self.ColumToforcast)
+        percentageData=int(self.percentageData)
         FFtUsedQ=self.FFtUsedQ
         
         saveAllandforcast=pd.DataFrame({})
@@ -101,7 +132,7 @@ class DL_Forcast(QThread):
         for i in datefiltredPercentage:
             print("to be predict from: "+str(i))
             #ColumToforcast, ColumRealYToCompare, dateFromForcast, data_frame_Path, BackDays
-            self.forcaster.ToForcastfrom(0,0,str(i),Data_CSV,backdaysConsidered)
+            self.forcaster.ToForcastfrom(ColumToForcast,ColumToForcast,str(i),Data_CSV,backdaysConsidered)
             Real_Y_current=self.forcaster.Get_UnicForcast_Real_Y_current()
             Real_Y_Forcast=self.forcaster.Get_UnicForcast_Forcast_Close()
             Real_Y_Close=self.forcaster.Get_UnicForcast_Real_Y_Close()
@@ -142,17 +173,37 @@ class DL_Forcast(QThread):
         frames = [Allandforcast, fd_ColumnForcast_Close_Day]
 
         Final_Allandforcast = pd.concat(frames,axis=1)
-        print(Final_Allandforcast)
 
-        print(type(ColumnForcast_Close_Day))
-        print(type(ColumnReal_Close_Day))
-        plt.plot(ColumnForcast_Close_Day,label='ColumnForcast_Close_Day',color='orange', marker='o')
-        plt.plot(ColumnReal_Close_Day,label='ColumnReal_Close_Day',color='green', marker='*')
+
+        ######         this plot must be done at main thread     ###############
+        #plt.plot(ColumnForcast_Close_Day,label='ColumnForcast_Close_Day',color='orange', marker='o')
+        #plt.plot(ColumnReal_Close_Day,label='ColumnReal_Close_Day',color='green', marker='*')
         #plt.plot([1,2,3,4])
-        plt.show()
+        #plt.show()
         #np.insert(a, a.shape[1], np.array((10, 10, 10, 10)), 1)
         #print(ensambly_np.shape)
         #print(ensambly_np.shape)
         # to convert to CSV
-
+        
+        
+        #Creating the csv File
         Final_Allandforcast.to_csv(path_or_buf=self.forcastPath,index=True)
+        
+        #Getting Forcasting Data
+        ### Model Data ###
+        print("Today's date:", self.today)
+        self.date_Time=str(self.today)
+        self.Rows_Considered=self.backdaysConsideredToBForcasted
+        self.Model_id_FRGN=self.Model_Id_Used
+        
+        #Giving de columns to main thread to get the trend 
+        self.ColumnForcast,self.ColumReal=ColumnForcast_Close_Day, ColumnReal_Close_Day
+        
+        self.Update_Progress_String.emit("Trainning finished")
+        self.Update_Progress.emit(100)
+        time.sleep(3)
+        self.Update_Progress_String.emit("Ready to create another DataSet")
+        self.Update_Progress.emit(0)
+        self.Update_ForcastingProcsStatus.emit(True)
+        
+        

@@ -17,6 +17,10 @@ sys.path.append("APP/Pakages/Seed_Model")
 #from Forcaster_Model_DateFromToForcast import Forcast_Data
 import matplotlib.pyplot as plt
 
+### Check if model is created
+import os.path as path
+import os 
+
 
 from PyQt5 import QtCore, QtGui, QtWidgets
 import sqlite3
@@ -411,9 +415,9 @@ class Ui_GUI_LSTM_FORCASTER(object):
         self.Model_C_ComBox_Int_Seed_Data.setGeometry(QtCore.QRect(195, 30, 100, 26))
         self.Model_C_ComBox_Int_Seed_Data.setObjectName("Model_C_ComBox_Int_Seed_Data")
         self.Model_C_ComBox_Int_Seed_Data.clear() #When starting app, combobox is updated
-        for i in self.SeedData_SLCT_all: #ComboBox is updated
-            Current_Row=i[0]
-            self.Model_C_ComBox_Int_Seed_Data.addItem(str(Current_Row))
+        #for i in self.SeedData_SLCT_all: #ComboBox is updated
+        #    Current_Row=i[0]
+        #    self.Model_C_ComBox_Int_Seed_Data.addItem(str(Current_Row))
         
         self.Tabs.addTab(self.ModCrtion, "")
         
@@ -429,6 +433,7 @@ class Ui_GUI_LSTM_FORCASTER(object):
         
         ### INIT Function calls
         self.UpdateLocalObjects()
+        
         
         #----------- TAB MODEL FORCASTING  -------------
         ############ General Emit Signals
@@ -589,6 +594,8 @@ class Ui_GUI_LSTM_FORCASTER(object):
         
         ####   Model creator tab   ####
         self.ModelTab_UpdateComboBoxModel_ID()
+        self.ModelTab_UpdateComboBoxSeedModel_ID()
+        
     
     def GetModelTable(self):
         query="SELECT * FROM Models"
@@ -675,6 +682,15 @@ class Ui_GUI_LSTM_FORCASTER(object):
             index= self.Model_C_ComBox_Int_Model.findText(str(Current_Row),QtCore.Qt.MatchFixedString)
             if index<0:
                 self.Model_C_ComBox_Int_Model.addItem(str(Current_Row))
+            
+    
+    def ModelTab_UpdateComboBoxSeedModel_ID(self):
+        self.GetSeedDataModel()
+        for i in self.SeedData_SLCT_all: #ComboBox is updated
+            Current_Row=i[0]
+            index= self.Model_C_ComBox_Int_Seed_Data.findText(str(Current_Row),QtCore.Qt.MatchFixedString)
+            if index<0:
+                self.Model_C_ComBox_Int_Seed_Data.addItem(str(Current_Row))
     
     def ModelsComboBoxChanged(self):
         Model_Selected=self.Model_C_ComBox_Int_Model.currentText()
@@ -683,7 +699,7 @@ class Ui_GUI_LSTM_FORCASTER(object):
         
         self.Forcaster_DB_c.execute(query,(Model_Selected,))
         Select_Model=self.Forcaster_DB_c.fetchall()
-
+        print("was called ")
         for i in Select_Model:   
             SeedDataModel=i[4]
         index= self.Model_C_ComBox_Int_Seed_Data.findText(str(SeedDataModel),QtCore.Qt.MatchFixedString)
@@ -776,17 +792,11 @@ class Ui_GUI_LSTM_FORCASTER(object):
         #Validate changes to our DB 
         self.Forcaster_DB_conn.commit()
 
-    def Creare_new_model_in_DB(self,val_1,val_2,val_3,val_4,val_5,val_6,val_7):
-
-        """date_Time TEXT,
-        Path_Model TEXT,
-        N_epochs_Done INTEGER,
-        Seed_Model_id_FRGN INTEGER,
-        DataSet_id_FRGN INTEGER"""
+    def Creare_new_model_in_DB(self,val_1,val_2,val_3,val_4,val_5,val_6):
         
-        query=""" INSERT INTO Models (date_Time,Path_Model, N_epochs_Done,Seed_Model_id_FRGN,DataSet_id_FRGN,Forcasting_Result_id_FRGN,Colm_T_Predict)
-         VALUES (?,?,?,?,?,?,?)"""
-        self.Forcaster_DB_c.execute(query,(val_1,val_2,val_3,val_4,val_5,val_6,val_7)) 
+        query=""" INSERT INTO Models (date_Time,Path_Model, N_epochs_Done,Seed_Model_id_FRGN,DataSet_id_FRGN,Colm_T_Predict)
+         VALUES (?,?,?,?,?,?)"""
+        self.Forcaster_DB_c.execute(query,(val_1,val_2,val_3,val_4,val_5,val_6)) 
         
         #Validate changes to our DB 
         self.Forcaster_DB_conn.commit()
@@ -799,7 +809,7 @@ class Ui_GUI_LSTM_FORCASTER(object):
         print(NewModelStatus)
 
         if val:
-            self.Creare_new_model_in_DB(date_Time,Path_Model,N_epochs_Done,Seed_Model_id_FRGN,DataSet_id_FRGN,Forcasting_Result_id_FRGN,Colm_T_Predict)
+            self.Creare_new_model_in_DB(date_Time,Path_Model,N_epochs_Done,Seed_Model_id_FRGN,DataSet_id_FRGN,Colm_T_Predict)
             print("Model Created :'D")
             modelJustCreated=self.model_creator.Get_Last_model_Create()+1
             self.AddinElementComoBoxModelData(modelJustCreated)
@@ -889,7 +899,7 @@ class Ui_GUI_LSTM_FORCASTER(object):
             self.AddinElementComoBoxSeed_DataSet()
         else:
             CurrentSeedDataRow=matching_row
-            
+        
         #Shows in combo box the current Item in used
         index= self.DaMa_ComBox_Seed_DataSet.findText(str(CurrentSeedDataRow),QtCore.Qt.MatchFixedString)
         self.DaMa_ComBox_Seed_DataSet.setCurrentIndex(index) #To set the item, consider (item from 1) (index from 0)
@@ -1189,7 +1199,7 @@ class Ui_GUI_LSTM_FORCASTER(object):
         
         ModelPath=Model_Selected_Row[2]
         DataSetMarried=int(Model_Selected_Row[5])
-        ColmTPredictMarried=int(Model_Selected_Row[7])
+        ColmTPredictMarried=int(Model_Selected_Row[6])
         
         Columns_Index=self.Mapping_DataSetColums(DataSet_Id,Colum_To_Predict,True)
         
@@ -1300,7 +1310,7 @@ class Ui_GUI_LSTM_FORCASTER(object):
         
         ephocs_done=str(Model_Selected_Row[3])
         DataSetMarried=int(Model_Selected_Row[5])
-        ColmTPredictMarried=int(Model_Selected_Row[7])
+        ColmTPredictMarried=int(Model_Selected_Row[6])
         
         self.MoTr_txtLine_ephocs_done.setText(ephocs_done)
         
@@ -1373,6 +1383,7 @@ class Ui_GUI_LSTM_FORCASTER(object):
         
         Path_DataSet=Model_Selected_Row[2]
         DataSet_Id=int(Model_Selected_Row[5])
+        ColumToForcast=int(Model_Selected_Row[6])
 
         #Getting the DataSet Table
         query="SELECT * FROM DataSet WHERE DataSet_id=?"
@@ -1401,22 +1412,31 @@ class Ui_GUI_LSTM_FORCASTER(object):
         
         
         #Defining Path files 
-        Forcastpath="APP/ModelForcast/"+ItemName+"/"+"Model_"+Model_To_use
-        BaseDataSet="APP/DataSets/"+ItemName+"/BaseDataSet.csv"
+        FolderForcastpath="APP/ModelForcast/"+ItemName+"/"+"Model_"+Model_To_use
         
-        print(Model_To_use)
-        print(Back_Days_To_Do)
-        print(Data_Precentage)
-        print(Get_The_Graph)
+        if path.exists(FolderForcastpath):
+            pass
+        else:
+            os.makedirs(FolderForcastpath)
+        
+
+        ForcastPath=FolderForcastpath+"/"+"Forcast_"+"1.csv"
+        BaseDataSet="APP/DataSets/"+ItemName+"/Id"+str(DataSet_Id)+"/BaseDataSet.csv"
+        
+        #To create folde if doesnt' exist
+
         
         #Data need to be able to forcast
+        self.Forcaster.Set_Model_id_Used(Model_To_use)
+        self.Forcaster.Set_ModelPath(Path_DataSet)
         self.Forcaster.Set_data_frame_Path(DataSet_Path) 
+        self.Forcaster.Set_ColumToforcast(ColumToForcast)
         self.Forcaster.Set_all_colums_Data_CSV(BaseDataSet)
         self.Forcaster.Set_backdaysConsideredToBForcasted(int(Back_Days_To_Do)) #GUI
         self.Forcaster.Set_BackDays(int(BackDays)) ## From DB table model
         self.Forcaster.Set_percentageData(int(Data_Precentage)) #GUI
         self.Forcaster.Set_FFtUsedQ(FFTwereUsed) # From DB tbale "model" then table "DataSet" then "Seed_DataSet" if FFT used True else False
-        self.Forcaster.Set_forcastPath(Forcastpath)
+        self.Forcaster.Set_forcastPath(ForcastPath)
         
         self.Forcaster.start()
     
@@ -1430,18 +1450,16 @@ class Ui_GUI_LSTM_FORCASTER(object):
                 self.ForC_ComBox_Model_To_used.addItem(str(Current_Row))
     
     
-    def Write_Over_the_Forcasting_Evaluation_table(self):
-        """Date_time TEXT,
-        Total_Movement_Right INTEGER,
-        Total_Movement_Right_Per100 REAL,
-        Rows_Considered INTEGER,
-        Total_Diff_Mag_earned REAL,
-        Total_Diff_earned_Per100 REAL,
-        Total_Diff_Mag_lose REAL,
-        Total_Diff_lose_Per100 REAL,
-        Total_Mag_Mvmnts REAL,
-        Real_Mag_earned REAL,
-        Real_earned_Per100 REAL"""
+    def CreatNewForcasting(self,val_1,val_2,val_3,val_4,val_5,val_6,val_7,val_8,val_9,val_10,val_11,val_12,val_13):
+
+        query=""" INSERT INTO Forcasting_Resul (Date_time,Total_Movement_Right,Total_Movement_Right_Per100,
+        Rows_Considered,Total_Diff_Mag_earned,Total_Diff_earned_Per100,Total_Diff_Mag_lose,Total_Diff_lose_Per100,
+        Total_Mag_Mvmnts,Real_Mag_earned,Real_earned_Per100,Real_earned_Per100,Model_id_FRGN)
+         VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)"""
+        self.Forcaster_DB_c.execute(query,(val_1,val_2,val_3,val_4,val_5,val_6,val_7,val_8,val_9,val_10,val_11,val_12,val_13)) 
+        
+        #Validate changes to our DB 
+        self.Forcaster_DB_conn.commit()
     
     ##### Emit general signals
     def Model_To_Forcast_ComboBoxChanged(self):
@@ -1449,7 +1467,15 @@ class Ui_GUI_LSTM_FORCASTER(object):
     
     ##### Emit thread signals
     def Event_ForcastingStatus(self,val):
-        pass
+        val_1,val_2,val_3,val_4,val_5,val_6,val_7,val_8,val_9,val_10,val_11,val_12,val_13=self.Forcaster.Get_NewForcastingData()
+        if val:
+            #Saving Data
+            self.CreatNewForcasting(val_1,val_2,val_3,val_4,val_5,val_6,val_7,val_8,val_9,val_10,val_11,val_12,val_13)
+            ColumsDataForcasted=self.Forcaster.Get_ColumForcast()
+            ColumsDataReal=self.Forcaster.Get_ColumReal()
+            plt.plot(ColumsDataForcasted,label='ColumnForcast_Close_Day',color='orange', marker='o')
+            plt.plot(ColumsDataReal,label='ColumnReal_Close_Day',color='green', marker='*')
+            plt.show()
         
     def Event_UpdateProgress_ForcastingProcess(self):
         pass

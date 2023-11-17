@@ -21,11 +21,9 @@ c.execute("""
             N_epochs_Done INTEGER,
             Seed_Model_id_FRGN INTEGER,
             DataSet_id_FRGN INTEGER,
-            Forcasting_Result_id_FRGN INTEGER,
             Colm_T_Predict,
             FOREIGN KEY(DataSet_id_FRGN) REFERENCES DataSet(DataSet_id),
-            FOREIGN KEY(Seed_Model_id_FRGN) REFERENCES Seed_Data(Seed_Model_id),
-            FOREIGN KEY(Forcasting_Result_id_FRGN) REFERENCES Forcasting_Resul(Forcasting_Resul_id)
+            FOREIGN KEY(Seed_Model_id_FRGN) REFERENCES Seed_Model(Seed_Model_id)
         )
         """)
 
@@ -57,7 +55,9 @@ c.execute("""
             Total_Diff_lose_Per100 REAL,
             Total_Mag_Mvmnts REAL,
             Real_Mag_earned REAL,
-            Real_earned_Per100 REAL
+            Real_earned_Per100 REAL,
+            Model_id_FRGN INTEGER,
+            FOREIGN KEY(Model_id_FRGN) REFERENCES Models(Model_id)
         )
     """)
 

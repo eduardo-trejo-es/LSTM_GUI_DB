@@ -76,8 +76,8 @@ class DL_DataSet(QThread):
         self.DataSet_id_Just_Created=self.Last_DataSet_Crated+1
         
         StartDay="2001-01-02"
-        EndDate="2001-06-15"
-        #EndDate=date.today().strftime("%Y-%m-%d")
+        #EndDate="2001-06-15"
+        EndDate=date.today().strftime("%Y-%m-%d")
         
         ObjectiveFilePath=self.ToCreateOrUpdateDataSet(self.DataSet_id_Just_Created,self.SeedDataSetList,StartDay,EndDate,self.TypeProcessToDo)
         self.Path_DataSet = ObjectiveFilePath
@@ -157,9 +157,6 @@ class DL_DataSet(QThread):
             self.dataSet_Gen.UpdateToday(itemName,Original_Path_Retiving)
             self.Update_Progress_String.emit("Base DataSet Updated")
             self.Update_Progress.emit(60)
-            
-            
-
         
         #columns to pop up # Solution applying a mask
         Colums_Selection_FFT=[Open_FFT_C,High_FFT_C,Low_FFT_C,Close_FFT_C,Volum_FFT_C] 
