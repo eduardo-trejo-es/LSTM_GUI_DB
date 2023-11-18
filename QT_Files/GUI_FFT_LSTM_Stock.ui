@@ -262,7 +262,7 @@
        <string>Tail backdays</string>
       </property>
      </widget>
-     <widget class="QComboBox" name="ForC_ComBox_DateFrom_2">
+     <widget class="QComboBox" name="ForC_ComBox_Model_To_used">
       <property name="geometry">
        <rect>
         <x>50</x>

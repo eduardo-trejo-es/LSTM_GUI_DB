@@ -5,8 +5,10 @@
 
 * Tab predict
     - Save the forcasted picture too
+    - show what item correspond this Model
+    I was adding forcast creation data to table DB
+    - Only can start to predict if model has been already trainned 
 
-    I was adding forcast creation data to table DB 
 
 * Too complicate to added or delete columns in DB, change list queries for dictionary, 
 in this way when I modify db structure, in code the dictionary lables won't changes

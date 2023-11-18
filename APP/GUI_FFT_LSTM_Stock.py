@@ -437,7 +437,7 @@ class Ui_GUI_LSTM_FORCASTER(object):
         
         #----------- TAB MODEL FORCASTING  -------------
         ############ General Emit Signals
-        #self.MoTr_ComBox_ChooseModel.currentIndexChanged.connect(self.Model_To_Train_ComboBoxChanged)
+        self.ForC_ComBox_Model_To_used.currentIndexChanged.connect(self.Model_ForcastWith_ComboBoxChanged)
         ############ Thread Emit Signals
         self.Forcaster.Update_ForcastingProcsStatus.connect(self.Event_ForcastingStatus)
         #self.Forcaster.Update_Progress.connect(self.Event_UpdateProgress_ForcastingProcess)
@@ -1385,6 +1385,7 @@ class Ui_GUI_LSTM_FORCASTER(object):
         DataSet_Id=int(Model_Selected_Row[5])
         ColumToForcast=int(Model_Selected_Row[6])
 
+        
         #Getting the DataSet Table
         query="SELECT * FROM DataSet WHERE DataSet_id=?"
         self.Forcaster_DB_c.execute(query,(DataSet_Id,))
@@ -1462,8 +1463,23 @@ class Ui_GUI_LSTM_FORCASTER(object):
         self.Forcaster_DB_conn.commit()
     
     ##### Emit general signals
-    def Model_To_Forcast_ComboBoxChanged(self):
-        pass
+    def Model_ForcastWith_ComboBoxChanged(self):
+        Model_To_use = self.ForC_ComBox_Model_To_used.currentText()
+        #Getting the Model table
+        query="SELECT * FROM Models WHERE Model_id=?"
+        self.Forcaster_DB_c.execute(query,(Model_To_use,))
+        Model_Selected_Row=self.Forcaster_DB_c.fetchall()[0]
+        
+        epochs_done=int(Model_Selected_Row[3])
+        DataSet_Married_to=int(Model_Selected_Row[5])
+        
+        if (epochs_done>0) and (DataSet_Married_to>0):
+            self.ForC_btn_StartForcasting.setEnabled(True)
+        else:
+            self.ForC_btn_StartForcasting.setEnabled(False)
+            
+             
+        
     
     ##### Emit thread signals
     def Event_ForcastingStatus(self,val):

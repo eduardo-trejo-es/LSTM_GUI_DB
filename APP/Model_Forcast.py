@@ -5,6 +5,9 @@ from Forcaster_Model_DateFromToForcast import Forcast_Data
 import pandas as pd
 import numpy as np
 from matplotlib import pyplot as plt
+
+#To get date
+from datetime import datetime
 import time
 
 from PyQt5.QtCore import *
@@ -191,7 +194,7 @@ class DL_Forcast(QThread):
         
         #Getting Forcasting Data
         ### Model Data ###
-        print("Today's date:", self.today)
+        self.today = datetime.now().strftime("%d/%m/%Y %H:%M:%S")
         self.date_Time=str(self.today)
         self.Rows_Considered=self.backdaysConsideredToBForcasted
         self.Model_id_FRGN=self.Model_Id_Used
