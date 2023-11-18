@@ -15,11 +15,16 @@ class DL_Trainner(QThread):
     Update_Progress = pyqtSignal(int)
     Update_Progress_String = pyqtSignal(str)
     Update_TrainningProcssStatus = pyqtSignal(bool)
+    
 
 
     def __init__(self):
         super().__init__()
         self.trainer_model = Model_Trainer()
+        self.epoch_Represent_first_Part=20
+        self.epoch_Represent_Precent_total=80
+        
+        
         
     def SetColumToForcast(self,val):
         self.ColumToforcast=val
@@ -48,7 +53,6 @@ class DL_Trainner(QThread):
         return self.losses
     
     def run(self):
-        print("Hello world trainnig Scrip running :)")
         #is this one the old working trainer versi
         ColumToforcast=self.ColumToforcast
         numEpochs=self.numEpochs
@@ -57,21 +61,39 @@ class DL_Trainner(QThread):
         percentageData=self.percentageData
         Np_pasdays=self.Np_pasdays
         
+        self.Update_Progress_String.emit("Trainning about to start")
+        self.Update_Progress.emit(self.epoch_Represent_first_Part)
+        
         print(ColumToforcast)
         print(numEpochs)
         print(Model_Path)
         print(Data_CSV)
         print(percentageData)
         print(Np_pasdays)
-        training_result,self.losses=self.trainer_model.to_train(int(ColumToforcast),int(numEpochs),Model_Path,Data_CSV,int(percentageData),int(Np_pasdays))
         
+        # Set the callback function
+        self.trainer_model.set_callback(self.update_Epoch)
+        
+        training_result,self.losses=self.trainer_model.to_train(int(ColumToforcast),int(numEpochs),Model_Path,Data_CSV,int(percentageData),int(Np_pasdays))
         self.Update_Progress_String.emit("Trainning finished")
         self.Update_Progress.emit(100)
+        
         self.SetEpochs_done(numEpochs)
         time.sleep(3)
-        self.Update_Progress_String.emit("Ready to create another DataSet")
+        self.Update_Progress_String.emit("To do another tranning session")
         self.Update_Progress.emit(0)
         self.Update_TrainningProcssStatus.emit(True)
+    
+    def update_Epoch(self,epoch): 
+        numEpochs=self.numEpochs
+        
+        CurrenEpochPrecent_and_Already_Done=int(((int(epoch)*self.epoch_Represent_Precent_total)/int(numEpochs))+self.epoch_Represent_first_Part)
+        print("..........................")
+        print(type(CurrenEpochPrecent_and_Already_Done))
+        
+        print("percentage"+str(CurrenEpochPrecent_and_Already_Done))
+        self.Update_Progress_String.emit("Trainning in process, last epoch: "+str(epoch) +" of "+str(numEpochs))
+        self.Update_Progress.emit(int(CurrenEpochPrecent_and_Already_Done))
 
 
         

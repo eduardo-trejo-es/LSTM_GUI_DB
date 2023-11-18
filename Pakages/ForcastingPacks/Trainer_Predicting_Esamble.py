@@ -28,7 +28,10 @@ import warnings
 class Model_Trainer:
 
   def __init__(self):
-    pass
+    self.callback_1 = None
+  
+  def set_callback(self, callback):
+    self.callback_1 = callback
   
   def to_train(self,ColumToforcast,numEpochs, modelPath,DatasetPath,ThepercentageTrainingData,Np_pasdays):
     
@@ -161,14 +164,7 @@ class Model_Trainer:
     return Training_result, losses
   
   def End_ephoc_event(self,current_ephoc):
-    print("this is number ephoc: "+str(current_ephoc))
-    
-  def Set_Current_Ephoc(self,val):
-    current_ephoc
-    
-    
-      
-
+    self.callback_1(current_ephoc)
 
     #######    Model evaluation      ########
   def Model_evaluation(self):

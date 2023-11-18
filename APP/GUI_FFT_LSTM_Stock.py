@@ -1355,12 +1355,15 @@ class Ui_GUI_LSTM_FORCASTER(object):
             #Show the loss plot
             losses.plot()
             plt.show()
+            
+            #Save plot
+            
     
-    def Event_UpdateProgress_TrainningProcess(self):
-        pass
+    def Event_UpdateProgress_TrainningProcess(self,val):
+        self.MoTr_LoadBar_CMDTraining.setProperty("value",val)
     
-    def Event_UpdateProgress_string_Trainning_Process(self):
-        pass
+    def Event_UpdateProgress_string_Trainning_Process(self,val):
+        self.MoTr_lbl_CMD_training.setText(val)
     
     ###########################################
     #           TAB Model Forcasting          #
