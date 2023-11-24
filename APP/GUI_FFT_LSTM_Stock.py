@@ -106,8 +106,7 @@ class Ui_GUI_LSTM_FORCASTER(object):
         self.ForC_Loadbar_Forcast.setGeometry(QtCore.QRect(140, 273, 391, 61))
         self.ForC_Loadbar_Forcast.setProperty("value", 0)
         self.ForC_Loadbar_Forcast.setObjectName("ForC_Loadbar_Forcast")
-        
-        
+       
         self.ForC_lbl_Model_To_used = QtWidgets.QLabel(self.Forcasting_Tab)
         self.ForC_lbl_Model_To_used.setGeometry(QtCore.QRect(50, 33, 60, 16))
         self.ForC_lbl_Model_To_used.setObjectName("ForC_lbl_DateFrom")
@@ -132,7 +131,7 @@ class Ui_GUI_LSTM_FORCASTER(object):
         self.ForC_radioButton_GetGraph.setGeometry(QtCore.QRect(370, 100, 111, 20))
         self.ForC_radioButton_GetGraph.setObjectName("ForC_radioButton_GetGraph")
         self.ForC_lbl_loadBar = QtWidgets.QLabel(self.Forcasting_Tab)
-        self.ForC_lbl_loadBar.setGeometry(QtCore.QRect(140, 273, 171, 16))
+        self.ForC_lbl_loadBar.setGeometry(QtCore.QRect(140, 273, 391, 16))
         self.ForC_lbl_loadBar.setObjectName("ForC_lbl_loadBar")
         self.ForC_Gbox_ForcastResul = QtWidgets.QGroupBox(self.Forcasting_Tab)
         self.ForC_Gbox_ForcastResul.setGeometry(QtCore.QRect(50, 153, 251, 91))
@@ -440,8 +439,8 @@ class Ui_GUI_LSTM_FORCASTER(object):
         self.ForC_ComBox_Model_To_used.currentIndexChanged.connect(self.Model_ForcastWith_ComboBoxChanged)
         ############ Thread Emit Signals
         self.Forcaster.Update_ForcastingProcsStatus.connect(self.Event_ForcastingStatus)
-        #self.Forcaster.Update_Progress.connect(self.Event_UpdateProgress_ForcastingProcess)
-        #self.Forcaster.Update_Progress_String.connect(self.Event_UpdateProgress_string_Forcasting_Process)
+        self.Forcaster.Update_Progress.connect(self.Event_UpdateProgress_ForcastingProcess)
+        self.Forcaster.Update_Progress_String.connect(self.Event_UpdateProgress_string_Forcasting_Process)
         #####  Buttons calls ##### 
         self.ForC_btn_StartForcasting.clicked.connect(self.Start_Forcasting)
         #self.MoTr_btn_Cancel_train.clicked.connect(self.Cancel_Trainning)
@@ -830,8 +829,16 @@ class Ui_GUI_LSTM_FORCASTER(object):
     
     ############### Bottons functions  ################   
     def Create_DataSet(self): 
+        self.Do_Dataset("1")
+        
+    def Update_DataSet(self):
+        self.Do_Dataset("0")
+    
+    def Do_Dataset(self,val):
+        ProcessToDo=val
         matching=False
         self.DaMa_btn_Create.setEnabled(False)
+        self.DaMa_btn_Update.setEnabled(False)
         CurrentSeedDataRow=0
         Item = self.DaMa_txtLine_Stock_Item.text()
         BackDays = self.DaMa_txtLine_BackDay.text()
@@ -882,6 +889,8 @@ class Ui_GUI_LSTM_FORCASTER(object):
         
         FFT_Frec = self.DaMa_txtLine_FFT_Frec.text()
         
+        DataSetSelected=self.DaMa_ComBox_DataSet_Id.currentText()
+        
         #Check if seed data already exist
         matching,matching_row=self.Check_Matching_Seed_DataSet(Item,BackDays,Open_C ,High_C,Low_C,Close_C ,Volume_C,Open_FFT_C ,High_FFT_C ,Low_FFT_C,
                                                            Close_FFT_C ,Volum_FFT_C ,Day_Wk_N_C, Day_MonthNDay_C ,Year_C ,FFT_Frec)
@@ -927,13 +936,11 @@ class Ui_GUI_LSTM_FORCASTER(object):
         
         self.DataSet_creator.Set_SeedParam(Last_SetDataSet_row)
         
-        self.DataSet_creator.Set_TypeProcessToDo("1") #Process
+        self.DataSet_creator.Set_DataSetToUpdate(DataSetSelected)
+        self.DataSet_creator.Set_TypeProcessToDo(ProcessToDo) #Process do to (Create a new dataset "1" or update one "0")
         
-        self.DataSet_creator.start()      
+        self.DataSet_creator.start()
     
-    def Update_DataSet(self):
-        pass
-
     ############ General Fucntions  ############
     def DataManagerTab_UpdateComboxDataSet_ID(self):
         #self.DaMa_ComBox_DataSet_Id.clear() #When starting app, combobox is updated
@@ -973,7 +980,6 @@ class Ui_GUI_LSTM_FORCASTER(object):
         self.DaMa_txtLine_PathCSV_File.setText(str(Path_DataSet))
         index= self.DaMa_ComBox_Seed_DataSet.findText(str(SeedDataSet),QtCore.Qt.MatchFixedString)
         self.DaMa_ComBox_Seed_DataSet.setCurrentIndex(index)
-        
     
     def SeedDataSetComboBoxChanged(self):
         Item_Selected=self.DaMa_ComBox_Seed_DataSet.currentText()
@@ -1156,15 +1162,28 @@ class Ui_GUI_LSTM_FORCASTER(object):
         #Validate changes to our DB 
         self.Forcaster_DB_conn.commit()
     
+    def Update_DataSet_in_DB(self,DataSetToUpdate,Date_Time):
+        query="UPDATE DataSet SET Date_Time = ? WHERE DataSet_id=?"
+        self.Forcaster_DB_c.execute(query,(Date_Time,DataSetToUpdate))
+        self.Forcaster_DB_conn.commit()
+        
     ##### Emit thread signals
     
     def Event_DataSetCreationStatus(self,val):
         Date_Time,Path_DataSet,Seed_DataSet_id_FRGN=self.DataSet_creator.Get_NewDataSet_Data()
-
+        
+        DataSetToUpdate=self.DataSet_creator.Get_DataSetToUpdate()
+        Proces_done=self.DataSet_creator.Get_Set_TypeProcessToDo
         if val:
-            self.Creare_new_DataSet_in_DB(Date_Time,Path_DataSet,Seed_DataSet_id_FRGN)
-            print("DataSet created Created :'D")
+            if Proces_done=="1":
+                self.Creare_new_DataSet_in_DB(Date_Time,Path_DataSet,Seed_DataSet_id_FRGN)
+                print("DataSet Created :'D")
+            else:
+                DataSetToUpdate
+                self.Update_DataSet_in_DB(DataSetToUpdate,Date_Time)
+                print("DataSet updated :'D")
             self.DaMa_btn_Create.setEnabled(True)
+            self.DaMa_btn_Update.setEnabled(True)
             DataSetJustCreated=self.DataSet_creator.Get_DataSet_id_Just_Created()
             self.AddinElementComoBoxData_Set()
             index= self.DaMa_ComBox_DataSet_Id.findText(str(DataSetJustCreated),QtCore.Qt.MatchFixedString)
@@ -1410,13 +1429,24 @@ class Ui_GUI_LSTM_FORCASTER(object):
         Close_FFT_C=int(Model_Selected_Row[11])
         Volum_FFT_C=int(Model_Selected_Row[12])
         
+        #Getting the Forcast table
+        query="SELECT Forcasting_Resul_id FROM Forcasting_Resul WHERE Forcasting_Resul_id=(SELECT max(Forcasting_Resul_id) FROM Forcasting_Resul)"
+        self.Forcaster_DB_c.execute(query)
+        Forcast_Selected_Row=self.Forcaster_DB_c.fetchall()[0]
+        
+        LastForcas=Forcast_Selected_Row[0]
+        print(LastForcas)
+        LastForcasPlusOne=str(LastForcas+1)
+        
+        
+        
         #ANswering question, there are FFT columns in DataSet?
         if (Open_FFT_C==1) or (High_FFT_C==1) or (Low_FFT_C==1)or(Close_FFT_C==1) or (Volum_FFT_C==1):FFTwereUsed=True
         else:FFTwereUsed=False
         
         
         #Defining Path files 
-        FolderForcastpath="APP/ModelForcast/"+ItemName+"/"+"Model_"+Model_To_use
+        FolderForcastpath="APP/ModelForcast/"+ItemName+"/"+"Model_"+Model_To_use+"/"+"Forcast_"+LastForcasPlusOne+"/"
         
         if path.exists(FolderForcastpath):
             pass
@@ -1424,7 +1454,7 @@ class Ui_GUI_LSTM_FORCASTER(object):
             os.makedirs(FolderForcastpath)
         
 
-        ForcastPath=FolderForcastpath+"/"+"Forcast_"+"1.csv"
+        ForcastPath=FolderForcastpath+"ForcastDataSet.csv"
         BaseDataSet="APP/DataSets/"+ItemName+"/Id"+str(DataSet_Id)+"/BaseDataSet.csv"
         
         #To create folde if doesnt' exist
@@ -1496,11 +1526,13 @@ class Ui_GUI_LSTM_FORCASTER(object):
             plt.plot(ColumsDataReal,label='ColumnReal_Close_Day',color='green', marker='*')
             plt.show()
         
-    def Event_UpdateProgress_ForcastingProcess(self):
-        pass
+    def Event_UpdateProgress_ForcastingProcess(self,val):
+        self.ForC_Loadbar_Forcast.setProperty("value",val)
+        
     
-    def Event_UpdateProgress_string_Forcasting_Process(self):
-        pass
+    def Event_UpdateProgress_string_Forcasting_Process(self,val):
+        self.ForC_lbl_loadBar.setText(val)
+        
                  
 if __name__ == "__main__":
     import sys

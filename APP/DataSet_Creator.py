@@ -55,6 +55,15 @@ class DL_DataSet(QThread):
     def Set_TypeProcessToDo(self,val):
         self.TypeProcessToDo=val
         
+    def Set_DataSetToUpdate(self,val):
+        self.DataSetToUpdateId=val
+        
+    def Get_DataSetToUpdate(self):
+        return self.DataSetToUpdateId
+        
+    def Get_Set_TypeProcessToDo(self):
+        return self.TypeProcessToDo
+        
     def Get_NewDataSet_Data(self):
         return self.Date_Time,self.Path_DataSet,self.Seed_DataSet_id_FRGN
     
@@ -73,11 +82,15 @@ class DL_DataSet(QThread):
         
         
         self.Seed_DataSet_id_FRGN =self.CurrentSeedDataRow
-        self.DataSet_id_Just_Created=self.Last_DataSet_Crated+1
+        if self.TypeProcessToDo=="1":
+            self.DataSet_id_Just_Created=self.Last_DataSet_Crated+1
+        else:
+            self.DataSet_id_Just_Created=self.DataSetToUpdateId
+        
         
         StartDay="2001-01-02"
-        #EndDate="2001-06-15"
-        EndDate=date.today().strftime("%Y-%m-%d")
+        EndDate="2001-06-15"
+        #EndDate=date.today().strftime("%Y-%m-%d")
         
         ObjectiveFilePath=self.ToCreateOrUpdateDataSet(self.DataSet_id_Just_Created,self.SeedDataSetList,StartDay,EndDate,self.TypeProcessToDo)
         self.Path_DataSet = ObjectiveFilePath
@@ -148,13 +161,14 @@ class DL_DataSet(QThread):
         else:
             os.makedirs(pathTocreated)
 
-        if ProcessToDo=="1":
+        if ProcessToDo=="1": #Create a new
             addToOld=False
             self.dataSet_Gen.RetivingDataPrices_Yahoo(itemName,dateStart, dateEnd,Original_Path_Retiving,Original_Path_Retiving,addToOld)
             self.Update_Progress_String.emit("Base DataSet Created created")
             self.Update_Progress.emit(60)
-        elif ProcessToDo=="0":
-            self.dataSet_Gen.UpdateToday(itemName,Original_Path_Retiving)
+        elif ProcessToDo=="0": #Create update
+            addToOld=True
+            self.dataSet_Gen.UpdateToday(itemName,Original_Path_Retiving,addToOld)
             self.Update_Progress_String.emit("Base DataSet Updated")
             self.Update_Progress.emit(60)
         
@@ -216,7 +230,7 @@ class DL_DataSet(QThread):
         
         
         self.Update_Progress_String.emit("Adding FFT columns columns added")
-        self.Update_Progress.emit(90)
+        self.Update_Progress.emit(80)
         self.dataSet_Gen.getTheLastFFTValue(backdaysToconsider,frec,ColumnsToFFT,inicialPath, FFTNew_FileData)
 
         Colums_FFT_Selection=[Open_FFT_C,High_FFT_C,Low_FFT_C,Close_FFT_C,Volum_FFT_C]
@@ -242,4 +256,5 @@ class DL_DataSet(QThread):
         for i in li:
             FinalList.append(int(i))
         return FinalList
+
         

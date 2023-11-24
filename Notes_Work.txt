@@ -1,3 +1,6 @@
+* Tab data manager
+    - When update, do not create iin db and update date
+
 * Tab trainning
     - Thread created
     - all function missing

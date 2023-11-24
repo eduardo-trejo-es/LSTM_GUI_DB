@@ -78,7 +78,7 @@ class DL_Trainner(QThread):
         self.Update_Progress_String.emit("Trainning finished")
         self.Update_Progress.emit(100)
         
-        self.SetEpochs_done(numEpochs)
+        
         time.sleep(3)
         self.Update_Progress_String.emit("To do another tranning session")
         self.Update_Progress.emit(0)
@@ -86,10 +86,12 @@ class DL_Trainner(QThread):
     
     def update_Epoch(self,epoch): 
         numEpochs=self.numEpochs
+        current_Doing_Epoch=int(epoch)+1
         
-        CurrenEpochPrecent_and_Already_Done=int(((int(epoch)*self.epoch_Represent_Precent_total)/int(numEpochs))+self.epoch_Represent_first_Part)
+        CurrenEpochPrecent_and_Already_Done=int(((current_Doing_Epoch*self.epoch_Represent_Precent_total)/int(numEpochs))+self.epoch_Represent_first_Part)
         print("..........................")
         print(type(CurrenEpochPrecent_and_Already_Done))
+        self.SetEpochs_done(current_Doing_Epoch)
         
         print("percentage"+str(CurrenEpochPrecent_and_Already_Done))
         self.Update_Progress_String.emit("Trainning in process, last epoch: "+str(epoch) +" of "+str(numEpochs))

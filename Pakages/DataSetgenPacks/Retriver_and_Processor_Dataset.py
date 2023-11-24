@@ -229,7 +229,7 @@ class DatasetGenerator:
                 #print("this is the last df"+str(df.head))     
         return df
     
-    def UpdateToday(self, ItemName,CsvFileName):
+    def UpdateToday(self, ItemName,CsvFileName,addToOld):
         startDate=""
         endDate=str(date.today())
         itemName=ItemName
@@ -243,7 +243,7 @@ class DatasetGenerator:
 
         print(endDate)
         print(startDate)
-        self.RetivingDataPrices_Yahoo(itemName,startDate,endDate,csvFileName,csvFileName)
+        self.RetivingDataPrices_Yahoo(itemName,startDate,endDate,csvFileName,csvFileName, addToOld)
         #df=yf.download('CL=F',start = startDate, end = endDate,interval='1d',utc=True,threads = True)
     
     

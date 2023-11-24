@@ -13,14 +13,10 @@ import time
 from PyQt5.QtCore import *
 
 
-
-
 class DL_Forcast(QThread):
     Update_Progress = pyqtSignal(int)
     Update_Progress_String = pyqtSignal(str)
     Update_ForcastingProcsStatus = pyqtSignal(bool)
-
-
 
     def __init__(self):
         super().__init__()
@@ -35,6 +31,8 @@ class DL_Forcast(QThread):
         self.Real_Mag_earned=0
         self.Real_earned_Per100=0
         self.Real_earned_Per100=0
+        self.FirstPercentageAbout_toStartForcast=20
+        self.Forcasting_Represent_Precent_total=80
         
     def Set_ColumToforcast(self,val):
         self.ColumToforcast=val
@@ -132,7 +130,13 @@ class DL_Forcast(QThread):
         # if datefiltredPercentage=indexDates[indexDates.shape[0]-backdaysConsideredToBForcasted:]
         datefiltredPercentage=indexDates[locpercentage-backdaysConsideredToBForcasted:locpercentage]
 
+        self.Update_Progress_String.emit("Forcasting about to start")
+        self.Update_Progress.emit(self.FirstPercentageAbout_toStartForcast)
+        
+        DatesIndex=0
+        
         for i in datefiltredPercentage:
+            
             print("to be predict from: "+str(i))
             #ColumToforcast, ColumRealYToCompare, dateFromForcast, data_frame_Path, BackDays
             self.forcaster.ToForcastfrom(ColumToForcast,ColumToForcast,str(i),Data_CSV,backdaysConsidered)
@@ -145,6 +149,9 @@ class DL_Forcast(QThread):
             ColumnReal_Close_Day.append(Real_Y_Close)
             Columnforcasteddate.append(str(forcastedDate))
             Forcast_Dates.append(i)
+            DatesIndex=DatesIndex+1
+            self.update_DateForcasting(DatesIndex,i)
+            
             
             #if i == datefiltredPercentage[len(datefiltredPercentage)-2]: break
         Forcast_Dates_toshow=Forcast_Dates
@@ -202,11 +209,23 @@ class DL_Forcast(QThread):
         #Giving de columns to main thread to get the trend 
         self.ColumnForcast,self.ColumReal=ColumnForcast_Close_Day, ColumnReal_Close_Day
         
-        self.Update_Progress_String.emit("Trainning finished")
+        self.Update_Progress_String.emit("Forcasting finished")
         self.Update_Progress.emit(100)
         time.sleep(3)
-        self.Update_Progress_String.emit("Ready to create another DataSet")
+        self.Update_Progress_String.emit("Ready to get some other forcast")
         self.Update_Progress.emit(0)
         self.Update_ForcastingProcsStatus.emit(True)
+        
+    def update_DateForcasting(self,DateIndexDone,Date): 
+        DatesToForcast=self.backdaysConsideredToBForcasted
+        
+        CurrenEpochPrecent_and_Already_Done=int(((int(DateIndexDone)*self.Forcasting_Represent_Precent_total)/int(DatesToForcast))+self.FirstPercentageAbout_toStartForcast)
+        print("..........................")
+        print(type(CurrenEpochPrecent_and_Already_Done))
+        
+        print("percentage"+str(CurrenEpochPrecent_and_Already_Done))
+        self.Update_Progress_String.emit("Forcasting in process, last forcast: "+str(DateIndexDone)+" ("+str(Date)+")"+" of "+str(DatesToForcast))
+        self.Update_Progress.emit(int(CurrenEpochPrecent_and_Already_Done))
+
         
         
