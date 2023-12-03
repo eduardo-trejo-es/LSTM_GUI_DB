@@ -1509,10 +1509,7 @@ class Ui_GUI_LSTM_FORCASTER(object):
         if (epochs_done>0) and (DataSet_Married_to>0):
             self.ForC_btn_StartForcasting.setEnabled(True)
         else:
-            self.ForC_btn_StartForcasting.setEnabled(False)
-            
-             
-        
+            self.ForC_btn_StartForcasting.setEnabled(False) 
     
     ##### Emit thread signals
     def Event_ForcastingStatus(self,val):
