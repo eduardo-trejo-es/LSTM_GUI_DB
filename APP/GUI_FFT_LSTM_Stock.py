@@ -41,10 +41,13 @@ from Model_Forcast import DL_Forcast
 class Ui_GUI_LSTM_FORCASTER(object):
     def __init__(self):
         #### PathFiles  ####
-        
+        self.InstallerVersionActive=False
         ####  App Instances 
         #Opening connection
-        self.Forcaster_DB_conn=sqlite3.connect('APP/DataStructures/Predict_model.db')
+        if self.InstallerVersionActive:
+            self.Forcaster_DB_conn=sqlite3.connect('dist/GUI_FFT_LSTM_Stock/DataStructures/Predict_model.db')
+        else:
+            self.Forcaster_DB_conn=sqlite3.connect('APP/DataStructures/Predict_model.db')
         #Create cursor
         self.Forcaster_DB_c = self.Forcaster_DB_conn.cursor()
         
@@ -1446,7 +1449,10 @@ class Ui_GUI_LSTM_FORCASTER(object):
         
         
         #Defining Path files 
-        FolderForcastpath="APP/ModelForcast/"+ItemName+"/"+"Model_"+Model_To_use+"/"+"Forcast_"+LastForcasPlusOne+"/"
+        if self.InstallerVersionActive:
+            FolderForcastpath="GUI_FFT_LSTM_Stock/ModelForcast/"+ItemName+"/"+"Model_"+Model_To_use+"/"+"Forcast_"+LastForcasPlusOne+"/"
+        else:
+            FolderForcastpath="APP/ModelForcast/"+ItemName+"/"+"Model_"+Model_To_use+"/"+"Forcast_"+LastForcasPlusOne+"/"
         
         if path.exists(FolderForcastpath):
             pass
@@ -1455,7 +1461,11 @@ class Ui_GUI_LSTM_FORCASTER(object):
         
 
         ForcastPath=FolderForcastpath+"ForcastDataSet.csv"
-        BaseDataSet="APP/DataSets/"+ItemName+"/Id"+str(DataSet_Id)+"/BaseDataSet.csv"
+        if self.InstallerVersionActive:
+            BaseDataSet="GUI_FFT_LSTM_Stock/DataSets/"+ItemName+"/Id"+str(DataSet_Id)+"/BaseDataSet.csv"
+        else:
+            BaseDataSet="APP/DataSets/"+ItemName+"/Id"+str(DataSet_Id)+"/BaseDataSet.csv"
+        TrendImage_path=FolderForcastpath+"TrendImage.png"
         
         #To create folde if doesnt' exist
 
@@ -1471,6 +1481,7 @@ class Ui_GUI_LSTM_FORCASTER(object):
         self.Forcaster.Set_percentageData(int(Data_Precentage)) #GUI
         self.Forcaster.Set_FFtUsedQ(FFTwereUsed) # From DB tbale "model" then table "DataSet" then "Seed_DataSet" if FFT used True else False
         self.Forcaster.Set_forcastPath(ForcastPath)
+        self.Forcaster.Set_TrendImagePath(TrendImage_path)
         
         self.Forcaster.start()
     
@@ -1514,6 +1525,7 @@ class Ui_GUI_LSTM_FORCASTER(object):
     ##### Emit thread signals
     def Event_ForcastingStatus(self,val):
         val_1,val_2,val_3,val_4,val_5,val_6,val_7,val_8,val_9,val_10,val_11,val_12,val_13=self.Forcaster.Get_NewForcastingData()
+        TrendImage_path=self.Forcaster.Get_TrendImageForcast()
         if val:
             #Saving Data
             self.CreatNewForcasting(val_1,val_2,val_3,val_4,val_5,val_6,val_7,val_8,val_9,val_10,val_11,val_12,val_13)
@@ -1521,7 +1533,12 @@ class Ui_GUI_LSTM_FORCASTER(object):
             ColumsDataReal=self.Forcaster.Get_ColumReal()
             plt.plot(ColumsDataForcasted,label='ColumnForcast_Close_Day',color='orange', marker='o')
             plt.plot(ColumsDataReal,label='ColumnReal_Close_Day',color='green', marker='*')
+            try:
+                plt.savefig(TrendImage_path,pad_inches=0.1)
+            except:
+                self.Event_UpdateProgress_string_Forcasting_Process("Was not possible to save forcast image")    
             plt.show()
+            
         
     def Event_UpdateProgress_ForcastingProcess(self,val):
         self.ForC_Loadbar_Forcast.setProperty("value",val)

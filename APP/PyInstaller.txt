@@ -1,0 +1,20 @@
+pyinstaller --windowed 
+--hidden-import=matplotlib.pyplot 
+--hidden-import=os.path 
+--hidden-import=os
+--hidden-import=PyQt5
+--hidden-import=sqlite3
+--hidden-import=sys
+--hidden-import=pandas
+--hidden-import=numpy
+--hidden-import=Model_Forcast
+--hidden-import=Model_Trainner
+--hidden-import=Model_Creator 
+--hidden-import=DataSet_Creator
+--hidden-import=matplotlib.pyplot 
+--icon=logoApp.ico
+GUI_FFT_LSTM_Stock.py
+
+dist/GUI_FFT_LSTM_Stock/APP/DataStructures/Predict_model.db
+
+pyinstaller APP/GUI_FFT_LSTM_Stock.py --osx-bundle-identifier AT_APPs --add-data="APP/DataSets:DataSets" --add-data="APP/DataStructures:DataStructures" --add-data="APP/ModelForcast:ModelForcast" --add-data="APP/Models:Models" --paths=Pakages/DataSetgenPacks/Retriver_and_Processor_Dataset.py --paths=Pakages/ForcastingPacks/Forcaster_Model_DateFromToForcast.py --paths=Pakages/ForcastingPacks/Trainer_Predicting_Esamble.py --hidden-import matplotlib.pyplot  --hidden-import os.path  --hidden-import os --hidden-import PyQt5 --hidden-import sqlite3 --hidden-import cmath --hidden-import sys --hidden-import pandas --hidden-import numpy --hidden-import Model_Forcast --hidden-import Model_Trainner --hidden-import Model_Creator  --hidden-import DataSet_Creator --hidden-import PyQt5.QtCore  --hidden-import tensorflow.keras.layers --hidden-import tensorflow.keras.optimizers --hidden-import tensorflow.keras.models --hidden-import tensorflow.keras.layers --hidden-import tensorflow --hidden-import tensorflow.python.keras.layers.core --hidden-import datetime --hidden-import time --hidden-import Retriver_and_Processor_Dataset --hidden-import matplotlib --hidden-import cProfile --hidden-import seaborn --hidden-import sklearn.preprocessing --hidden-import sklearn.metrics --hidden-import math --hidden-import mplfinance --hidden-import unittest --hidden-import yfinance --hidden-import sklearn.preprocessing --hidden-import yfinance --icon=logoApp.ico

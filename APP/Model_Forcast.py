@@ -70,6 +70,9 @@ class DL_Forcast(QThread):
         
     def Set_Model_id_Used(self,val):
         self.Model_Id_Used=val
+    
+    def Set_TrendImagePath(self,val):
+        self.ImageTrendPath=val
         
     def Get_ColumForcast(self):       
         return self.ColumnForcast
@@ -83,6 +86,9 @@ class DL_Forcast(QThread):
                 self.Total_Diff_Mag_lose,self.Total_Diff_lose_Per100,self.Total_Mag_Mvmnts,
                 self.Real_Mag_earned,self.Real_earned_Per100,self.Real_earned_Per100,self.Model_id_FRGN)
         
+    def Get_TrendImageForcast(self):
+        return self.ImageTrendPath
+    
     def run(self):
         print("Forcast thread running")
         self.forcaster = Forcast_Data(self.Model_Path)
