@@ -107,12 +107,62 @@ for i in range(0,df.shape[0]):
     else:
         if i<(df.shape[0]-1):
             TotalRight=TotalRight+df['Result'][i]
+print(TotalRight)
 
 #Right %
 Right_precentage=TotalRight*100/RowConsidered
-
-print(TotalRight)
 print(Right_precentage)
+
+
+#Total diff earned
+Total_diff_Earned=0
+for i in range(0,df.shape[0]):
+    if df.index[i]==firstDate: 
+        pass
+    else:
+        if i<(df.shape[0]-1):
+            Total_diff_Earned=Total_diff_Earned+df['diff_right'][i]
+
+print("Total_diff_Earned"+str(Total_diff_Earned))
+
+
+
+#Total diff lose
+Total_diff_lose=0
+for i in range(0,df.shape[0]):
+    if df.index[i]==firstDate: 
+        pass
+    else:
+        if i<(df.shape[0]-1):
+            Total_diff_lose=Total_diff_lose+df['diff_wrong'][i]
+        
+print("Total_diff_lose"+str(Total_diff_lose))
+
+
+
+#total movements
+total_movements=Total_diff_lose+Total_diff_Earned
+print("total_movements"+str(total_movements))
+
+#diff earned %
+diff_earned_percentage=Total_diff_Earned*100/total_movements
+print("diff_earned_percentage"+str(diff_earned_percentage))
+
+#diff lose %
+diff_lose_percentage=Total_diff_lose*100/total_movements
+print("diff_lose_percentage"+str(diff_lose_percentage))
+
+#Real earned
+Real_earned=Total_diff_Earned-Total_diff_lose
+print("Real_earned"+str(Real_earned))
+
+#Total percentages
+TotalPercentage=diff_earned_percentage+diff_lose_percentage
+print("TotalPercentage"+str(TotalPercentage))
+
+#Real earned%
+RealEarnedPercentage=Real_earned*100/total_movements
+print("RealEarnedPercentage"+str(RealEarnedPercentage))
 
             
 df.to_csv(path_or_buf=ForcastResult,index=True)
