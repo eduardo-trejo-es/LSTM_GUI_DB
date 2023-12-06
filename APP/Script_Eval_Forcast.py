@@ -1,8 +1,9 @@
 import pandas as pd
 
 
-ForcastVCS_Path="APP/ModelForcast/CL=F/Model_19/Forcast_82/ForcastDataSet.csv"
-ForcastResult="APP/ModelForcast/CL=F/Model_19/Forcast_82/ForcastDataSetResult.csv"
+basePath="APP/ModelForcast/CL=F/Model_12/Forcast_83/"
+ForcastVCS_Path=basePath+"ForcastDataSet.csv"
+ForcastResult=basePath+"ForcastDataSetResult.csv"
 
 df=pd.read_csv(ForcastVCS_Path, index_col=0)
 
