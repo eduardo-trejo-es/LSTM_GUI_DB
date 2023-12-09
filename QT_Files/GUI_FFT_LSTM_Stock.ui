@@ -30,7 +30,7 @@
      <enum>QTabWidget::North</enum>
     </property>
     <property name="currentIndex">
-     <number>1</number>
+     <number>0</number>
     </property>
     <property name="movable">
      <bool>false</bool>
@@ -38,67 +38,392 @@
     <property name="tabBarAutoHide">
      <bool>false</bool>
     </property>
-    <widget class="QWidget" name="BasicConf_Tab">
+    <widget class="QWidget" name="ForcastEval_Tab">
      <attribute name="title">
-      <string>Basic Config</string>
+      <string>Forcast evaluate</string>
      </attribute>
-     <widget class="QLabel" name="BaCon_lbl_ChooseModel">
+     <widget class="QLabel" name="ForcastEval_lbl_ChooseModel">
       <property name="geometry">
        <rect>
-        <x>28</x>
-        <y>50</y>
+        <x>30</x>
+        <y>80</y>
         <width>161</width>
         <height>20</height>
        </rect>
       </property>
       <property name="text">
-       <string>To choose the model</string>
+       <string>To Choose model</string>
       </property>
      </widget>
-     <widget class="QLabel" name="BaCon_lbl_DatasetBelongs">
+     <widget class="QPushButton" name="ForcastEval_btn_EvaluateFor">
+      <property name="geometry">
+       <rect>
+        <x>430</x>
+        <y>30</y>
+        <width>131</width>
+        <height>71</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Evaluate Forcast</string>
+      </property>
+     </widget>
+     <widget class="QComboBox" name="ForcastEval_Combox_ChooseModel">
       <property name="geometry">
        <rect>
         <x>30</x>
-        <y>130</y>
-        <width>231</width>
-        <height>16</height>
-       </rect>
-      </property>
-      <property name="text">
-       <string>Dataset that belongs to model</string>
-      </property>
-     </widget>
-     <widget class="QPushButton" name="BaCon_btn_SetConfig">
-      <property name="geometry">
-       <rect>
-        <x>520</x>
-        <y>190</y>
-        <width>113</width>
-        <height>32</height>
-       </rect>
-      </property>
-      <property name="text">
-       <string>Set Config</string>
-      </property>
-     </widget>
-     <widget class="QComboBox" name="BaCon_Combox_ChooseModel">
-      <property name="geometry">
-       <rect>
-        <x>26</x>
-        <y>70</y>
-        <width>361</width>
+        <y>100</y>
+        <width>171</width>
         <height>26</height>
        </rect>
       </property>
      </widget>
-     <widget class="QLineEdit" name="BaCon_txtLine_DatasetBelongs">
+     <widget class="QLineEdit" name="ForcastEval_txtLine_ShowShape">
+      <property name="geometry">
+       <rect>
+        <x>230</x>
+        <y>170</y>
+        <width>141</width>
+        <height>21</height>
+       </rect>
+      </property>
+     </widget>
+     <widget class="QLabel" name="ForcastEval_lbl_Chooseitem">
+      <property name="geometry">
+       <rect>
+        <x>30</x>
+        <y>10</y>
+        <width>161</width>
+        <height>20</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>To Choose Item</string>
+      </property>
+     </widget>
+     <widget class="QComboBox" name="ForcastEval_Combox_ChooseItem">
+      <property name="geometry">
+       <rect>
+        <x>30</x>
+        <y>30</y>
+        <width>171</width>
+        <height>26</height>
+       </rect>
+      </property>
+     </widget>
+     <widget class="QLabel" name="ForcastEval_lbl_ShowShape">
+      <property name="geometry">
+       <rect>
+        <x>230</x>
+        <y>150</y>
+        <width>131</width>
+        <height>16</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Shape</string>
+      </property>
+     </widget>
+     <widget class="QComboBox" name="ForcastEval_Combox_Chooseforcast">
+      <property name="geometry">
+       <rect>
+        <x>30</x>
+        <y>170</y>
+        <width>171</width>
+        <height>26</height>
+       </rect>
+      </property>
+     </widget>
+     <widget class="QLabel" name="ForcastEval_lbl_ChooseForcast">
       <property name="geometry">
        <rect>
         <x>30</x>
         <y>150</y>
-        <width>351</width>
+        <width>161</width>
+        <height>20</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>To Choose Forcast</string>
+      </property>
+     </widget>
+     <widget class="QPushButton" name="ForcastEval_btn_DeleteFor">
+      <property name="geometry">
+       <rect>
+        <x>430</x>
+        <y>110</y>
+        <width>131</width>
+        <height>71</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Delete Forcast</string>
+      </property>
+     </widget>
+     <widget class="QLineEdit" name="ForcastEval_txtLine_RowsConsidered">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>340</y>
+        <width>141</width>
         <height>21</height>
        </rect>
+      </property>
+     </widget>
+     <widget class="QLineEdit" name="ForcastEval_txtLine_TotalDiffLose">
+      <property name="geometry">
+       <rect>
+        <x>180</x>
+        <y>290</y>
+        <width>141</width>
+        <height>21</height>
+       </rect>
+      </property>
+     </widget>
+     <widget class="QLineEdit" name="ForcastEval_txtLine_RigthPercent">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>290</y>
+        <width>141</width>
+        <height>21</height>
+       </rect>
+      </property>
+     </widget>
+     <widget class="QLineEdit" name="ForcastEval_txtLine_TotalDiffEarned">
+      <property name="geometry">
+       <rect>
+        <x>180</x>
+        <y>240</y>
+        <width>141</width>
+        <height>21</height>
+       </rect>
+      </property>
+     </widget>
+     <widget class="QLineEdit" name="ForcastEval_txtLine_TotalRight">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>240</y>
+        <width>141</width>
+        <height>21</height>
+       </rect>
+      </property>
+     </widget>
+     <widget class="QLineEdit" name="ForcastEval_txtLine_diffEarnedPercent">
+      <property name="geometry">
+       <rect>
+        <x>350</x>
+        <y>240</y>
+        <width>141</width>
+        <height>21</height>
+       </rect>
+      </property>
+     </widget>
+     <widget class="QLineEdit" name="ForcastEval_txtLine_diffLosePercent">
+      <property name="geometry">
+       <rect>
+        <x>350</x>
+        <y>290</y>
+        <width>141</width>
+        <height>21</height>
+       </rect>
+      </property>
+     </widget>
+     <widget class="QLabel" name="ForcastEval_lbl_TotalRight">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>220</y>
+        <width>161</width>
+        <height>20</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Total rigth</string>
+      </property>
+     </widget>
+     <widget class="QLabel" name="ForcastEval_lbl_RigthPerCent">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>270</y>
+        <width>161</width>
+        <height>20</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Rigth %</string>
+      </property>
+     </widget>
+     <widget class="QLabel" name="ForcastEval_lbl_RowsConsidered">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>320</y>
+        <width>161</width>
+        <height>20</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Total row considered</string>
+      </property>
+     </widget>
+     <widget class="QLabel" name="ForcastEval_lbl_TotalDiffEarned">
+      <property name="geometry">
+       <rect>
+        <x>180</x>
+        <y>220</y>
+        <width>161</width>
+        <height>20</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Total diff earned</string>
+      </property>
+     </widget>
+     <widget class="QLineEdit" name="ForcastEval_txtLine_TotalmagMvmt">
+      <property name="geometry">
+       <rect>
+        <x>180</x>
+        <y>340</y>
+        <width>141</width>
+        <height>21</height>
+       </rect>
+      </property>
+     </widget>
+     <widget class="QLabel" name="ForcastEval_lbl_ToralDiffLose">
+      <property name="geometry">
+       <rect>
+        <x>180</x>
+        <y>270</y>
+        <width>161</width>
+        <height>20</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Total diff lose</string>
+      </property>
+     </widget>
+     <widget class="QLabel" name="ForcastEval_lbl_DiffLosePercent">
+      <property name="geometry">
+       <rect>
+        <x>350</x>
+        <y>270</y>
+        <width>161</width>
+        <height>20</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>diff lose %</string>
+      </property>
+     </widget>
+     <widget class="QLabel" name="ForcastEval_lbl_DiffEarnedPercent">
+      <property name="geometry">
+       <rect>
+        <x>350</x>
+        <y>220</y>
+        <width>161</width>
+        <height>20</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>diff earned %</string>
+      </property>
+     </widget>
+     <widget class="QLabel" name="ForcastEval_lbl_ChooseModel_11">
+      <property name="geometry">
+       <rect>
+        <x>180</x>
+        <y>320</y>
+        <width>161</width>
+        <height>20</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string/>
+      </property>
+     </widget>
+     <widget class="QLineEdit" name="ForcastEval_txtLine_TotalMvmPercent">
+      <property name="geometry">
+       <rect>
+        <x>350</x>
+        <y>340</y>
+        <width>141</width>
+        <height>21</height>
+       </rect>
+      </property>
+     </widget>
+     <widget class="QLabel" name="ForcastEval_lbl_ToralMvmtPercent">
+      <property name="geometry">
+       <rect>
+        <x>350</x>
+        <y>320</y>
+        <width>161</width>
+        <height>20</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Total mvmt %</string>
+      </property>
+     </widget>
+     <widget class="QLineEdit" name="ForcastEval_txtLine_RealMagEarned">
+      <property name="geometry">
+       <rect>
+        <x>520</x>
+        <y>240</y>
+        <width>141</width>
+        <height>21</height>
+       </rect>
+      </property>
+     </widget>
+     <widget class="QLabel" name="ForcastEval_lbl_RealMagEarned">
+      <property name="geometry">
+       <rect>
+        <x>520</x>
+        <y>220</y>
+        <width>161</width>
+        <height>20</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Real  mag earned</string>
+      </property>
+     </widget>
+     <widget class="QLineEdit" name="ForcastEval_txtLine_RealPercentEarned">
+      <property name="geometry">
+       <rect>
+        <x>520</x>
+        <y>290</y>
+        <width>141</width>
+        <height>21</height>
+       </rect>
+      </property>
+     </widget>
+     <widget class="QLabel" name="ForcastEval_lbl_RealPercentEarned">
+      <property name="geometry">
+       <rect>
+        <x>520</x>
+        <y>270</y>
+        <width>161</width>
+        <height>20</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Real % earned</string>
+      </property>
+     </widget>
+     <widget class="QLabel" name="ForcastEval_lbl_magmvmt">
+      <property name="geometry">
+       <rect>
+        <x>180</x>
+        <y>320</y>
+        <width>161</width>
+        <height>20</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Total magnitud mvmt</string>
       </property>
      </widget>
     </widget>
