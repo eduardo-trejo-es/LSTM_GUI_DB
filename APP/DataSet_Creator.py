@@ -61,7 +61,7 @@ class DL_DataSet(QThread):
     def Get_DataSetToUpdate(self):
         return self.DataSetToUpdateId
         
-    def Get_Set_TypeProcessToDo(self):
+    def Get_TypeProcessToDo(self):
         return self.TypeProcessToDo
         
     def Get_NewDataSet_Data(self):

@@ -73,6 +73,7 @@ class DL_Forcast(QThread):
     
     def Set_TrendImagePath(self,val):
         self.ImageTrendPath=val
+
         
     def Get_ColumForcast(self):       
         return self.ColumnForcast
@@ -84,7 +85,8 @@ class DL_Forcast(QThread):
         return (self.date_Time,self.Total_Movement_Right,self.Total_Movement_Right_Per100,
                 self.Rows_Considered,self.Total_Diff_Mag_earned,self.Total_Diff_earned_Per100,
                 self.Total_Diff_Mag_lose,self.Total_Diff_lose_Per100,self.Total_Mag_Mvmnts,
-                self.Real_Mag_earned,self.Real_earned_Per100,self.Real_earned_Per100,self.Model_id_FRGN)
+                self.Real_Mag_earned,self.Real_earned_Per100,self.Real_earned_Per100,
+                self.Model_id_FRGN,self.forcastPath)
         
     def Get_TrendImageForcast(self):
         return self.ImageTrendPath
