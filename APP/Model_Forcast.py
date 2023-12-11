@@ -33,6 +33,8 @@ class DL_Forcast(QThread):
         self.Real_earned_Per100=0
         self.FirstPercentageAbout_toStartForcast=20
         self.Forcasting_Represent_Precent_total=80
+        self.Total_Mag_Mvmnts_Per100=0
+        self.EvalForcastPath=""
         
     def Set_ColumToforcast(self,val):
         self.ColumToforcast=val
@@ -73,6 +75,11 @@ class DL_Forcast(QThread):
     
     def Set_TrendImagePath(self,val):
         self.ImageTrendPath=val
+    def Set_Total_Mag_Mvmnts_Per100(self,val):
+        self.Total_Mag_Mvmnts_Per100=val
+        
+    def Set_EvalForcastPath(self,val):
+        self.EvalForcastPath=val
 
         
     def Get_ColumForcast(self):       
@@ -86,7 +93,7 @@ class DL_Forcast(QThread):
                 self.Rows_Considered,self.Total_Diff_Mag_earned,self.Total_Diff_earned_Per100,
                 self.Total_Diff_Mag_lose,self.Total_Diff_lose_Per100,self.Total_Mag_Mvmnts,
                 self.Real_Mag_earned,self.Real_earned_Per100,self.Real_earned_Per100,
-                self.Model_id_FRGN,self.forcastPath)
+                self.Model_id_FRGN,self.forcastPath,self.Total_Mag_Mvmnts_Per100,self.EvalForcastPath)
         
     def Get_TrendImageForcast(self):
         return self.ImageTrendPath
@@ -211,7 +218,7 @@ class DL_Forcast(QThread):
         ### Model Data ###
         self.today = datetime.now().strftime("%d/%m/%Y %H:%M:%S")
         self.date_Time=str(self.today)
-        self.Rows_Considered=self.backdaysConsideredToBForcasted
+        self.Rows_Considered=self.backdaysConsideredToBForcasted-2
         self.Model_id_FRGN=self.Model_Id_Used
         
         #Giving de columns to main thread to get the trend 

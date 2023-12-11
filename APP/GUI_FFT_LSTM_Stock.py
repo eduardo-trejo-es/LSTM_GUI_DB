@@ -36,6 +36,8 @@ from Model_Trainner import DL_Trainner
 from Model_Creator import DL_Model
 from DataSet_Creator import DL_DataSet
 from Model_Forcast import DL_Forcast
+from Eval_Forcast import DL_Evaluator
+
 
 #To see easy the db file is to drag bdfiel into:  https://inloop.github.io/sqlite-viewer/
 #or by using the command c.execute('SELECT * FROM estudiantes")
@@ -64,6 +66,11 @@ class Ui_GUI_LSTM_FORCASTER(object):
         self.DataSet_creator = DL_DataSet() 
         # Model forcaster
         self.Forcaster = DL_Forcast()
+        
+        # Evaluation forcast
+        self.Evaluator = DL_Evaluator()
+        
+        
         
         ## global var init
         
@@ -534,9 +541,9 @@ class Ui_GUI_LSTM_FORCASTER(object):
         self.ForcastEval_Combox_ChooseModel.currentIndexChanged.connect(self.model_evalFolcast_ComboBoxChanged)
         self.ForcastEval_Combox_Chooseforcast.currentIndexChanged.connect(self.Forcast_evalFolcast_ComboBoxChanged)
         ############ Thread Emit Signals
-        #self.Evaluator.Update_ForcastingProcsStatus.connect(self.Event_EvaluationStatus)
-        #self.Evaluator.Update_Progress.connect(self.Event_UpdateProgress_EvaluationProcess)
-        #self.Evaluator.Update_Progress_String.connect(self.Event_UpdateProgress_string_Evaluation_Process)
+        self.Evaluator.Update_EvaluationStatus.connect(self.Event_EvaluationStatus)
+        self.Evaluator.Update_Progress.connect(self.Event_UpdateProgress_EvaluationProcess)
+        self.Evaluator.Update_Progress_String.connect(self.Event_UpdateProgress_string_Evaluation_Process)
         #####  Buttons calls ##### 
         self.ForcastEval_btn_EvaluateFor.clicked.connect(self.Start_Evaluation)
         self.ForcastEval_btn_DeleteFor.clicked.connect(self.Delete_Forcast)
@@ -1647,13 +1654,14 @@ class Ui_GUI_LSTM_FORCASTER(object):
                 self.ForC_ComBox_Model_To_used.addItem(str(Current_Row))
     
     
-    def CreatNewForcasting(self,val_1,val_2,val_3,val_4,val_5,val_6,val_7,val_8,val_9,val_10,val_11,val_12,val_13,val_14):
+    def CreatNewForcasting(self,val_1,val_2,val_3,val_4,val_5,val_6,val_7,val_8,val_9,val_10,val_11,val_12,val_13,val_14,val_15,val_16):
 
         query=""" INSERT INTO Forcasting_Resul (Date_time,Total_Movement_Right,Total_Movement_Right_Per100,
         Rows_Considered,Total_Diff_Mag_earned,Total_Diff_earned_Per100,Total_Diff_Mag_lose,Total_Diff_lose_Per100,
-        Total_Mag_Mvmnts,Real_Mag_earned,Real_earned_Per100,Real_earned_Per100,Model_id_FRGN,Path_Forcast)
-         VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?)"""
-        self.Forcaster_DB_c.execute(query,(val_1,val_2,val_3,val_4,val_5,val_6,val_7,val_8,val_9,val_10,val_11,val_12,val_13,val_14)) 
+        Total_Mag_Mvmnts,Real_Mag_earned,Real_earned_Per100,Real_earned_Per100,Model_id_FRGN,Path_Forcast,Total_Mag_Mvmnts_Per100,
+        EvalForcastPath)
+         VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)"""
+        self.Forcaster_DB_c.execute(query,(val_1,val_2,val_3,val_4,val_5,val_6,val_7,val_8,val_9,val_10,val_11,val_12,val_13,val_14,val_15,val_16)) 
         
         #Validate changes to our DB 
         self.Forcaster_DB_conn.commit()
@@ -1676,11 +1684,11 @@ class Ui_GUI_LSTM_FORCASTER(object):
     
     ##### Emit thread signals
     def Event_ForcastingStatus(self,val):
-        val_1,val_2,val_3,val_4,val_5,val_6,val_7,val_8,val_9,val_10,val_11,val_12,val_13,val_14=self.Forcaster.Get_NewForcastingData()
+        val_1,val_2,val_3,val_4,val_5,val_6,val_7,val_8,val_9,val_10,val_11,val_12,val_13,val_14,val_15,val_16=self.Forcaster.Get_NewForcastingData()
         TrendImage_path=self.Forcaster.Get_TrendImageForcast()
         if val:
             #Saving Data
-            self.CreatNewForcasting(val_1,val_2,val_3,val_4,val_5,val_6,val_7,val_8,val_9,val_10,val_11,val_12,val_13,val_14)
+            self.CreatNewForcasting(val_1,val_2,val_3,val_4,val_5,val_6,val_7,val_8,val_9,val_10,val_11,val_12,val_13,val_14,val_15,val_16)
             ColumsDataForcasted=self.Forcaster.Get_ColumForcast()
             ColumsDataReal=self.Forcaster.Get_ColumReal()
             plt.plot(ColumsDataForcasted,label='ColumnForcast_Close_Day',color='orange', marker='o')
@@ -1700,12 +1708,27 @@ class Ui_GUI_LSTM_FORCASTER(object):
         self.ForC_lbl_loadBar.setText(val)
         
     ###########################################
-    #              TAB Model Creator          #
+    #          TAB Forcast Evaluator          #
     ###########################################
     
     ############### Bottons functions  ################
     def Start_Evaluation(self):
-        print("Hello world")
+        Current_Forcast=self.ForcastEval_Combox_Chooseforcast.currentText()
+        self.GetSpecificForcast(Current_Forcast)
+        self.Evaluator.Set_Forcast_id(Current_Forcast)
+
+        ForcastPath=""
+        for i in self.SpecificForcast_SLCT_all:
+            ForcastPath=i[13]
+        self.Evaluator.Set_ForcastPath(ForcastPath)
+        
+        
+
+        
+        self.Evaluator.Set_selectedModel()
+        
+
+        self.Evaluator.start()
     
     def Delete_Forcast(self):
         print("Function to delete forcast")
@@ -1736,6 +1759,17 @@ class Ui_GUI_LSTM_FORCASTER(object):
             index= self.ForcastEval_Combox_Chooseforcast.findText(str(Current_Row),QtCore.Qt.MatchFixedString)
             if index==-1:
                 self.ForcastEval_Combox_Chooseforcast.addItem(str(Current_Row))
+    
+    def SetDataEvlForcasting(self,val_1,val_2,val_3,val_4,val_5,val_6,val_7,val_8,val_9,val_10,val_11,Forcast_ID,Eval_ForcastPath):
+
+        query=""" UPDATE Forcasting_Resul SET Total_Movement_Right=?,Total_Movement_Right_Per100=?,
+        Rows_Considered=?,Total_Diff_Mag_earned=?,Total_Diff_earned_Per100=?,Total_Diff_Mag_lose=?,Total_Diff_lose_Per100=?,
+        Total_Mag_Mvmnts=?,Real_Mag_earned=?,Real_earned_Per100=?,Total_Mag_Mvmnts_Per100=?,EvalForcastPath=?
+        Where Forcasting_Resul_id=?"""
+        self.Forcaster_DB_c.execute(query,(val_1,val_2,val_3,val_4,val_5,val_6,val_7,val_8,val_9,val_10,val_11,Eval_ForcastPath,Forcast_ID,)) 
+        
+        #Validate changes to our DB 
+        self.Forcaster_DB_conn.commit()
         
         
     
@@ -1750,11 +1784,9 @@ class Ui_GUI_LSTM_FORCASTER(object):
         self.EvalForcastTab_UpdateComboxForcast()
         
     def Forcast_evalFolcast_ComboBoxChanged(self):
-        print("Hello")
         Current_Forcast=self.ForcastEval_Combox_Chooseforcast.currentText()
         self.GetSpecificForcast(Current_Forcast)
-        print(type(self.SpecificForcast_SLCT_all))
-        print(len(self.SpecificForcast_SLCT_all))
+
         ForcastPath=""
         for i in self.SpecificForcast_SLCT_all:
             ForcastPath=i[13]
@@ -1767,10 +1799,20 @@ class Ui_GUI_LSTM_FORCASTER(object):
             self.ForcastEval_txtLine_ShowShape.setText("") 
             print("An error occure trying to retrive the forcast dataSet ")
              
-        
-        
-    
     ##### Emit thread signals
+    def Event_EvaluationStatus(self,val):
+        val_1,val_2,val_3,val_4,val_5,val_6,val_7,val_8,val_9,val_10,val_11,Forcast_Id,Eval_ForcastPath=self.Evaluator.Get_All_DataDB()
+        
+        if val:
+            #Saving Data
+            self.SetDataEvlForcasting(val_1,val_2,val_3,val_4,val_5,val_6,val_7,val_8,val_9,val_10,val_11,Forcast_Id,Eval_ForcastPath)
+            
+            
+    
+    def Event_UpdateProgress_EvaluationProcess(self):
+        pass
+    def Event_UpdateProgress_string_Evaluation_Process(self):
+        pass
         
                  
 if __name__ == "__main__":

@@ -13,4 +13,4 @@ c = conn.cursor()
 
 
 #Add colum
-c.execute("""ALTER TABLE 'Forcasting_Resul' ADD Path_Forcast TEXT """)
+c.execute("""ALTER TABLE 'Forcasting_Resul' ADD EvalForcastPath TEXT""")
