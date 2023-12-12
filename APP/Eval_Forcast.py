@@ -32,9 +32,7 @@ class DL_Evaluator(QThread):
         self.selecteditem=""
         self.selectedModel=0
         self.selectedForcast=0
-    
-    def Set_Forcast_id(self,val):
-        self.Forcast_id_Used=val
+        self.EvalDFPath=""
     
     def Set_ForcastPath(self,val):
         self.forcastpath=val
@@ -80,33 +78,23 @@ class DL_Evaluator(QThread):
     
     def Set_selectedForcastId(self,val):
         self.selectedForcast=val
+        
+    def Set_EvalDFPath(self,val):
+        self.EvalDFPath=val
+        
     
     def Get_All_DataDB(self):
         return (self.TotalRight,self.Right_precentage,self.RowConsidered,self.Total_diff_Earned,
                 self.diff_earned_percentage, self.Total_diff_lose, self.diff_lose_percentage,
                 self.total_movements,self.Real_earned,self.RealEarnedPercentage,self.TotalPercentage,
-                self.Forcast_id_Used,)
-    
-    """Total_Movement_Right self.TotalRight
-    Total_Movement_Right_Per100 self.Right_precentage
-    Rows_Considered : self.RowConsidered
-    
-    Total_Diff_Mag_earned, self.Total_diff_Earned
-    Total_Diff_earned_Per100 self.diff_earned_percentage
-    
-    Total_Diff_Mag_lose, self.Total_diff_lose,
-    Total_Diff_lose_Per100,self.diff_lose_percentage
-    
-    Total_Mag_Mvmnts, self.total_movements,
-    
-    Real_Mag_earned, self.Real_earned
-    Real_earned_Per100 self.RealEarnedPercentage
-    
-    Total_Mag_Mvmnts_Per100 self.TotalPercentage"""
+                self.selectedForcast,self.EvalDFPath)
     
     def run(self):
         df=pd.read_csv(self.forcastpath, index_col=0)
-        self.evaluate(df)
+        
+        self.EvalDFPath="APP/ModelForcast/"+str(self.selecteditem)+"/Model_"+str(self.selectedModel)+"/Forcast_"+str(self.selectedForcast)+"/ForcastDataSetResult.csv"
+        
+        self.evaluate(df,self.EvalDFPath)
         """try:
             df=pd.read_csv(self.forcastpath, index_col=0)
             self.evaluate(self,df)
@@ -117,7 +105,7 @@ class DL_Evaluator(QThread):
         self.Update_EvaluationStatus.emit(True)
 
 
-    def evaluate(self,DF):
+    def evaluate(self,DF,EvalDFPath):
         df=DF
         Direction_Forcast=[]
         Direction_Real=[]
@@ -293,5 +281,5 @@ class DL_Evaluator(QThread):
 
         
                     
-        #df.to_csv(path_or_buf=ForcastResult,index=True)
+        df.to_csv(path_or_buf=EvalDFPath,index=True)
         

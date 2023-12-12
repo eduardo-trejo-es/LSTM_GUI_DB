@@ -733,6 +733,7 @@ class Ui_GUI_LSTM_FORCASTER(object):
         query=("""SELECT * FROM 'Forcasting_Resul' WHERE Forcasting_Resul_id=?""")
         self.Forcaster_DB_c.execute(query, (Forcast_Id,))
         self.SpecificForcast_SLCT_all=self.Forcaster_DB_c.fetchall()
+        
     
     def GetMadeUpForcastTableCnsdModel(self,Model):
         query=("""SELECT * FROM 'Forcasting_Resul' WHERE Model_id_FRGN=?""")
@@ -1713,21 +1714,21 @@ class Ui_GUI_LSTM_FORCASTER(object):
     
     ############### Bottons functions  ################
     def Start_Evaluation(self):
+        item=self.ForcastEval_Combox_ChooseItem.currentText()
+        model=self.ForcastEval_Combox_ChooseModel.currentText()
         Current_Forcast=self.ForcastEval_Combox_Chooseforcast.currentText()
-        self.GetSpecificForcast(Current_Forcast)
-        self.Evaluator.Set_Forcast_id(Current_Forcast)
-
+        
+        
+        self.Evaluator.Set_selectedItem(item)
+        self.Evaluator.Set_selectedModel(model)
+        self.Evaluator.Set_selectedForcastId(Current_Forcast)
+        
+        self.GetSpecificForcast(Current_Forcast)    
         ForcastPath=""
         for i in self.SpecificForcast_SLCT_all:
             ForcastPath=i[13]
         self.Evaluator.Set_ForcastPath(ForcastPath)
         
-        
-
-        
-        self.Evaluator.Set_selectedModel()
-        
-
         self.Evaluator.start()
     
     def Delete_Forcast(self):
@@ -1771,8 +1772,6 @@ class Ui_GUI_LSTM_FORCASTER(object):
         #Validate changes to our DB 
         self.Forcaster_DB_conn.commit()
         
-        
-    
     ##### Emit general signals
     def item_evalForcast_ComboBoxChanged(self):
         self.ForcastEval_Combox_ChooseModel.clear()
@@ -1802,11 +1801,33 @@ class Ui_GUI_LSTM_FORCASTER(object):
     ##### Emit thread signals
     def Event_EvaluationStatus(self,val):
         val_1,val_2,val_3,val_4,val_5,val_6,val_7,val_8,val_9,val_10,val_11,Forcast_Id,Eval_ForcastPath=self.Evaluator.Get_All_DataDB()
+        Current_Forcast=self.ForcastEval_Combox_Chooseforcast.currentText()
         
         if val:
             #Saving Data
             self.SetDataEvlForcasting(val_1,val_2,val_3,val_4,val_5,val_6,val_7,val_8,val_9,val_10,val_11,Forcast_Id,Eval_ForcastPath)
             
+            #Get data from Db to show in line boxes
+            self.GetSpecificForcast(Current_Forcast)
+            print(len(self.SpecificForcast_SLCT_all))
+        
+            
+            
+            self.ForcastEval_txtLine_TotalRight.setText(str(self.SpecificForcast_SLCT_all[0][2]))
+            self.ForcastEval_txtLine_RigthPercent.setText(str(self.SpecificForcast_SLCT_all[0][3])) 
+            self.ForcastEval_txtLine_RowsConsidered.setText(str(self.SpecificForcast_SLCT_all[0][4]))
+            
+            self.ForcastEval_txtLine_TotalDiffEarned.setText(str(self.SpecificForcast_SLCT_all[0][5]))
+            self.ForcastEval_txtLine_diffEarnedPercent.setText(str(self.SpecificForcast_SLCT_all[0][6]))
+            
+            self.ForcastEval_txtLine_TotalDiffLose.setText(str(self.SpecificForcast_SLCT_all[0][7]))
+            self.ForcastEval_txtLine_diffLosePercent.setText(str(self.SpecificForcast_SLCT_all[0][8]))
+            
+            self.ForcastEval_txtLine_TotalmagMvmt.setText(str(self.SpecificForcast_SLCT_all[0][9]))
+            self.ForcastEval_txtLine_TotalMvmPercent.setText(str(self.SpecificForcast_SLCT_all[0][14]))
+            
+            self.ForcastEval_txtLine_RealMagEarned.setText(str(self.SpecificForcast_SLCT_all[0][10]))
+            self.ForcastEval_txtLine_RealPercentEarned.setText(str(self.SpecificForcast_SLCT_all[0][11])) 
             
     
     def Event_UpdateProgress_EvaluationProcess(self):

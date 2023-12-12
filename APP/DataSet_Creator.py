@@ -89,8 +89,8 @@ class DL_DataSet(QThread):
         
         
         StartDay="2001-01-02"
-        EndDate="2001-06-15"
-        #EndDate=date.today().strftime("%Y-%m-%d")
+        #EndDate="2001-06-15"
+        EndDate=date.today().strftime("%Y-%m-%d")
         
         ObjectiveFilePath=self.ToCreateOrUpdateDataSet(self.DataSet_id_Just_Created,self.SeedDataSetList,StartDay,EndDate,self.TypeProcessToDo)
         self.Path_DataSet = ObjectiveFilePath
