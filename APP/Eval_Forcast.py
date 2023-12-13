@@ -267,17 +267,17 @@ class DL_Evaluator(QThread):
         
 
         #####   Results
-        self.Set_RowConsidered(RowConsidered)
-        self.Set_TotalRight(TotalRight)
-        self.Set_Right_precentage(Right_precentage)
-        self.Set_Total_diff_Earned(Total_diff_Earned)
-        self.Set_Total_diff_lose(Total_diff_lose)
-        self.Set_total_movements(total_movements)
-        self.Set_diff_earned_percentage(diff_earned_percentage)
-        self.Set_diff_lose_percentage(diff_lose_percentage)
-        self.Set_Real_earned(Real_earned)
-        self.Set_TotalPercentage(TotalPercentage)
-        self.Set_RealEarnedPercentage(RealEarnedPercentage)
+        self.Set_RowConsidered(round(RowConsidered, 2))
+        self.Set_TotalRight(round(TotalRight, 2))
+        self.Set_Right_precentage(round(Right_precentage, 2))
+        self.Set_Total_diff_Earned(round(Total_diff_Earned, 2))
+        self.Set_Total_diff_lose(round(Total_diff_lose, 2))
+        self.Set_total_movements(round(total_movements, 2))
+        self.Set_diff_earned_percentage(round(diff_earned_percentage, 2))
+        self.Set_diff_lose_percentage(round(diff_lose_percentage, 2))
+        self.Set_Real_earned(round(Real_earned, 2))
+        self.Set_TotalPercentage(round(TotalPercentage, 2))
+        self.Set_RealEarnedPercentage(round(RealEarnedPercentage, 2))
 
         
                     
