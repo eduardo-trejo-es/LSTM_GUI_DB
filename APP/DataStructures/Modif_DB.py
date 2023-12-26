@@ -13,4 +13,7 @@ c = conn.cursor()
 
 
 #Add colum
-c.execute("""ALTER TABLE 'Forcasting_Resul' ADD EvalForcastPath TEXT""")
+#c.execute("""ALTER TABLE 'Models' ADD Last_val_loss INTEGER""")
+
+#Delete table
+c.execute("""ALTER TABLE 'Models' DROP Last_loss""")

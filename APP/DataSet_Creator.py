@@ -58,6 +58,9 @@ class DL_DataSet(QThread):
     def Set_DataSetToUpdate(self,val):
         self.DataSetToUpdateId=val
         
+    def Set_BackDaysConsideredFFT(self,val):
+        self.BackDaysConsideredFFT=val
+        
     def Get_DataSetToUpdate(self):
         return self.DataSetToUpdateId
         
@@ -72,6 +75,8 @@ class DL_DataSet(QThread):
     
     def GetModelCreationStatus(self):
         pass
+    
+    
     
     def run(self):
         
@@ -223,7 +228,7 @@ class DL_DataSet(QThread):
             if Colums_Selection_FFT[i]==1:
                 ColumnsToFFT.append(columns[i])
 
-        backdaysToconsider=6
+        backdaysToconsider=self.BackDaysConsideredFFT+1
         inicialPath=yearAddedPath
         FFTNew_FileData=FFTAddedPath
         frec=self.Convert(FFT_Frec)

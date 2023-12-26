@@ -1102,6 +1102,8 @@ class Ui_GUI_LSTM_FORCASTER(object):
         self.DataSet_creator.Set_DataSetToUpdate(DataSetSelected)
         self.DataSet_creator.Set_TypeProcessToDo(ProcessToDo) #Process do to (Create a new dataset "1" or update one "0")
         
+        self.DataSet_creator.Set_BackDaysConsideredFFT(int(BackDays))
+        
         self.DataSet_creator.start()
     
     ############ General Fucntions  ############
@@ -1598,7 +1600,6 @@ class Ui_GUI_LSTM_FORCASTER(object):
         Forcast_Selected_Row=self.Forcaster_DB_c.fetchall()[0]
         
         LastForcas=Forcast_Selected_Row[0]
-        print(LastForcas)
         LastForcasPlusOne=str(LastForcas+1)
         
         
@@ -1810,8 +1811,7 @@ class Ui_GUI_LSTM_FORCASTER(object):
             #Get data from Db to show in line boxes
             self.GetSpecificForcast(Current_Forcast)
             print(len(self.SpecificForcast_SLCT_all))
-        
-            
+    
             
             self.ForcastEval_txtLine_TotalRight.setText(str(self.SpecificForcast_SLCT_all[0][2]))
             self.ForcastEval_txtLine_RigthPercent.setText(str(self.SpecificForcast_SLCT_all[0][3])) 

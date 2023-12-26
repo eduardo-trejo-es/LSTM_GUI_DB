@@ -99,7 +99,6 @@ class DL_Forcast(QThread):
         return self.ImageTrendPath
     
     def run(self):
-        print("Forcast thread running")
         self.forcaster = Forcast_Data(self.Model_Path)
 
         ########## forcasting instuctions below #######
@@ -114,12 +113,9 @@ class DL_Forcast(QThread):
         saveAllandforcast=pd.DataFrame({})
         fd_ColumnForcast_Close_Day=pd.DataFrame({})
         all_df=pd.read_csv(all_colums_Data_CSV,index_col=0)
-        print(all_df.shape)
+
 
         df=pd.read_csv(Data_CSV,index_col=0)
-        print(df.shape)
-        
-
         
         locpercentage=0
         ColumnCurrent_Close_Day=[]
@@ -138,8 +134,10 @@ class DL_Forcast(QThread):
 
         indexDates=df.index
 
+        print("indexDates.shape[0]")
+        print(indexDates.shape[0])
+        
         locpercentage=int((indexDates.shape[0]*percentageData)/100)
-        print(locpercentage)
         #datefiltredPercentage=indexDates[locpercentage:]
         #
         # if datefiltredPercentage=indexDates[indexDates.shape[0]-backdaysConsideredToBForcasted:]
@@ -152,7 +150,7 @@ class DL_Forcast(QThread):
         
         for i in datefiltredPercentage:
             
-            print("to be predict from: "+str(i))
+            #print("to be predict from: "+str(i))
             #ColumToforcast, ColumRealYToCompare, dateFromForcast, data_frame_Path, BackDays
             self.forcaster.ToForcastfrom(ColumToForcast,ColumToForcast,str(i),Data_CSV,backdaysConsidered)
             Real_Y_current=self.forcaster.Get_UnicForcast_Real_Y_current()
@@ -171,9 +169,9 @@ class DL_Forcast(QThread):
             #if i == datefiltredPercentage[len(datefiltredPercentage)-2]: break
         Forcast_Dates_toshow=Forcast_Dates
 
-        print(ColumnForcast_Close_Day)
-        print("---------------------------------------------------")
-        print(ColumnReal_Close_Day)
+        #print(ColumnForcast_Close_Day)
+        #print("---------------------------------------------------")
+        #print(ColumnReal_Close_Day)
 
 
         ### Below df only has close forcast data and dates forcast data
@@ -187,29 +185,33 @@ class DL_Forcast(QThread):
 
         if FFtUsedQ:
             #if fft considered:
+            print("FFtUsedQ=1")
             Allandforcast=all_df[locpercentage-backdaysConsideredToBForcasted+backdaysConsidered:locpercentage+backdaysConsidered]
+            print("locpercentage")
+            print(locpercentage)
+            print("backdaysConsideredToBForcasted")
+            print(backdaysConsideredToBForcasted)
+            print("backdaysConsidered")
+            print(backdaysConsidered)
+            print("__________________________________________")
+            print("locpercentage")
+            print(locpercentage)
+            print("backdaysConsidered")
+            print(backdaysConsidered)
         else:
-            #if not FFT consider
+            #if not FFT considerf
+            print("FFtUsedQ=0")
             Allandforcast=all_df[locpercentage-backdaysConsideredToBForcasted:locpercentage]
+        print("Allandforcast.shape")
         print(Allandforcast.shape)
         print(Allandforcast)
+        
+        print("fd_ColumnForcast_Close_Day.shape")
         print(fd_ColumnForcast_Close_Day.shape)
         print(fd_ColumnForcast_Close_Day)
         frames = [Allandforcast, fd_ColumnForcast_Close_Day]
 
         Final_Allandforcast = pd.concat(frames,axis=1)
-
-
-        ######         this plot must be done at main thread     ###############
-        #plt.plot(ColumnForcast_Close_Day,label='ColumnForcast_Close_Day',color='orange', marker='o')
-        #plt.plot(ColumnReal_Close_Day,label='ColumnReal_Close_Day',color='green', marker='*')
-        #plt.plot([1,2,3,4])
-        #plt.show()
-        #np.insert(a, a.shape[1], np.array((10, 10, 10, 10)), 1)
-        #print(ensambly_np.shape)
-        #print(ensambly_np.shape)
-        # to convert to CSV
-        
         
         #Creating the csv File
         Final_Allandforcast.to_csv(path_or_buf=self.forcastPath,index=True)
@@ -235,10 +237,10 @@ class DL_Forcast(QThread):
         DatesToForcast=self.backdaysConsideredToBForcasted
         
         CurrenEpochPrecent_and_Already_Done=int(((int(DateIndexDone)*self.Forcasting_Represent_Precent_total)/int(DatesToForcast))+self.FirstPercentageAbout_toStartForcast)
-        print("..........................")
-        print(type(CurrenEpochPrecent_and_Already_Done))
+        #print("..........................")
+        #print(type(CurrenEpochPrecent_and_Already_Done))
         
-        print("percentage"+str(CurrenEpochPrecent_and_Already_Done))
+        #print("percentage"+str(CurrenEpochPrecent_and_Already_Done))
         self.Update_Progress_String.emit("Forcasting in process, last forcast: "+str(DateIndexDone)+" ("+str(Date)+")"+" of "+str(DatesToForcast))
         self.Update_Progress.emit(int(CurrenEpochPrecent_and_Already_Done))
 
