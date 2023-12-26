@@ -21,7 +21,7 @@ c.execute("""
             N_epochs_Done INTEGER,
             Seed_Model_id_FRGN INTEGER,
             DataSet_id_FRGN INTEGER,
-            Colm_T_Predict,
+            Colm_T_Predict INTEGER,
             FOREIGN KEY(DataSet_id_FRGN) REFERENCES DataSet(DataSet_id),
             FOREIGN KEY(Seed_Model_id_FRGN) REFERENCES Seed_Model(Seed_Model_id)
         )
