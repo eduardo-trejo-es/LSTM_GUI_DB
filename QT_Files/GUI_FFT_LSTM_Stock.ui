@@ -30,7 +30,7 @@
      <enum>QTabWidget::North</enum>
     </property>
     <property name="currentIndex">
-     <number>0</number>
+     <number>2</number>
     </property>
     <property name="movable">
      <bool>false</bool>
@@ -665,16 +665,6 @@
       </property>
       <property name="text">
        <string>To train</string>
-      </property>
-     </widget>
-     <widget class="QPlainTextEdit" name="MoTr_Plaintxt_CMDTraining">
-      <property name="geometry">
-       <rect>
-        <x>10</x>
-        <y>210</y>
-        <width>661</width>
-        <height>171</height>
-       </rect>
       </property>
      </widget>
      <widget class="QLabel" name="MoTr_lbl_CMD_training">

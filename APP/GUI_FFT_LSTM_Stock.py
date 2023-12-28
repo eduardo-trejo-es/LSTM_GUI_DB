@@ -275,11 +275,11 @@ class Ui_GUI_LSTM_FORCASTER(object):
         self.MoTr_btn_Totrain.setGeometry(QtCore.QRect(470, 30, 141, 51))
         self.MoTr_btn_Totrain.setObjectName("MoTr_btn_Totrain")
         self.MoTr_LoadBar_CMDTraining = QtWidgets.QProgressBar(self.Model_Trainner_Tab)
-        self.MoTr_LoadBar_CMDTraining.setGeometry(QtCore.QRect(120, 250, 411, 41))
+        self.MoTr_LoadBar_CMDTraining.setGeometry(QtCore.QRect(120, 320, 411, 41))
         self.MoTr_LoadBar_CMDTraining.setProperty("value", 0)
         self.MoTr_LoadBar_CMDTraining.setObjectName("MoTr_LoadBar_CMDTraining")
         self.MoTr_lbl_CMD_training = QtWidgets.QLabel(self.Model_Trainner_Tab)
-        self.MoTr_lbl_CMD_training.setGeometry(QtCore.QRect(120, 230, 370, 16))
+        self.MoTr_lbl_CMD_training.setGeometry(QtCore.QRect(120, 310, 370, 16))
         self.MoTr_lbl_CMD_training.setObjectName("MoTr_lbl_CMD_training")
         self.MoTr_txtLine_PercentDataSet = QtWidgets.QLineEdit(self.Model_Trainner_Tab)
         self.MoTr_txtLine_PercentDataSet.setGeometry(QtCore.QRect(70, 150, 61, 21))
@@ -320,6 +320,39 @@ class Ui_GUI_LSTM_FORCASTER(object):
         self.MoTr_txtLine_ephocs_done.setGeometry(QtCore.QRect(270, 150, 81, 21))
         self.MoTr_txtLine_ephocs_done.setObjectName("MoTr_txtLine_ephocs_done")
         self.MoTr_txtLine_ephocs_done.setEnabled(False)
+
+        
+        self.MoTr_lbl_loss = QtWidgets.QLabel(self.Model_Trainner_Tab)
+        self.MoTr_lbl_loss.setGeometry(QtCore.QRect(70, 180, 91, 16))
+        self.MoTr_lbl_loss.setObjectName("MoTr_lbl_loss")
+        self.MoTr_txtLine_loss = QtWidgets.QLineEdit(self.Model_Trainner_Tab)
+        self.MoTr_txtLine_loss.setGeometry(QtCore.QRect(70, 200, 81, 21))
+        self.MoTr_txtLine_loss.setObjectName("MoTr_txtLine_loss")
+        self.MoTr_txtLine_loss.setEnabled(False)
+        
+        self.MoTr_lbl_mean_sqr_error = QtWidgets.QLabel(self.Model_Trainner_Tab)
+        self.MoTr_lbl_mean_sqr_error.setGeometry(QtCore.QRect(270, 180, 131, 16))
+        self.MoTr_lbl_mean_sqr_error.setObjectName("MoTr_lbl_mean_sqr_error")
+        self.MoTr_txtLine_mean_sqr_error = QtWidgets.QLineEdit(self.Model_Trainner_Tab)
+        self.MoTr_txtLine_mean_sqr_error.setGeometry(QtCore.QRect(270, 200, 81, 21))
+        self.MoTr_txtLine_mean_sqr_error.setObjectName("MoTr_txtLine_mean_sqr_error")
+        self.MoTr_txtLine_mean_sqr_error.setEnabled(False)
+        
+        self.MoTr_lbl_val_loss = QtWidgets.QLabel(self.Model_Trainner_Tab)
+        self.MoTr_lbl_val_loss.setGeometry(QtCore.QRect(70, 230, 91, 16))
+        self.MoTr_lbl_val_loss.setObjectName("MoTr_lbl_val_loss")
+        self.MoTr_txtLine_val_loss = QtWidgets.QLineEdit(self.Model_Trainner_Tab)
+        self.MoTr_txtLine_val_loss.setGeometry(QtCore.QRect(70, 250, 81, 21))
+        self.MoTr_txtLine_val_loss.setObjectName("MoTr_txtLine_val_loss")
+        self.MoTr_txtLine_val_loss.setEnabled(False)
+    
+        self.MoTr_lbl_val_mean_sqr_error = QtWidgets.QLabel(self.Model_Trainner_Tab)
+        self.MoTr_lbl_val_mean_sqr_error.setGeometry(QtCore.QRect(270, 230, 151, 16))
+        self.MoTr_lbl_val_mean_sqr_error.setObjectName("MoTr_lbl_val_mean_sqr_error")
+        self.MoTr_txtLine_val_mean_sqr_error = QtWidgets.QLineEdit(self.Model_Trainner_Tab)
+        self.MoTr_txtLine_val_mean_sqr_error.setGeometry(QtCore.QRect(270, 250, 81, 21))
+        self.MoTr_txtLine_val_mean_sqr_error.setObjectName("MoTr_txtLine_val_mean_sqr_error")
+        self.MoTr_txtLine_val_mean_sqr_error.setEnabled(False)
         
         self.MoTr_ComBox_DataSet = QtWidgets.QComboBox(self.Model_Trainner_Tab)
         self.MoTr_ComBox_DataSet.setGeometry(QtCore.QRect(70, 100, 111, 26))
@@ -660,6 +693,20 @@ class Ui_GUI_LSTM_FORCASTER(object):
         
         self.MoTr_lbl_ephocs_done.setText(_translate("GUI_LSTM_FORCASTER", "ephocs done"))
         self.MoTr_txtLine_ephocs_done.setText(_translate("GUI_LSTM_FORCASTER", "0"))
+        
+        ###################
+        ###############_--------------
+        self.MoTr_lbl_loss.setText(_translate("GUI_LSTM_FORCASTER", "last loss"))
+        self.MoTr_txtLine_loss.setText(_translate("GUI_LSTM_FORCASTER", "0"))
+        
+        self.MoTr_lbl_mean_sqr_error.setText(_translate("GUI_LSTM_FORCASTER", "mean sqr error"))
+        self.MoTr_txtLine_mean_sqr_error.setText(_translate("GUI_LSTM_FORCASTER", "0"))
+        
+        self.MoTr_lbl_val_loss.setText(_translate("GUI_LSTM_FORCASTER", "val loss"))
+        self.MoTr_txtLine_val_loss.setText(_translate("GUI_LSTM_FORCASTER", "0"))
+        
+        self.MoTr_lbl_val_mean_sqr_error.setText(_translate("GUI_LSTM_FORCASTER", "val mean sqr error"))
+        self.MoTr_txtLine_val_mean_sqr_error.setText(_translate("GUI_LSTM_FORCASTER", "0"))
         
         
         self.Tabs.setTabText(self.Tabs.indexOf(self.Model_Trainner_Tab), _translate("GUI_LSTM_FORCASTER", "Model Trainner"))
@@ -1495,8 +1542,24 @@ class Ui_GUI_LSTM_FORCASTER(object):
         ephocs_done=str(Model_Selected_Row[3])
         DataSetMarried=int(Model_Selected_Row[5])
         ColmTPredictMarried=int(Model_Selected_Row[6])
-        
+        try:
+            loss=float(Model_Selected_Row[7])
+            mean_squared_error=float(Model_Selected_Row[8])
+            val_loss=float(Model_Selected_Row[9])
+            val_mean_squared_error=float(Model_Selected_Row[10])
+        except:
+            loss=0
+            mean_squared_error=0
+            val_loss=0
+            val_mean_squared_error=0
+            
         self.MoTr_txtLine_ephocs_done.setText(ephocs_done)
+        
+        self.MoTr_txtLine_loss.setText('%.2E'%loss)
+        self.MoTr_txtLine_mean_sqr_error.setText('%.2E'%mean_squared_error)
+        self.MoTr_txtLine_val_loss.setText('%.2E'%val_loss)
+        self.MoTr_txtLine_val_mean_sqr_error.setText('%.2E'%val_mean_squared_error)
+
         
         if DataSetMarried>0:
             ### if has already a DataSet married to, let's bring it on
@@ -1518,6 +1581,12 @@ class Ui_GUI_LSTM_FORCASTER(object):
         losses=self.trainner.Getlosses()
         epochs_done=int(self.trainner.GetEpochs_done())
         Id_modelSelect=self.Current_Trainning_Id_modelSelect
+        last_loss=self.trainner.Get_LastLoss()
+        mean_squared_error=self.trainner.Get_LastMean_Squared_error()
+        val_loss=self.trainner.Get_LastValLoss()
+        val_mean_squared_error=self.trainner.Get_LastValMeanSquared_Error()
+        
+        
         
         if val:
             #Update the N_epoch done
@@ -1530,11 +1599,42 @@ class Ui_GUI_LSTM_FORCASTER(object):
                 
                 # add saved ephos done + new done epochs
             Total_Epochs_done=ephocs_in_Bd+epochs_done
+            
+            #Update training result values
+            last_loss=self.trainner.Get_LastLoss()
+            mean_squared_error=self.trainner.Get_LastMean_Squared_error()
+            val_loss=self.trainner.Get_LastValLoss()
+            val_mean_squared_error=self.trainner.Get_LastValMeanSquared_Error()
                 # save in bd
-            query="UPDATE Models SET N_epochs_Done = ? WHERE Model_id=?"
-            self.Forcaster_DB_c.execute(query,(Total_Epochs_done,Id_modelSelect))
+            query="UPDATE Models SET N_epochs_Done = ?,loss=?,mean_squared_error=?,val_loss=?,val_mean_squared_error=? WHERE Model_id=?"
+            #query="UPDATE Models SET N_epochs_Done = ? WHERE Model_id=?"
+            #self.Forcaster_DB_c.execute(query,(Total_Epochs_done,Id_modelSelect))
+            print(mean_squared_error)
+            self.Forcaster_DB_c.execute(query,(Total_Epochs_done,last_loss,mean_squared_error,val_loss,val_mean_squared_error,Id_modelSelect))
             self.Forcaster_DB_conn.commit()
-            self.MoTr_txtLine_ephocs_done.setText(str(Total_Epochs_done))
+            
+            ## Getting the DB row model 
+            query="SELECT * FROM Models WHERE Model_id=?"
+            self.Forcaster_DB_c.execute(query,(Id_modelSelect,))
+            Model_Selected_Row=self.Forcaster_DB_c.fetchall()[0]
+        
+            ephocs_done=str(Model_Selected_Row[3])
+            try:
+                loss=float(Model_Selected_Row[7])
+                mean_squared_error=float(Model_Selected_Row[8])
+                val_loss=float(Model_Selected_Row[9])
+                val_mean_squared_error=float(Model_Selected_Row[10])
+            except:
+                loss=0
+                mean_squared_error=0
+                val_loss=0
+                val_mean_squared_error=0
+
+            self.MoTr_txtLine_ephocs_done.setText(ephocs_done)
+            self.MoTr_txtLine_loss.setText('%.2E'%loss)
+            self.MoTr_txtLine_mean_sqr_error.setText('%.2E'%mean_squared_error)
+            self.MoTr_txtLine_val_loss.setText('%.2E'%val_loss)
+            self.MoTr_txtLine_val_mean_sqr_error.setText('%.2E'%val_mean_squared_error)
             
             #Show the loss plot
             losses.plot()
