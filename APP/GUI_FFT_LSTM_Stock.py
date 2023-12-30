@@ -661,12 +661,14 @@ class Ui_GUI_LSTM_FORCASTER(object):
         
         self.ForC_btn_StartForcasting.setText(_translate("GUI_LSTM_FORCASTER", "START FORCASTING"))
         self.ForC_radioButton_GetGraph.setText(_translate("GUI_LSTM_FORCASTER", "Get the graph?"))
+        self.ForC_radioButton_GetGraph.setChecked(True)
+        
         self.ForC_lbl_loadBar.setText(_translate("GUI_LSTM_FORCASTER", "Ready to forcast"))
         self.ForC_Gbox_ForcastResul.setTitle(_translate("GUI_LSTM_FORCASTER", "Forcast Result Close"))
         self.label_13.setText(_translate("GUI_LSTM_FORCASTER", "Today Close price:"))
         self.label_5.setText(_translate("GUI_LSTM_FORCASTER", "Tomorrow forcast:"))
-        self.ForC_lbl_TodayPrice.setText(_translate("GUI_LSTM_FORCASTER", "2334"))
-        self.ForC_lbl_TomorrowPrice.setText(_translate("GUI_LSTM_FORCASTER", "234"))
+        self.ForC_lbl_TodayPrice.setText(_translate("GUI_LSTM_FORCASTER", ""))
+        self.ForC_lbl_TomorrowPrice.setText(_translate("GUI_LSTM_FORCASTER", ""))
         
         self.ForC_txtLine_TailBackDays.setText(_translate("GUI_LSTM_FORCASTER", "200"))
         self.ForC_txtLine_DataPrecentage.setText(_translate("GUI_LSTM_FORCASTER", "100"))
@@ -1659,7 +1661,6 @@ class Ui_GUI_LSTM_FORCASTER(object):
         Model_To_use = self.ForC_ComBox_Model_To_used.currentText()
         Back_Days_To_Do= self.ForC_txtLine_TailBackDays.text()
         Data_Precentage= self.ForC_txtLine_DataPrecentage.text()
-        Get_The_Graph= self.ForC_radioButton_GetGraph.isChecked()# return a False or True
         
         FFTwereUsed=False #To define if FFT columns existe in Dataset, this is because first 5 rows are lost to generated them 
         
@@ -1788,18 +1789,34 @@ class Ui_GUI_LSTM_FORCASTER(object):
     def Event_ForcastingStatus(self,val):
         val_1,val_2,val_3,val_4,val_5,val_6,val_7,val_8,val_9,val_10,val_11,val_12,val_13,val_14,val_15,val_16=self.Forcaster.Get_NewForcastingData()
         TrendImage_path=self.Forcaster.Get_TrendImageForcast()
+        ToGetTheGraph=self.ForC_radioButton_GetGraph.isChecked()
         if val:
             #Saving Data
             self.CreatNewForcasting(val_1,val_2,val_3,val_4,val_5,val_6,val_7,val_8,val_9,val_10,val_11,val_12,val_13,val_14,val_15,val_16)
             ColumsDataForcasted=self.Forcaster.Get_ColumForcast()
             ColumsDataReal=self.Forcaster.Get_ColumReal()
-            plt.plot(ColumsDataForcasted,label='ColumnForcast_Close_Day',color='orange', marker='o')
-            plt.plot(ColumsDataReal,label='ColumnReal_Close_Day',color='green', marker='*')
-            try:
-                plt.savefig(TrendImage_path,pad_inches=0.1)
-            except:
-                self.Event_UpdateProgress_string_Forcasting_Process("Was not possible to save forcast image")    
-            plt.show()
+            TodayPrice_value=ColumsDataReal[len(ColumsDataReal)-1:][0]
+            TomorrowPrice_Value=ColumsDataForcasted[len(ColumsDataForcasted)-1:][0]
+            
+            self.ForC_lbl_TodayPrice.setText(str(TodayPrice_value)[:7])
+            self.ForC_lbl_TomorrowPrice.setText(str(TomorrowPrice_Value)[:7])
+            
+            if TodayPrice_value > TomorrowPrice_Value:
+                resultForcast="Down"
+            elif TodayPrice_value == TomorrowPrice_Value:
+                resultForcast="same"
+            else:
+                resultForcast="Up"
+            self.ForC_Gbox_ForcastResul.setTitle("Forcast Result Close: price:"+resultForcast)
+            
+            if ToGetTheGraph:
+                plt.plot(ColumsDataForcasted,label='ColumnForcast_Close_Day',color='orange', marker='o')
+                plt.plot(ColumsDataReal,label='ColumnReal_Close_Day',color='green', marker='*')
+                try:
+                    plt.savefig(TrendImage_path,pad_inches=0.1)
+                except:
+                    self.Event_UpdateProgress_string_Forcasting_Process("Was not possible to save forcast image")    
+                plt.show()
             
         
     def Event_UpdateProgress_ForcastingProcess(self,val):

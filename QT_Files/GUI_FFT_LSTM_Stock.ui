@@ -670,8 +670,8 @@
      <widget class="QLabel" name="MoTr_lbl_CMD_training">
       <property name="geometry">
        <rect>
-        <x>10</x>
-        <y>190</y>
+        <x>120</x>
+        <y>310</y>
         <width>161</width>
         <height>16</height>
        </rect>
@@ -837,6 +837,123 @@
       </property>
       <property name="text">
        <string>ephocs done</string>
+      </property>
+     </widget>
+     <widget class="QLineEdit" name="MoTr_txtLine_ephocs_3">
+      <property name="geometry">
+       <rect>
+        <x>70</x>
+        <y>200</y>
+        <width>81</width>
+        <height>21</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>50</string>
+      </property>
+     </widget>
+     <widget class="QLineEdit" name="MoTr_txtLine_ephocs_4">
+      <property name="geometry">
+       <rect>
+        <x>270</x>
+        <y>200</y>
+        <width>81</width>
+        <height>21</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>50</string>
+      </property>
+     </widget>
+     <widget class="QLineEdit" name="MoTr_txtLine_ephocs_5">
+      <property name="geometry">
+       <rect>
+        <x>70</x>
+        <y>250</y>
+        <width>81</width>
+        <height>21</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>50</string>
+      </property>
+     </widget>
+     <widget class="QLineEdit" name="MoTr_txtLine_ephocs_6">
+      <property name="geometry">
+       <rect>
+        <x>270</x>
+        <y>250</y>
+        <width>81</width>
+        <height>21</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>50</string>
+      </property>
+     </widget>
+     <widget class="QLabel" name="MoTr_lbl_DataSet_4">
+      <property name="geometry">
+       <rect>
+        <x>70</x>
+        <y>180</y>
+        <width>91</width>
+        <height>16</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>loss</string>
+      </property>
+     </widget>
+     <widget class="QLabel" name="MoTr_lbl_DataSet_5">
+      <property name="geometry">
+       <rect>
+        <x>270</x>
+        <y>180</y>
+        <width>131</width>
+        <height>16</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>mean squarded error</string>
+      </property>
+     </widget>
+     <widget class="QLabel" name="MoTr_lbl_DataSet_6">
+      <property name="geometry">
+       <rect>
+        <x>70</x>
+        <y>230</y>
+        <width>91</width>
+        <height>16</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>val loss</string>
+      </property>
+     </widget>
+     <widget class="QLabel" name="MoTr_lbl_DataSet_7">
+      <property name="geometry">
+       <rect>
+        <x>270</x>
+        <y>230</y>
+        <width>151</width>
+        <height>16</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>val_mean_squared_error</string>
+      </property>
+     </widget>
+     <widget class="QProgressBar" name="progressBar">
+      <property name="geometry">
+       <rect>
+        <x>120</x>
+        <y>320</y>
+        <width>411</width>
+        <height>41</height>
+       </rect>
+      </property>
+      <property name="value">
+       <number>24</number>
       </property>
      </widget>
     </widget>
