@@ -31,4 +31,4 @@ the combo box int_model reapeting data, doubuling
 
 to convert Ui to pyqt5
 
-python3 -m PyQt5.uic.pyuic -x QT_Files/GUI_FFT_LSTM_Stock.ui -o APP/GUI_FFT_LSTM_Stock.py
+python3 -m PyQt5.uic.pyuic -x QT_Files/GUI_FFT_LSTM_Stock.ui -o bbGUI_FFT_LSTM_Stock.py

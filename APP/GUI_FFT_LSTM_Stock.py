@@ -1795,8 +1795,10 @@ class Ui_GUI_LSTM_FORCASTER(object):
             self.CreatNewForcasting(val_1,val_2,val_3,val_4,val_5,val_6,val_7,val_8,val_9,val_10,val_11,val_12,val_13,val_14,val_15,val_16)
             ColumsDataForcasted=self.Forcaster.Get_ColumForcast()
             ColumsDataReal=self.Forcaster.Get_ColumReal()
-            TodayPrice_value=ColumsDataReal[len(ColumsDataReal)-1:][0]
-            TomorrowPrice_Value=ColumsDataForcasted[len(ColumsDataForcasted)-1:][0]
+            
+            TodayPrice_value=ColumsDataForcasted[len(ColumsDataReal)-2:][0]
+            TomorrowPrice_Value=ColumsDataForcasted[len(ColumsDataForcasted)-2:][1]
+
             
             self.ForC_lbl_TodayPrice.setText(str(TodayPrice_value)[:7])
             self.ForC_lbl_TomorrowPrice.setText(str(TomorrowPrice_Value)[:7])

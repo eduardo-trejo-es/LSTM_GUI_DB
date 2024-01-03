@@ -133,9 +133,6 @@ class DL_Forcast(QThread):
         ensambly=[]
 
         indexDates=df.index
-
-        print("indexDates.shape[0]")
-        print(indexDates.shape[0])
         
         locpercentage=int((indexDates.shape[0]*percentageData)/100)
         #datefiltredPercentage=indexDates[locpercentage:]
@@ -185,30 +182,11 @@ class DL_Forcast(QThread):
 
         if FFtUsedQ:
             #if fft considered:
-            print("FFtUsedQ=1")
             Allandforcast=all_df[locpercentage-backdaysConsideredToBForcasted+backdaysConsidered:locpercentage+backdaysConsidered]
-            print("locpercentage")
-            print(locpercentage)
-            print("backdaysConsideredToBForcasted")
-            print(backdaysConsideredToBForcasted)
-            print("backdaysConsidered")
-            print(backdaysConsidered)
-            print("__________________________________________")
-            print("locpercentage")
-            print(locpercentage)
-            print("backdaysConsidered")
-            print(backdaysConsidered)
         else:
             #if not FFT considerf
-            print("FFtUsedQ=0")
             Allandforcast=all_df[locpercentage-backdaysConsideredToBForcasted:locpercentage]
-        print("Allandforcast.shape")
-        print(Allandforcast.shape)
-        print(Allandforcast)
-        
-        print("fd_ColumnForcast_Close_Day.shape")
-        print(fd_ColumnForcast_Close_Day.shape)
-        print(fd_ColumnForcast_Close_Day)
+
         frames = [Allandforcast, fd_ColumnForcast_Close_Day]
 
         Final_Allandforcast = pd.concat(frames,axis=1)
