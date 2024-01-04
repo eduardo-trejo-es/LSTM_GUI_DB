@@ -100,31 +100,41 @@ class Ui_GUI_LSTM_FORCASTER(object):
         self.ForcastEval_Tab = QtWidgets.QWidget()
         self.ForcastEval_Tab.setObjectName("ForcastEval_Tab")
         self.ForcastEval_lbl_ChooseModel = QtWidgets.QLabel(self.ForcastEval_Tab)
-        self.ForcastEval_lbl_ChooseModel.setGeometry(QtCore.QRect(30, 80, 161, 20))
+        self.ForcastEval_lbl_ChooseModel.setGeometry(QtCore.QRect(30, 50, 161, 20))
         self.ForcastEval_lbl_ChooseModel.setObjectName("ForcastEval_lbl_ChooseModel")
+        
+        
+        self.ForcastEval_lbl_Rlted_DataSet = QtWidgets.QLabel(self.ForcastEval_Tab)
+        self.ForcastEval_lbl_Rlted_DataSet.setGeometry(QtCore.QRect(210, 50, 131, 20))
+        self.ForcastEval_lbl_Rlted_DataSet.setObjectName("ForcastEval_lbl_Rlted_DataSet")
+        
         self.ForcastEval_btn_EvaluateFor = QtWidgets.QPushButton(self.ForcastEval_Tab)
         self.ForcastEval_btn_EvaluateFor.setGeometry(QtCore.QRect(430, 30, 131, 71))
         self.ForcastEval_btn_EvaluateFor.setObjectName("ForcastEval_btn_EvaluateFor")
+        
         self.ForcastEval_Combox_ChooseModel = QtWidgets.QComboBox(self.ForcastEval_Tab)
-        self.ForcastEval_Combox_ChooseModel.setGeometry(QtCore.QRect(30, 100, 171, 26))
+        self.ForcastEval_Combox_ChooseModel.setGeometry(QtCore.QRect(30, 70, 171, 26))
         self.ForcastEval_Combox_ChooseModel.setObjectName("ForcastEval_Combox_ChooseModel")
+        
+        
         self.ForcastEval_txtLine_ShowShape = QtWidgets.QLineEdit(self.ForcastEval_Tab)
-        self.ForcastEval_txtLine_ShowShape.setGeometry(QtCore.QRect(230, 170, 141, 21))
+        self.ForcastEval_txtLine_ShowShape.setGeometry(QtCore.QRect(220, 130, 141, 21))
         self.ForcastEval_txtLine_ShowShape.setObjectName("ForcastEval_txtLine_ShowShape")
-        self.ForcastEval_lbl_Chooseitem = QtWidgets.QLabel(self.ForcastEval_Tab)
-        self.ForcastEval_lbl_Chooseitem.setGeometry(QtCore.QRect(30, 10, 161, 20))
-        self.ForcastEval_lbl_Chooseitem.setObjectName("ForcastEval_lbl_Chooseitem")
-        self.ForcastEval_Combox_ChooseItem = QtWidgets.QComboBox(self.ForcastEval_Tab)
-        self.ForcastEval_Combox_ChooseItem.setGeometry(QtCore.QRect(30, 30, 171, 26))
-        self.ForcastEval_Combox_ChooseItem.setObjectName("ForcastEval_Combox_ChooseItem")
+
+
+        
+        self.ForcastEval_ComBox_Rlted_DataSet = QtWidgets.QComboBox(self.ForcastEval_Tab)
+        self.ForcastEval_ComBox_Rlted_DataSet.setGeometry(QtCore.QRect(210, 70, 211, 26))
+        self.ForcastEval_ComBox_Rlted_DataSet.setObjectName("ForcastEval_ComBox_Rlted_DataSet")
+        
         self.ForcastEval_lbl_ShowShape = QtWidgets.QLabel(self.ForcastEval_Tab)
-        self.ForcastEval_lbl_ShowShape.setGeometry(QtCore.QRect(230, 150, 131, 16))
+        self.ForcastEval_lbl_ShowShape.setGeometry(QtCore.QRect(220, 110, 131, 16))
         self.ForcastEval_lbl_ShowShape.setObjectName("ForcastEval_lbl_ShowShape")
         self.ForcastEval_Combox_Chooseforcast = QtWidgets.QComboBox(self.ForcastEval_Tab)
-        self.ForcastEval_Combox_Chooseforcast.setGeometry(QtCore.QRect(30, 170, 171, 26))
+        self.ForcastEval_Combox_Chooseforcast.setGeometry(QtCore.QRect(30, 130, 171, 26))
         self.ForcastEval_Combox_Chooseforcast.setObjectName("ForcastEval_Combox_Chooseforcast")
         self.ForcastEval_lbl_ChooseForcast = QtWidgets.QLabel(self.ForcastEval_Tab)
-        self.ForcastEval_lbl_ChooseForcast.setGeometry(QtCore.QRect(30, 150, 161, 20))
+        self.ForcastEval_lbl_ChooseForcast.setGeometry(QtCore.QRect(30, 110, 161, 21))
         self.ForcastEval_lbl_ChooseForcast.setObjectName("ForcastEval_lbl_ChooseForcast")
         self.ForcastEval_btn_DeleteFor = QtWidgets.QPushButton(self.ForcastEval_Tab)
         self.ForcastEval_btn_DeleteFor.setGeometry(QtCore.QRect(430, 110, 131, 71))
@@ -266,11 +276,16 @@ class Ui_GUI_LSTM_FORCASTER(object):
         self.Model_Trainner_Tab = QtWidgets.QWidget()
         self.Model_Trainner_Tab.setObjectName("Model_Trainner_Tab")
         self.MoTr_lbl_chooseModel = QtWidgets.QLabel(self.Model_Trainner_Tab)
-        self.MoTr_lbl_chooseModel.setGeometry(QtCore.QRect(70, 30, 111, 16))
+        self.MoTr_lbl_chooseModel.setGeometry(QtCore.QRect(10, 30, 111, 16))
         self.MoTr_lbl_chooseModel.setObjectName("MoTr_lbl_chooseModel")
         self.MoTr_lbl_DataSet = QtWidgets.QLabel(self.Model_Trainner_Tab)
-        self.MoTr_lbl_DataSet.setGeometry(QtCore.QRect(70, 80, 60, 16))
+        self.MoTr_lbl_DataSet.setGeometry(QtCore.QRect(130, 30, 60, 16))
         self.MoTr_lbl_DataSet.setObjectName("MoTr_lbl_DataSet")
+        
+        self.MoTr_lbl_Relations = QtWidgets.QLabel(self.Model_Trainner_Tab)
+        self.MoTr_lbl_Relations.setGeometry(QtCore.QRect(10, 80, 60, 16))
+        self.MoTr_lbl_Relations.setObjectName("MoTr_lbl_Relations")
+        
         self.MoTr_btn_Totrain = QtWidgets.QPushButton(self.Model_Trainner_Tab)
         self.MoTr_btn_Totrain.setGeometry(QtCore.QRect(470, 30, 141, 51))
         self.MoTr_btn_Totrain.setObjectName("MoTr_btn_Totrain")
@@ -287,8 +302,13 @@ class Ui_GUI_LSTM_FORCASTER(object):
         self.MoTr_lbl_PercentDataset = QtWidgets.QLabel(self.Model_Trainner_Tab)
         self.MoTr_lbl_PercentDataset.setGeometry(QtCore.QRect(70, 130, 111, 16))
         self.MoTr_lbl_PercentDataset.setObjectName("MoTr_lbl_PercentDataset")
+        
+        self.MoTr_ComBox_Rlted_DataSet = QtWidgets.QComboBox(self.Model_Trainner_Tab)
+        self.MoTr_ComBox_Rlted_DataSet.setGeometry(QtCore.QRect(10, 100, 211, 26))
+        self.MoTr_ComBox_Rlted_DataSet.setObjectName("MoTr_ComBox_Rlted_DataSet")
+        
         self.MoTr_ComBox_ChooseModel = QtWidgets.QComboBox(self.Model_Trainner_Tab)
-        self.MoTr_ComBox_ChooseModel.setGeometry(QtCore.QRect(70, 50, 111, 26))
+        self.MoTr_ComBox_ChooseModel.setGeometry(QtCore.QRect(10, 50, 111, 26))
         self.MoTr_ComBox_ChooseModel.setObjectName("MoTr_ComBox_ChooseModel")
         
         self.MoTr_btn_Cancel_train = QtWidgets.QPushButton(self.Model_Trainner_Tab)
@@ -355,7 +375,7 @@ class Ui_GUI_LSTM_FORCASTER(object):
         self.MoTr_txtLine_val_mean_sqr_error.setEnabled(False)
         
         self.MoTr_ComBox_DataSet = QtWidgets.QComboBox(self.Model_Trainner_Tab)
-        self.MoTr_ComBox_DataSet.setGeometry(QtCore.QRect(70, 100, 111, 26))
+        self.MoTr_ComBox_DataSet.setGeometry(QtCore.QRect(130, 50, 91, 26))
         self.MoTr_ComBox_DataSet.setObjectName("MoTr_ComBox_DataSet")
         self.MoTr_ComBox_DataSet.clear()
         #for i in self.DataSet_all: #ComboBox is updated
@@ -570,7 +590,7 @@ class Ui_GUI_LSTM_FORCASTER(object):
         
         #----------- TAB Eval Forcast  -------------
         ############ General Emit Signals
-        self.ForcastEval_Combox_ChooseItem.currentIndexChanged.connect(self.item_evalForcast_ComboBoxChanged)
+
         self.ForcastEval_Combox_ChooseModel.currentIndexChanged.connect(self.model_evalFolcast_ComboBoxChanged)
         self.ForcastEval_Combox_Chooseforcast.currentIndexChanged.connect(self.Forcast_evalFolcast_ComboBoxChanged)
         ############ Thread Emit Signals
@@ -638,8 +658,10 @@ class Ui_GUI_LSTM_FORCASTER(object):
         GUI_LSTM_FORCASTER.setWindowTitle(_translate("GUI_LSTM_FORCASTER", "Stock_Forcastig_Interface"))
         
         self.ForcastEval_lbl_ChooseModel.setText(_translate("GUI_LSTM_FORCASTER", "To Choose model"))
+        self.ForcastEval_lbl_Rlted_DataSet.setText(_translate("GUI_LSTM_FORCASTER", "Related to DataSet"))
+        
+        
         self.ForcastEval_btn_EvaluateFor.setText(_translate("GUI_LSTM_FORCASTER", "Evaluate Forcast"))
-        self.ForcastEval_lbl_Chooseitem.setText(_translate("GUI_LSTM_FORCASTER", "To Choose Item"))
         self.ForcastEval_lbl_ShowShape.setText(_translate("GUI_LSTM_FORCASTER", "Shape"))
         self.ForcastEval_lbl_ChooseForcast.setText(_translate("GUI_LSTM_FORCASTER", "To Choose Forcast"))
         self.ForcastEval_btn_DeleteFor.setText(_translate("GUI_LSTM_FORCASTER", "Delete Forcast"))
@@ -678,6 +700,9 @@ class Ui_GUI_LSTM_FORCASTER(object):
         self.Tabs.setTabText(self.Tabs.indexOf(self.Forcasting_Tab), _translate("GUI_LSTM_FORCASTER", "Forcasting"))
         self.MoTr_lbl_chooseModel.setText(_translate("GUI_LSTM_FORCASTER", "To choose Model"))
         self.MoTr_lbl_DataSet.setText(_translate("GUI_LSTM_FORCASTER", "DataSet"))
+        self.MoTr_lbl_Relations.setText(_translate("GUI_LSTM_FORCASTER", "Relations"))
+        
+        
         self.MoTr_btn_Totrain.setText(_translate("GUI_LSTM_FORCASTER", "To train"))
         self.MoTr_lbl_CMD_training.setText(_translate("GUI_LSTM_FORCASTER", "CMD training process"))
         self.MoTr_txtLine_PercentDataSet.setText(_translate("GUI_LSTM_FORCASTER", "96"))
@@ -759,7 +784,6 @@ class Ui_GUI_LSTM_FORCASTER(object):
     def UpdateLocalObjects(self):
         
         #### Evaluation tab
-        self.EvalForcastTab_UpdateComboxItem()
         self.EvalForcastTab_UpdateComboxModel()
         self.EvalForcastTab_UpdateComboxForcast()
     
@@ -1003,11 +1027,11 @@ class Ui_GUI_LSTM_FORCASTER(object):
         #Validate changes to our DB 
         self.Forcaster_DB_conn.commit()
 
-    def Creare_new_model_in_DB(self,val_1,val_2,val_3,val_4,val_5,val_6):
+    def Creare_new_model_in_DB(self,val_1,val_2,val_3,val_4,val_5):
         
-        query=""" INSERT INTO Models (date_Time,Path_Model, N_epochs_Done,Seed_Model_id_FRGN,DataSet_id_FRGN,Colm_T_Predict)
-         VALUES (?,?,?,?,?,?)"""
-        self.Forcaster_DB_c.execute(query,(val_1,val_2,val_3,val_4,val_5,val_6)) 
+        query=""" INSERT INTO Models (date_Time,Path_Model, N_epochs_Done,Seed_Model_id_FRGN,Colm_T_Predict)
+         VALUES (?,?,?,?,?)"""
+        self.Forcaster_DB_c.execute(query,(val_1,val_2,val_3,val_4,val_5)) 
         
         #Validate changes to our DB 
         self.Forcaster_DB_conn.commit()
@@ -1015,12 +1039,12 @@ class Ui_GUI_LSTM_FORCASTER(object):
     ##### Emit thread signals
     
     def Event_ModelCreationStatus(self,val):
-        date_Time,Path_Model,N_epochs_Done,Seed_Model_id_FRGN,DataSet_id_FRGN,Forcasting_Result_id_FRGN,Colm_T_Predict=self.model_creator.Get_NewModelData()
+        date_Time,Path_Model,N_epochs_Done,Seed_Model_id_FRGN,Colm_T_Predict=self.model_creator.Get_NewModelData()
         NewModelStatus=self.model_creator.GetModelCreationStatus()
         print(NewModelStatus)
 
         if val:
-            self.Creare_new_model_in_DB(date_Time,Path_Model,N_epochs_Done,Seed_Model_id_FRGN,DataSet_id_FRGN,Colm_T_Predict)
+            self.Creare_new_model_in_DB(date_Time,Path_Model,N_epochs_Done,Seed_Model_id_FRGN,Colm_T_Predict)
             print("Model Created :'D")
             modelJustCreated=self.model_creator.Get_Last_model_Create()+1
             self.AddinElementComoBoxModelData(modelJustCreated)
@@ -1431,8 +1455,8 @@ class Ui_GUI_LSTM_FORCASTER(object):
         Model_Selected_Row=self.Forcaster_DB_c.fetchall()[0]
         
         ModelPath=Model_Selected_Row[2]
-        DataSetMarried=int(Model_Selected_Row[5])
-        ColmTPredictMarried=int(Model_Selected_Row[6])
+        ###### DataSetMarried=int(Model_Selected_Row[5])
+        ColmTPredictMarried=int(Model_Selected_Row[5])
         
         Columns_Index=self.Mapping_DataSetColums(DataSet_Id,Colum_To_Predict,True)
         
@@ -1622,10 +1646,10 @@ class Ui_GUI_LSTM_FORCASTER(object):
         
             ephocs_done=str(Model_Selected_Row[3])
             try:
-                loss=float(Model_Selected_Row[7])
-                mean_squared_error=float(Model_Selected_Row[8])
-                val_loss=float(Model_Selected_Row[9])
-                val_mean_squared_error=float(Model_Selected_Row[10])
+                loss=float(Model_Selected_Row[6])
+                mean_squared_error=float(Model_Selected_Row[7])
+                val_loss=float(Model_Selected_Row[8])
+                val_mean_squared_error=float(Model_Selected_Row[9])
             except:
                 loss=0
                 mean_squared_error=0
@@ -1778,9 +1802,9 @@ class Ui_GUI_LSTM_FORCASTER(object):
         Model_Selected_Row=self.Forcaster_DB_c.fetchall()[0]
         
         epochs_done=int(Model_Selected_Row[3])
-        DataSet_Married_to=int(Model_Selected_Row[5])
+        #DataSet_Married_to=int(Model_Selected_Row[5])
         
-        if (epochs_done>0) and (DataSet_Married_to>0):
+        if (epochs_done>0):
             self.ForC_btn_StartForcasting.setEnabled(True)
         else:
             self.ForC_btn_StartForcasting.setEnabled(False) 
@@ -1834,7 +1858,6 @@ class Ui_GUI_LSTM_FORCASTER(object):
     
     ############### Bottons functions  ################
     def Start_Evaluation(self):
-        item=self.ForcastEval_Combox_ChooseItem.currentText()
         model=self.ForcastEval_Combox_ChooseModel.currentText()
         Current_Forcast=self.ForcastEval_Combox_Chooseforcast.currentText()
         
@@ -1855,22 +1878,16 @@ class Ui_GUI_LSTM_FORCASTER(object):
         print("Function to delete forcast")
     
     ############ General Fucntions  ###########
-    def EvalForcastTab_UpdateComboxItem(self):
-        self.GetMadeUpItemTable()
-        for i in self.Items_DISTINCT_Item: #ComboBox is updated
-            Current_Row=i[0]
-            index= self.ForcastEval_Combox_ChooseItem.findText(str(Current_Row),QtCore.Qt.MatchFixedString)
-            if index==-1:
-                self.ForcastEval_Combox_ChooseItem.addItem(str(Current_Row))
     
     def EvalForcastTab_UpdateComboxModel(self):
-        Current_Item=self.ForcastEval_Combox_ChooseItem.currentText()
-        self.GetMadeUpModelTableCnsdItem(Current_Item) #Table that contain model linked to item x
-        for i in self.ModelsJointItem_SLCT_all: #ComboBox is updated
+        pass
+        #Current_Item=self.ForcastEval_Combox_ChooseItem.currentText()
+        #self.GetMadeUpModelTableCnsdItem(Current_Item) #Table that contain model linked to item x
+        """for i in self.ModelsJointItem_SLCT_all: #ComboBox is updated
             Current_Row=i[0]
             index= self.ForcastEval_Combox_ChooseModel.findText(str(Current_Row),QtCore.Qt.MatchFixedString)
             if index==-1:
-                self.ForcastEval_Combox_ChooseModel.addItem(str(Current_Row))
+                self.ForcastEval_Combox_ChooseModel.addItem(str(Current_Row))"""
     
     def EvalForcastTab_UpdateComboxForcast(self):
         Current_Model=self.ForcastEval_Combox_ChooseModel.currentText()

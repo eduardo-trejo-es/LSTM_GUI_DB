@@ -19,20 +19,18 @@ c = conn.cursor()
 #eliminar la tabla original
 #renombrar la nueva tabla
 
-c.execute("""DROP TABLE t1_backup""")
+#c.execute("""DROP TABLE t1_backup""")
 
 c.execute("""CREATE TABLE t1_backup(Model_id INTEGER PRIMARY KEY AUTOINCREMENT,
             date_Time TEXT,
             Path_Model TEXT,
             N_epochs_Done INTEGER,
             Seed_Model_id_FRGN INTEGER,
-            DataSet_id_FRGN INTEGER,
             Colm_T_Predict INTEGER,
             loss REAL,
             mean_squared_error REAL,
             val_loss REAL,
             val_mean_squared_error REAL,
-            FOREIGN KEY(DataSet_id_FRGN) REFERENCES DataSet(DataSet_id),
             FOREIGN KEY(Seed_Model_id_FRGN) REFERENCES Seed_Model(Seed_Model_id))""")
 
 c.execute("""INSERT INTO t1_backup
@@ -43,7 +41,6 @@ c.execute("""INSERT INTO t1_backup
             Path_Model,
             N_epochs_Done,
             Seed_Model_id_FRGN,
-            DataSet_id_FRGN,
             Colm_T_Predict,
             loss,
             mean_squared_error,
@@ -61,13 +58,11 @@ c.execute("""CREATE TABLE Models(Model_id INTEGER PRIMARY KEY AUTOINCREMENT,
             Path_Model TEXT,
             N_epochs_Done INTEGER,
             Seed_Model_id_FRGN INTEGER,
-            DataSet_id_FRGN INTEGER,
             Colm_T_Predict INTEGER,
             loss REAL,
             mean_squared_error REAL,
             val_loss REAL,
             val_mean_squared_error REAL,
-            FOREIGN KEY(DataSet_id_FRGN) REFERENCES DataSet(DataSet_id),
             FOREIGN KEY(Seed_Model_id_FRGN) REFERENCES Seed_Model(Seed_Model_id))""")
 
 c.execute("""INSERT INTO Models SELECT
@@ -77,7 +72,6 @@ c.execute("""INSERT INTO Models SELECT
         Path_Model,
         N_epochs_Done,
         Seed_Model_id_FRGN,
-        DataSet_id_FRGN,
         Colm_T_Predict,
         loss,
         mean_squared_error,

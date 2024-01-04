@@ -30,7 +30,7 @@
      <enum>QTabWidget::North</enum>
     </property>
     <property name="currentIndex">
-     <number>1</number>
+     <number>2</number>
     </property>
     <property name="movable">
      <bool>false</bool>
@@ -631,7 +631,7 @@
      <widget class="QLabel" name="MoTr_lbl_chooseModel">
       <property name="geometry">
        <rect>
-        <x>70</x>
+        <x>10</x>
         <y>30</y>
         <width>111</width>
         <height>16</height>
@@ -644,8 +644,8 @@
      <widget class="QLabel" name="MoTr_lbl_DataSet">
       <property name="geometry">
        <rect>
-        <x>70</x>
-        <y>80</y>
+        <x>130</x>
+        <y>30</y>
         <width>60</width>
         <height>16</height>
        </rect>
@@ -709,7 +709,7 @@
      <widget class="QComboBox" name="MoTr_ComBox_ChooseModel">
       <property name="geometry">
        <rect>
-        <x>70</x>
+        <x>10</x>
         <y>50</y>
         <width>111</width>
         <height>26</height>
@@ -806,9 +806,9 @@
      <widget class="QComboBox" name="MoTr_ComBox_DataSet">
       <property name="geometry">
        <rect>
-        <x>70</x>
-        <y>100</y>
-        <width>111</width>
+        <x>130</x>
+        <y>50</y>
+        <width>91</width>
         <height>26</height>
        </rect>
       </property>
@@ -954,6 +954,29 @@
       </property>
       <property name="value">
        <number>24</number>
+      </property>
+     </widget>
+     <widget class="QComboBox" name="MoTr_ComBox_DataSet_2">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>100</y>
+        <width>211</width>
+        <height>26</height>
+       </rect>
+      </property>
+     </widget>
+     <widget class="QLabel" name="MoTr_lbl_DataSet_8">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>80</y>
+        <width>60</width>
+        <height>16</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Relations</string>
       </property>
      </widget>
     </widget>

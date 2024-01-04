@@ -53,7 +53,7 @@ class DL_Model(QThread):
         
         
     def Get_NewModelData(self):
-        return self.date_Time,self.Path_Model,self.N_epochs_Done,self.Seed_Data_id_FRGN,self.DataSet_id_FRGN,self.Forcasting_Result_id_FRGN,self.Colm_T_Predict
+        return self.date_Time,self.Path_Model,self.N_epochs_Done,self.Seed_Data_id_FRGN,self.Colm_T_Predict
     
     def GetModelCreationStatus(self):
         return self.ModelCreationStatus
