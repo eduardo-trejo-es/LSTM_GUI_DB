@@ -30,7 +30,7 @@
      <enum>QTabWidget::North</enum>
     </property>
     <property name="currentIndex">
-     <number>2</number>
+     <number>1</number>
     </property>
     <property name="movable">
      <bool>false</bool>
@@ -448,7 +448,7 @@
       <property name="geometry">
        <rect>
         <x>50</x>
-        <y>90</y>
+        <y>110</y>
         <width>121</width>
         <height>16</height>
        </rect>
@@ -590,8 +590,8 @@
      <widget class="QComboBox" name="ForC_ComBox_Model_To_used">
       <property name="geometry">
        <rect>
-        <x>50</x>
-        <y>53</y>
+        <x>40</x>
+        <y>30</y>
         <width>221</width>
         <height>26</height>
        </rect>
@@ -601,7 +601,7 @@
       <property name="geometry">
        <rect>
         <x>50</x>
-        <y>33</y>
+        <y>10</y>
         <width>91</width>
         <height>16</height>
        </rect>
@@ -614,13 +614,36 @@
       <property name="geometry">
        <rect>
         <x>50</x>
-        <y>110</y>
+        <y>130</y>
         <width>113</width>
         <height>21</height>
        </rect>
       </property>
       <property name="text">
        <string>100</string>
+      </property>
+     </widget>
+     <widget class="QComboBox" name="ForC_ComBox_DataSet_To_use">
+      <property name="geometry">
+       <rect>
+        <x>40</x>
+        <y>80</y>
+        <width>221</width>
+        <height>26</height>
+       </rect>
+      </property>
+     </widget>
+     <widget class="QLabel" name="ForC_lbl_DataSet_To_used">
+      <property name="geometry">
+       <rect>
+        <x>50</x>
+        <y>60</y>
+        <width>121</width>
+        <height>16</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>DataSet to use</string>
       </property>
      </widget>
     </widget>
@@ -956,7 +979,7 @@
        <number>24</number>
       </property>
      </widget>
-     <widget class="QComboBox" name="MoTr_ComBox_DataSet_2">
+     <widget class="QComboBox" name="MoTr_ComBox_Rlted_DataSet">
       <property name="geometry">
        <rect>
         <x>10</x>

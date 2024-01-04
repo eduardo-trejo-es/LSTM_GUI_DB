@@ -16,19 +16,20 @@ c = conn.cursor()
 #c.execute("""ALTER TABLE 'Models' ADD val_mean_squared_error REAL""")
           
           
-c.execute("""DROP TABLE Relation_Model_Datasets""")
+#c.execute("""DROP TABLE Relation_Model_Datasets""")
 
-c.execute("""
-        CREATE TABLE Relation_Model_Datasets(
-            Rltion_ModelDataSet_id INTEGER PRIMARY KEY AUTOINCREMENT,
-            Model_id_FRGN INTEGER,
-            DataSet_id_FRGN INTEGER,
-            FOREIGN KEY(Model_id_FRGN) REFERENCES Models(Model_id),
-            FOREIGN KEY(DataSet_id_FRGN) REFERENCES DataSet(DataSet_id)
-        )
-        """)
+#c.execute("""
+#        CREATE TABLE Relation_Model_Datasets(
+#            Rltion_ModelDataSet_id INTEGER PRIMARY KEY AUTOINCREMENT,
+#            Model_id_FRGN INTEGER,
+#            DataSet_id_FRGN INTEGER,
+#            FOREIGN KEY(Model_id_FRGN) REFERENCES Models(Model_id),
+#            FOREIGN KEY(DataSet_id_FRGN) REFERENCES DataSet(DataSet_id)
+#        )
+#        """)
 
 
+c.execute("""INSERT INTO Relation_Model_Datasets (Model_id_FRGN,DataSet_id_FRGN) VALUES(35,2) """)
 
 conn.commit()
           

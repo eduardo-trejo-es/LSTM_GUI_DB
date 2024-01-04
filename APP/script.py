@@ -1,6 +1,8 @@
-from engineering_notation import EngNumber
+import pandas as pd
+df = pd.DataFrame([("a",),("b",)])
 
-a=0.0005660226452164352
-a_sci='%.2E'% a
-print(a_sci)
+print(df.shape)
 
+for i in df[0]:
+    print(i)
+    

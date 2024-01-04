@@ -83,6 +83,7 @@ class Ui_GUI_LSTM_FORCASTER(object):
         self.GetDataSetTable()
         
         
+        
     
     def setupUi(self, GUI_LSTM_FORCASTER):
         GUI_LSTM_FORCASTER.setObjectName("GUI_LSTM_FORCASTER")
@@ -220,19 +221,27 @@ class Ui_GUI_LSTM_FORCASTER(object):
         self.ForC_Loadbar_Forcast.setObjectName("ForC_Loadbar_Forcast")
        
         self.ForC_lbl_Model_To_used = QtWidgets.QLabel(self.Forcasting_Tab)
-        self.ForC_lbl_Model_To_used.setGeometry(QtCore.QRect(50, 33, 60, 16))
+        self.ForC_lbl_Model_To_used.setGeometry(QtCore.QRect(50, 10, 60, 16))
         self.ForC_lbl_Model_To_used.setObjectName("ForC_lbl_DateFrom")
         
         self.ForC_ComBox_Model_To_used = QtWidgets.QComboBox(self.Forcasting_Tab)
-        self.ForC_ComBox_Model_To_used.setGeometry(QtCore.QRect(50, 53, 221, 26))
+        self.ForC_ComBox_Model_To_used.setGeometry(QtCore.QRect(40, 30, 221, 26))
         self.ForC_ComBox_Model_To_used.setObjectName("ForC_ComBox_DateFrom")
         
+        self.ForC_lbl_DataSet_To_used = QtWidgets.QLabel(self.Forcasting_Tab)
+        self.ForC_lbl_DataSet_To_used.setGeometry(QtCore.QRect(50, 60, 121, 16))
+        self.ForC_lbl_DataSet_To_used.setObjectName("ForC_lbl_DateFrom")
+        
+        self.ForC_ComBox_DataSet_To_use = QtWidgets.QComboBox(self.Forcasting_Tab)
+        self.ForC_ComBox_DataSet_To_use.setGeometry(QtCore.QRect(40, 80, 221, 26))
+        self.ForC_ComBox_DataSet_To_use.setObjectName("ForC_ComBox_DataSet_To_use")
+        
         self.ForC_lbl_DataPrecentage = QtWidgets.QLabel(self.Forcasting_Tab)
-        self.ForC_lbl_DataPrecentage.setGeometry(QtCore.QRect(50, 90, 121, 16))
+        self.ForC_lbl_DataPrecentage.setGeometry(QtCore.QRect(50, 110, 121, 16))
         self.ForC_lbl_DataPrecentage.setObjectName("ForC_lbl_DataPrecentage")
         
         self.ForC_txtLine_DataPrecentage = QtWidgets.QLineEdit(self.Forcasting_Tab)
-        self.ForC_txtLine_DataPrecentage.setGeometry(QtCore.QRect(50, 110, 113, 21))
+        self.ForC_txtLine_DataPrecentage.setGeometry(QtCore.QRect(50, 130, 113, 21))
         self.ForC_txtLine_DataPrecentage.setObjectName("ForC_txtLine_DataPrecentage")
         
         
@@ -679,6 +688,8 @@ class Ui_GUI_LSTM_FORCASTER(object):
         self.Tabs.setTabText(self.Tabs.indexOf(self.ForcastEval_Tab), _translate("GUI_LSTM_FORCASTER", "Forcast evaluate"))
         
         self.ForC_lbl_Model_To_used.setText(_translate("GUI_LSTM_FORCASTER", "Model To use"))
+        self.ForC_lbl_DataSet_To_used.setText(_translate("GUI_LSTM_FORCASTER", "DataSet to use"))
+        
         self.ForC_lbl_DataPrecentage.setText(_translate("GUI_LSTM_FORCASTER", "Data precentage %"))
         
         self.ForC_btn_StartForcasting.setText(_translate("GUI_LSTM_FORCASTER", "START FORCASTING"))
@@ -782,6 +793,7 @@ class Ui_GUI_LSTM_FORCASTER(object):
     #              Global Functions           #
     ###########################################
     def UpdateLocalObjects(self):
+        print("INIT called")
         
         #### Evaluation tab
         self.EvalForcastTab_UpdateComboxModel()
@@ -789,10 +801,12 @@ class Ui_GUI_LSTM_FORCASTER(object):
     
         #### Forcasting tab
         self.ForcastingTab_UpdateComboxModel_ID()
+        self.ForcastingTab_UpdateComboxRelationModelDataset_Id()
         
         #### Tranning tab
         self.TrainningTab_UpdateComboxModel_ID()
         self.TrainningTab_UpdateComboxDataSet_ID()
+        self.TrainningTab_UpdateComboxRelationModelDataSet_ID()
         
         #### Data Mananer Tab
         self.DataManagerTab_UpdateComboxDataSet_ID()
@@ -851,6 +865,15 @@ class Ui_GUI_LSTM_FORCASTER(object):
         query="SELECT * FROM Seed_DataSet"
         self.Forcaster_DB_c.execute(query)
         self.SeedDataSet_all=self.Forcaster_DB_c.fetchall()
+    
+    def GetRelationModelDatasetTable(self,model_id):
+        ##Getting the table relation model DataSet
+        query="SELECT DataSet_id_FRGN FROM Relation_Model_Datasets WHERE Model_id_FRGN=?"
+        self.Forcaster_DB_c.execute(query,(model_id,))
+        Relation_Model_DataSet_Selected_Row=self.Forcaster_DB_c.fetchall()
+        
+        self.Relation_Model_DataSet_Selected_Row = pd.DataFrame(Relation_Model_DataSet_Selected_Row)
+        
         
     
     
@@ -1445,7 +1468,7 @@ class Ui_GUI_LSTM_FORCASTER(object):
         #Getting data form GUI
         self.Current_Trainning_Id_modelSelect=self.MoTr_ComBox_ChooseModel.currentText()
         Colum_To_Predict=self.MoTr_ComBox_Column_T_Predict.currentText()
-        DataSet_Id=self.MoTr_ComBox_DataSet.currentText()
+        self.Current_Trainning_DataSet_Id=self.MoTr_ComBox_DataSet.currentText()
         N_Epohc=self.MoTr_txtLine_ephocs.text()
         N_PercentData=self.MoTr_txtLine_PercentDataSet.text()        
         
@@ -1458,24 +1481,23 @@ class Ui_GUI_LSTM_FORCASTER(object):
         ###### DataSetMarried=int(Model_Selected_Row[5])
         ColmTPredictMarried=int(Model_Selected_Row[5])
         
-        Columns_Index=self.Mapping_DataSetColums(DataSet_Id,Colum_To_Predict,True)
+        Columns_Index=self.Mapping_DataSetColums(self.Current_Trainning_DataSet_Id,Colum_To_Predict,True)
         
-        print("this is de colums Index to predict")
-        print(Columns_Index)
         
         #Missing to do a mapping DataSetMarried and COlumns to predrict
         
-        #in case not dataset and column married to model 
-        if DataSetMarried==0 and ColmTPredictMarried==0:
-            query="UPDATE Models SET DataSet_id_FRGN = ?,Colm_T_Predict=? WHERE Model_id=?"
-            self.Forcaster_DB_c.execute(query,(DataSet_Id,Columns_Index,self.Current_Trainning_Id_modelSelect))
+        #in case column married to model 
+        if ColmTPredictMarried==0:
+            query="UPDATE Models SET Colm_T_Predict=? WHERE Model_id=?"
+            self.Forcaster_DB_c.execute(query,(Columns_Index,self.Current_Trainning_Id_modelSelect))
             self.Forcaster_DB_conn.commit()
         else:
-            print("This model is already married to a Dataset and a Column ")
+            print("This model is already married to a Column ")
+        
             
         ## Getting the DB row DataSet 
         query="SELECT * FROM DataSet WHERE DataSet_id=?"
-        self.Forcaster_DB_c.execute(query,(DataSet_Id,))
+        self.Forcaster_DB_c.execute(query,(self.Current_Trainning_DataSet_Id,))
         DataSet_Selected_Row=self.Forcaster_DB_c.fetchall()[0]
         
         dataSetPath=DataSet_Selected_Row[2]
@@ -1512,6 +1534,21 @@ class Ui_GUI_LSTM_FORCASTER(object):
                 self.MoTr_ComBox_ChooseModel.addItem(str(Current_Row))
             
             
+    def  TrainningTab_UpdateComboxRelationModelDataSet_ID(self):
+        self.MoTr_ComBox_Rlted_DataSet.clear()
+        print("TrainningTab_UpdateComboxRelationModelDataSet_ID called")
+        Model_Id=self.MoTr_ComBox_ChooseModel.currentText()
+        self.GetRelationModelDatasetTable(Model_Id)
+        relationList=self.Relation_Model_DataSet_Selected_Row.values
+
+        for i in relationList: #ComboBox is updated
+            print(i)
+            Current_Row=i[0]
+            print(Current_Row)
+            index= self.MoTr_ComBox_Rlted_DataSet.findText(str(Current_Row),QtCore.Qt.MatchFixedString)
+            if index==-1:
+                self.MoTr_ComBox_Rlted_DataSet.addItem(str(Current_Row))
+                
     def TrainningTab_UpdateComboxDataSet_ID(self):
         #self.MoTr_ComBox_DataSet.clear()
         self.GetDataSetTable()
@@ -1564,10 +1601,10 @@ class Ui_GUI_LSTM_FORCASTER(object):
         query="SELECT * FROM Models WHERE Model_id=?"
         self.Forcaster_DB_c.execute(query,(Id_modelSelect,))
         Model_Selected_Row=self.Forcaster_DB_c.fetchall()[0]
-        
+
         ephocs_done=str(Model_Selected_Row[3])
-        #DataSetMarried=int(Model_Selected_Row[5])
         ColmTPredictMarried=int(Model_Selected_Row[5])
+
         try:
             loss=float(Model_Selected_Row[6])
             mean_squared_error=float(Model_Selected_Row[7])
@@ -1585,20 +1622,16 @@ class Ui_GUI_LSTM_FORCASTER(object):
         self.MoTr_txtLine_mean_sqr_error.setText('%.2E'%mean_squared_error)
         self.MoTr_txtLine_val_loss.setText('%.2E'%val_loss)
         self.MoTr_txtLine_val_mean_sqr_error.setText('%.2E'%val_mean_squared_error)
-
-        
-        if DataSetMarried>0:
-            ### if has already a DataSet married to, let's bring it on
-            index= self.MoTr_ComBox_DataSet.findText(str(DataSetMarried),QtCore.Qt.MatchFixedString)
-            self.MoTr_ComBox_DataSet.setCurrentIndex(index)
             
             
         if ColmTPredictMarried>0:
             ### if has already a Colum to predict married to, let's bring it on
-            Column_Name=self.Mapping_DataSetColums(DataSetMarried,ColmTPredictMarried,False)
+            Column_Name=self.Mapping_DataSetColums(DataSet_Id,ColmTPredictMarried,False)
             print(Column_Name)
             index= self.MoTr_ComBox_Column_T_Predict.findText(str(Column_Name),QtCore.Qt.MatchFixedString)
             self.MoTr_ComBox_Column_T_Predict.setCurrentIndex(index)
+        
+        self.TrainningTab_UpdateComboxRelationModelDataSet_ID()
         
     
     ##### Emit thread signals
@@ -1638,6 +1671,26 @@ class Ui_GUI_LSTM_FORCASTER(object):
             print(mean_squared_error)
             self.Forcaster_DB_c.execute(query,(Total_Epochs_done,last_loss,mean_squared_error,val_loss,val_mean_squared_error,Id_modelSelect))
             self.Forcaster_DB_conn.commit()
+            
+            #Check if relation is created or created in db Model and dataset
+       
+            ##Getting the DB row model
+            self.GetRelationModelDatasetTable(self.Current_Trainning_Id_modelSelect)
+            relationList=self.Relation_Model_DataSet_Selected_Row.values
+                    
+            for i in relationList:
+                if i[0]==self.Current_Trainning_DataSet_Id:
+                    RelationModelDataset=1
+                else:
+                    RelationModelDataset=0
+
+            #in case Relation model and data set not created
+                    if RelationModelDataset==0:
+                        query="INSERT INTO Relation_Model_Datasets (Model_id_FRGN, DataSet_id_FRGN) VALUES (?,?)"
+                        self.Forcaster_DB_c.execute(query,(self.Current_Trainning_Id_modelSelect,self.Current_Trainning_DataSet_Id))
+                        self.Forcaster_DB_conn.commit()
+                    else:
+                        print("This model data relationship already exist ")
             
             ## Getting the DB row model 
             query="SELECT * FROM Models WHERE Model_id=?"
@@ -1780,6 +1833,21 @@ class Ui_GUI_LSTM_FORCASTER(object):
             if index==-1:
                 self.ForC_ComBox_Model_To_used.addItem(str(Current_Row))
     
+    def ForcastingTab_UpdateComboxRelationModelDataset_Id(self):
+        self.ForC_ComBox_DataSet_To_use.clear()
+        print("TrainningTab_UpdateComboxRelationModelDataSet_ID called")
+        Model_Id=self.ForC_ComBox_Model_To_used.currentText()
+        self.GetRelationModelDatasetTable(Model_Id)
+        relationList=self.Relation_Model_DataSet_Selected_Row.values
+
+        for i in relationList: #ComboBox is updated
+            print(i)
+            Current_Row=i[0]
+            print(Current_Row)
+            index= self.ForC_ComBox_DataSet_To_use.findText(str(Current_Row),QtCore.Qt.MatchFixedString)
+            if index==-1:
+                self.ForC_ComBox_DataSet_To_use.addItem(str(Current_Row))
+    
     
     def CreatNewForcasting(self,val_1,val_2,val_3,val_4,val_5,val_6,val_7,val_8,val_9,val_10,val_11,val_12,val_13,val_14,val_15,val_16):
 
@@ -1803,6 +1871,7 @@ class Ui_GUI_LSTM_FORCASTER(object):
         
         epochs_done=int(Model_Selected_Row[3])
         #DataSet_Married_to=int(Model_Selected_Row[5])
+        self.ForcastingTab_UpdateComboxRelationModelDataset_Id()
         
         if (epochs_done>0):
             self.ForC_btn_StartForcasting.setEnabled(True)
