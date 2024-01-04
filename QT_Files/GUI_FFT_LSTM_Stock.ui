@@ -30,7 +30,7 @@
      <enum>QTabWidget::North</enum>
     </property>
     <property name="currentIndex">
-     <number>1</number>
+     <number>0</number>
     </property>
     <property name="movable">
      <bool>false</bool>
@@ -46,7 +46,7 @@
       <property name="geometry">
        <rect>
         <x>30</x>
-        <y>80</y>
+        <y>50</y>
         <width>161</width>
         <height>20</height>
        </rect>
@@ -72,7 +72,7 @@
       <property name="geometry">
        <rect>
         <x>30</x>
-        <y>100</y>
+        <y>70</y>
         <width>171</width>
         <height>26</height>
        </rect>
@@ -81,41 +81,18 @@
      <widget class="QLineEdit" name="ForcastEval_txtLine_ShowShape">
       <property name="geometry">
        <rect>
-        <x>230</x>
-        <y>170</y>
+        <x>220</x>
+        <y>130</y>
         <width>141</width>
         <height>21</height>
-       </rect>
-      </property>
-     </widget>
-     <widget class="QLabel" name="ForcastEval_lbl_Chooseitem">
-      <property name="geometry">
-       <rect>
-        <x>30</x>
-        <y>10</y>
-        <width>161</width>
-        <height>20</height>
-       </rect>
-      </property>
-      <property name="text">
-       <string>To Choose Item</string>
-      </property>
-     </widget>
-     <widget class="QComboBox" name="ForcastEval_Combox_ChooseItem">
-      <property name="geometry">
-       <rect>
-        <x>30</x>
-        <y>30</y>
-        <width>171</width>
-        <height>26</height>
        </rect>
       </property>
      </widget>
      <widget class="QLabel" name="ForcastEval_lbl_ShowShape">
       <property name="geometry">
        <rect>
-        <x>230</x>
-        <y>150</y>
+        <x>220</x>
+        <y>110</y>
         <width>131</width>
         <height>16</height>
        </rect>
@@ -128,7 +105,7 @@
       <property name="geometry">
        <rect>
         <x>30</x>
-        <y>170</y>
+        <y>130</y>
         <width>171</width>
         <height>26</height>
        </rect>
@@ -138,9 +115,9 @@
       <property name="geometry">
        <rect>
         <x>30</x>
-        <y>150</y>
+        <y>110</y>
         <width>161</width>
-        <height>20</height>
+        <height>21</height>
        </rect>
       </property>
       <property name="text">
@@ -426,6 +403,29 @@
        <string>Total magnitud mvmt</string>
       </property>
      </widget>
+     <widget class="QComboBox" name="ForcastEval_ComBox_Rlted_DataSet">
+      <property name="geometry">
+       <rect>
+        <x>210</x>
+        <y>70</y>
+        <width>211</width>
+        <height>26</height>
+       </rect>
+      </property>
+     </widget>
+     <widget class="QLabel" name="ForcastEval_lbl_Rlted_DataSet">
+      <property name="geometry">
+       <rect>
+        <x>210</x>
+        <y>50</y>
+        <width>131</width>
+        <height>16</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Related to DataSet</string>
+      </property>
+     </widget>
     </widget>
     <widget class="QWidget" name="Forcasting_Tab">
      <attribute name="title">
@@ -631,7 +631,7 @@
      <widget class="QLabel" name="MoTr_lbl_chooseModel">
       <property name="geometry">
        <rect>
-        <x>70</x>
+        <x>10</x>
         <y>30</y>
         <width>111</width>
         <height>16</height>
@@ -644,8 +644,8 @@
      <widget class="QLabel" name="MoTr_lbl_DataSet">
       <property name="geometry">
        <rect>
-        <x>70</x>
-        <y>80</y>
+        <x>130</x>
+        <y>30</y>
         <width>60</width>
         <height>16</height>
        </rect>
@@ -709,7 +709,7 @@
      <widget class="QComboBox" name="MoTr_ComBox_ChooseModel">
       <property name="geometry">
        <rect>
-        <x>70</x>
+        <x>10</x>
         <y>50</y>
         <width>111</width>
         <height>26</height>
@@ -806,9 +806,9 @@
      <widget class="QComboBox" name="MoTr_ComBox_DataSet">
       <property name="geometry">
        <rect>
-        <x>70</x>
-        <y>100</y>
-        <width>111</width>
+        <x>130</x>
+        <y>50</y>
+        <width>91</width>
         <height>26</height>
        </rect>
       </property>
@@ -954,6 +954,29 @@
       </property>
       <property name="value">
        <number>24</number>
+      </property>
+     </widget>
+     <widget class="QComboBox" name="MoTr_ComBox_Rlted_DataSet">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>100</y>
+        <width>211</width>
+        <height>26</height>
+       </rect>
+      </property>
+     </widget>
+     <widget class="QLabel" name="MoTr_lbl_Rlted_DataSet">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>80</y>
+        <width>60</width>
+        <height>16</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Relations</string>
       </property>
      </widget>
     </widget>
