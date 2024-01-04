@@ -1738,6 +1738,7 @@ class Ui_GUI_LSTM_FORCASTER(object):
         Model_To_use = self.ForC_ComBox_Model_To_used.currentText()
         Back_Days_To_Do= self.ForC_txtLine_TailBackDays.text()
         Data_Precentage= self.ForC_txtLine_DataPrecentage.text()
+        DataSet_Id=self.ForC_ComBox_DataSet_To_use.currentText()
         
         FFTwereUsed=False #To define if FFT columns existe in Dataset, this is because first 5 rows are lost to generated them 
         
@@ -1747,9 +1748,7 @@ class Ui_GUI_LSTM_FORCASTER(object):
         Model_Selected_Row=self.Forcaster_DB_c.fetchall()[0]
         
         Path_DataSet=Model_Selected_Row[2]
-        DataSet_Id=int(Model_Selected_Row[5])
-        ColumToForcast=int(Model_Selected_Row[6])
-
+        ColumToForcast=int(Model_Selected_Row[5])
         
         #Getting the DataSet Table
         query="SELECT * FROM DataSet WHERE DataSet_id=?"
