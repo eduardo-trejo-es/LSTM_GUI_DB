@@ -1566,13 +1566,13 @@ class Ui_GUI_LSTM_FORCASTER(object):
         Model_Selected_Row=self.Forcaster_DB_c.fetchall()[0]
         
         ephocs_done=str(Model_Selected_Row[3])
-        DataSetMarried=int(Model_Selected_Row[5])
-        ColmTPredictMarried=int(Model_Selected_Row[6])
+        #DataSetMarried=int(Model_Selected_Row[5])
+        ColmTPredictMarried=int(Model_Selected_Row[5])
         try:
-            loss=float(Model_Selected_Row[7])
-            mean_squared_error=float(Model_Selected_Row[8])
-            val_loss=float(Model_Selected_Row[9])
-            val_mean_squared_error=float(Model_Selected_Row[10])
+            loss=float(Model_Selected_Row[6])
+            mean_squared_error=float(Model_Selected_Row[7])
+            val_loss=float(Model_Selected_Row[8])
+            val_mean_squared_error=float(Model_Selected_Row[9])
         except:
             loss=0
             mean_squared_error=0
