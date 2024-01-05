@@ -30,7 +30,7 @@
      <enum>QTabWidget::North</enum>
     </property>
     <property name="currentIndex">
-     <number>1</number>
+     <number>0</number>
     </property>
     <property name="movable">
      <bool>false</bool>
@@ -85,29 +85,6 @@
         <y>170</y>
         <width>141</width>
         <height>21</height>
-       </rect>
-      </property>
-     </widget>
-     <widget class="QLabel" name="ForcastEval_lbl_Chooseitem">
-      <property name="geometry">
-       <rect>
-        <x>30</x>
-        <y>10</y>
-        <width>161</width>
-        <height>20</height>
-       </rect>
-      </property>
-      <property name="text">
-       <string>To Choose Item</string>
-      </property>
-     </widget>
-     <widget class="QComboBox" name="ForcastEval_Combox_ChooseItem">
-      <property name="geometry">
-       <rect>
-        <x>30</x>
-        <y>30</y>
-        <width>171</width>
-        <height>26</height>
        </rect>
       </property>
      </widget>
@@ -426,6 +403,29 @@
        <string>Total magnitud mvmt</string>
       </property>
      </widget>
+     <widget class="QComboBox" name="ForcastEval_ComBox_Rlted_DataSet">
+      <property name="geometry">
+       <rect>
+        <x>220</x>
+        <y>100</y>
+        <width>171</width>
+        <height>26</height>
+       </rect>
+      </property>
+     </widget>
+     <widget class="QLabel" name="ForcastEval_lbl_ChooseModel_2">
+      <property name="geometry">
+       <rect>
+        <x>220</x>
+        <y>80</y>
+        <width>161</width>
+        <height>20</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Related to DataSet</string>
+      </property>
+     </widget>
     </widget>
     <widget class="QWidget" name="Forcasting_Tab">
      <attribute name="title">
@@ -444,7 +444,7 @@
        <number>24</number>
       </property>
      </widget>
-     <widget class="QLabel" name="ForC_lbl_DateFrom">
+     <widget class="QLabel" name="ForC_lbl_DataPrecentage">
       <property name="geometry">
        <rect>
         <x>50</x>

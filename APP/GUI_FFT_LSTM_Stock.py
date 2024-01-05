@@ -798,6 +798,7 @@ class Ui_GUI_LSTM_FORCASTER(object):
         #### Evaluation tab
         self.EvalForcastTab_UpdateComboxModel()
         self.EvalForcastTab_UpdateComboxForcast()
+        self.EvalForcastTab_UpdateComboxRelationModelDataset_Id()
     
         #### Forcasting tab
         self.ForcastingTab_UpdateComboxModel_ID()
@@ -828,17 +829,10 @@ class Ui_GUI_LSTM_FORCASTER(object):
         self.ForcastJointModel_SLCT_all=self.Forcaster_DB_c.fetchall()
         
         
-    def GetMadeUpModelTableCnsdItem(self,item):
-        query=("""Select * from Models
-            JOIN 
-            
-            (Select DataSet_id,item from DataSet
-            JOIN Seed_DataSet ON DataSet.Seed_DataSet_id_FRGN = Seed_DataSet.SeedDataSet_id
-            WHERE item=?) as DataSet_SeedDataSet
-            
-            ON Models.DataSet_id_FRGN = DataSet_SeedDataSet.DataSet_id""")
+    def GetMadeUpModelTable(self):
+        query=("""SELECT Model_id,date_Time FROM 'Models'""")
         
-        self.Forcaster_DB_c.execute(query, (item,))
+        self.Forcaster_DB_c.execute(query)
         self.ModelsJointItem_SLCT_all=self.Forcaster_DB_c.fetchall()
     
     def GetMadeUpItemTable(self):
@@ -1677,20 +1671,27 @@ class Ui_GUI_LSTM_FORCASTER(object):
             ##Getting the DB row model
             self.GetRelationModelDatasetTable(self.Current_Trainning_Id_modelSelect)
             relationList=self.Relation_Model_DataSet_Selected_Row.values
-                    
-            for i in relationList:
-                if i[0]==self.Current_Trainning_DataSet_Id:
-                    RelationModelDataset=1
-                else:
-                    RelationModelDataset=0
-
-            #in case Relation model and data set not created
-                    if RelationModelDataset==0:
-                        query="INSERT INTO Relation_Model_Datasets (Model_id_FRGN, DataSet_id_FRGN) VALUES (?,?)"
-                        self.Forcaster_DB_c.execute(query,(self.Current_Trainning_Id_modelSelect,self.Current_Trainning_DataSet_Id))
-                        self.Forcaster_DB_conn.commit()
+            print(relationList)
+            if len(relationList)>0:     
+                for i in relationList:
+                    if i[0]==self.Current_Trainning_DataSet_Id:
+                        RelationModelDataset=1
+                        print("RelationModelDataset :{}".format(RelationModelDataset))
                     else:
-                        print("This model data relationship already exist ")
+                        RelationModelDataset=0
+                        print("RelationModelDataset :{}".format(RelationModelDataset))
+            else:
+                RelationModelDataset=0
+                print("RelationModel is the first relation for this models :{}".format(RelationModelDataset))
+                
+            print("Stop")
+            #in case Relation model and data set not created
+            if RelationModelDataset==0:
+                query="INSERT INTO Relation_Model_Datasets (Model_id_FRGN, DataSet_id_FRGN) VALUES (?,?)"
+                self.Forcaster_DB_c.execute(query,(self.Current_Trainning_Id_modelSelect,self.Current_Trainning_DataSet_Id))
+                self.Forcaster_DB_conn.commit()
+            else:
+                print("This model data relationship already exist ")
             
             ## Getting the DB row model 
             query="SELECT * FROM Models WHERE Model_id=?"
@@ -1930,6 +1931,16 @@ class Ui_GUI_LSTM_FORCASTER(object):
         Current_Forcast=self.ForcastEval_Combox_Chooseforcast.currentText()
         
         
+        DataSet_id=self.ForcastEval_ComBox_Rlted_DataSet.currentText()
+        
+        #Getting the DataSet table
+        query=("""Select Seed_DataSet_id_FRGN,Item from Seed_DataSet
+                JOIN DataSet ON DataSet.Seed_DataSet_id_FRGN = Seed_DataSet.SeedDataSet_id Where DataSet.DataSet_id=?""")
+        self.Forcaster_DB_c.execute(query,(DataSet_id,))
+        Model_Selected_Row=self.Forcaster_DB_c.fetchall()[0]
+        
+        item=Model_Selected_Row[1]
+        
         self.Evaluator.Set_selectedItem(item)
         self.Evaluator.Set_selectedModel(model)
         self.Evaluator.Set_selectedForcastId(Current_Forcast)
@@ -1948,14 +1959,13 @@ class Ui_GUI_LSTM_FORCASTER(object):
     ############ General Fucntions  ###########
     
     def EvalForcastTab_UpdateComboxModel(self):
-        pass
-        #Current_Item=self.ForcastEval_Combox_ChooseItem.currentText()
-        #self.GetMadeUpModelTableCnsdItem(Current_Item) #Table that contain model linked to item x
-        """for i in self.ModelsJointItem_SLCT_all: #ComboBox is updated
+        self.GetMadeUpModelTable() #Table that contain model linked to item x
+        for i in self.ModelsJointItem_SLCT_all: #ComboBox is updated
             Current_Row=i[0]
+            print(Current_Row)
             index= self.ForcastEval_Combox_ChooseModel.findText(str(Current_Row),QtCore.Qt.MatchFixedString)
             if index==-1:
-                self.ForcastEval_Combox_ChooseModel.addItem(str(Current_Row))"""
+                self.ForcastEval_Combox_ChooseModel.addItem(str(Current_Row))
     
     def EvalForcastTab_UpdateComboxForcast(self):
         Current_Model=self.ForcastEval_Combox_ChooseModel.currentText()
@@ -1965,6 +1975,21 @@ class Ui_GUI_LSTM_FORCASTER(object):
             index= self.ForcastEval_Combox_Chooseforcast.findText(str(Current_Row),QtCore.Qt.MatchFixedString)
             if index==-1:
                 self.ForcastEval_Combox_Chooseforcast.addItem(str(Current_Row))
+    
+    def EvalForcastTab_UpdateComboxRelationModelDataset_Id(self):
+        self.ForcastEval_ComBox_Rlted_DataSet.clear()
+        print("TrainningTab_UpdateComboxRelationModelDataSet_ID called")
+        Model_Id=self.ForcastEval_Combox_ChooseModel.currentText()
+        self.GetRelationModelDatasetTable(Model_Id)
+        relationList=self.Relation_Model_DataSet_Selected_Row.values
+
+        for i in relationList: #ComboBox is updated
+            print(i)
+            Current_Row=i[0]
+            print(Current_Row)
+            index= self.ForcastEval_ComBox_Rlted_DataSet.findText(str(Current_Row),QtCore.Qt.MatchFixedString)
+            if index==-1:
+                self.ForcastEval_ComBox_Rlted_DataSet.addItem(str(Current_Row))
     
     def SetDataEvlForcasting(self,val_1,val_2,val_3,val_4,val_5,val_6,val_7,val_8,val_9,val_10,val_11,Forcast_ID,Eval_ForcastPath):
 
@@ -1986,6 +2011,7 @@ class Ui_GUI_LSTM_FORCASTER(object):
     def model_evalFolcast_ComboBoxChanged(self):
         self.ForcastEval_Combox_Chooseforcast.clear()
         self.EvalForcastTab_UpdateComboxForcast()
+        self.EvalForcastTab_UpdateComboxRelationModelDataset_Id()
         
     def Forcast_evalFolcast_ComboBoxChanged(self):
         Current_Forcast=self.ForcastEval_Combox_Chooseforcast.currentText()
