@@ -104,7 +104,7 @@ class Model_Trainer:
     #######    Let's split data     #######
     #It's going to be used 70% of data to train and 30% to test the model
 
-    #This Function split dataset with shape (z,x, y) and is splited in z
+    #This Function split dataset with shape (z,x, y) and is splited at z axis
 
     percentageTrainingData= ThepercentageTrainingData
     #####   training data, testing data  ####
