@@ -298,6 +298,16 @@ class Ui_GUI_LSTM_FORCASTER(object):
         self.MoTr_btn_Totrain = QtWidgets.QPushButton(self.Model_Trainner_Tab)
         self.MoTr_btn_Totrain.setGeometry(QtCore.QRect(470, 30, 141, 51))
         self.MoTr_btn_Totrain.setObjectName("MoTr_btn_Totrain")
+        
+        self.MoTr_btn_add_Ds = QtWidgets.QPushButton(self.Model_Trainner_Tab)
+        self.MoTr_btn_add_Ds.setGeometry(QtCore.QRect(130, 85, 121, 29))
+        self.MoTr_btn_add_Ds.setObjectName("MoTr_btn_add_Ds")
+        
+        self.MoTr_btn_Rmv_Ds = QtWidgets.QPushButton(self.Model_Trainner_Tab)
+        self.MoTr_btn_Rmv_Ds.setGeometry(QtCore.QRect(130, 110, 135, 29))
+        self.MoTr_btn_Rmv_Ds.setObjectName("MoTr_btn_Rmv_Ds")
+        
+        
         self.MoTr_LoadBar_CMDTraining = QtWidgets.QProgressBar(self.Model_Trainner_Tab)
         self.MoTr_LoadBar_CMDTraining.setGeometry(QtCore.QRect(120, 320, 411, 41))
         self.MoTr_LoadBar_CMDTraining.setProperty("value", 0)
@@ -306,14 +316,14 @@ class Ui_GUI_LSTM_FORCASTER(object):
         self.MoTr_lbl_CMD_training.setGeometry(QtCore.QRect(120, 310, 370, 16))
         self.MoTr_lbl_CMD_training.setObjectName("MoTr_lbl_CMD_training")
         self.MoTr_txtLine_PercentDataSet = QtWidgets.QLineEdit(self.Model_Trainner_Tab)
-        self.MoTr_txtLine_PercentDataSet.setGeometry(QtCore.QRect(70, 150, 61, 21))
+        self.MoTr_txtLine_PercentDataSet.setGeometry(QtCore.QRect(10, 150, 61, 21))
         self.MoTr_txtLine_PercentDataSet.setObjectName("MoTr_txtLine_PercentDataSet")
         self.MoTr_lbl_PercentDataset = QtWidgets.QLabel(self.Model_Trainner_Tab)
-        self.MoTr_lbl_PercentDataset.setGeometry(QtCore.QRect(70, 130, 111, 16))
+        self.MoTr_lbl_PercentDataset.setGeometry(QtCore.QRect(10, 130, 111, 16))
         self.MoTr_lbl_PercentDataset.setObjectName("MoTr_lbl_PercentDataset")
         
         self.MoTr_ComBox_Rlted_DataSet = QtWidgets.QComboBox(self.Model_Trainner_Tab)
-        self.MoTr_ComBox_Rlted_DataSet.setGeometry(QtCore.QRect(10, 100, 211, 26))
+        self.MoTr_ComBox_Rlted_DataSet.setGeometry(QtCore.QRect(10, 100, 111, 26))
         self.MoTr_ComBox_Rlted_DataSet.setObjectName("MoTr_ComBox_Rlted_DataSet")
         
         self.MoTr_ComBox_ChooseModel = QtWidgets.QComboBox(self.Model_Trainner_Tab)
@@ -352,10 +362,11 @@ class Ui_GUI_LSTM_FORCASTER(object):
 
         
         self.MoTr_lbl_loss = QtWidgets.QLabel(self.Model_Trainner_Tab)
-        self.MoTr_lbl_loss.setGeometry(QtCore.QRect(70, 180, 91, 16))
+        self.MoTr_lbl_loss.setGeometry(QtCore.QRect(10, 180, 91, 16))
         self.MoTr_lbl_loss.setObjectName("MoTr_lbl_loss")
+        
         self.MoTr_txtLine_loss = QtWidgets.QLineEdit(self.Model_Trainner_Tab)
-        self.MoTr_txtLine_loss.setGeometry(QtCore.QRect(70, 200, 81, 21))
+        self.MoTr_txtLine_loss.setGeometry(QtCore.QRect(10, 200, 81, 21))
         self.MoTr_txtLine_loss.setObjectName("MoTr_txtLine_loss")
         self.MoTr_txtLine_loss.setEnabled(False)
         
@@ -368,10 +379,10 @@ class Ui_GUI_LSTM_FORCASTER(object):
         self.MoTr_txtLine_mean_sqr_error.setEnabled(False)
         
         self.MoTr_lbl_val_loss = QtWidgets.QLabel(self.Model_Trainner_Tab)
-        self.MoTr_lbl_val_loss.setGeometry(QtCore.QRect(70, 230, 91, 16))
+        self.MoTr_lbl_val_loss.setGeometry(QtCore.QRect(10, 230, 91, 16))
         self.MoTr_lbl_val_loss.setObjectName("MoTr_lbl_val_loss")
         self.MoTr_txtLine_val_loss = QtWidgets.QLineEdit(self.Model_Trainner_Tab)
-        self.MoTr_txtLine_val_loss.setGeometry(QtCore.QRect(70, 250, 81, 21))
+        self.MoTr_txtLine_val_loss.setGeometry(QtCore.QRect(10, 250, 81, 21))
         self.MoTr_txtLine_val_loss.setObjectName("MoTr_txtLine_val_loss")
         self.MoTr_txtLine_val_loss.setEnabled(False)
     
@@ -413,7 +424,12 @@ class Ui_GUI_LSTM_FORCASTER(object):
         self.DaMa_lbl_DataSetId.setObjectName("DaMa_lbl_DataSetId")    
         self.DaMa_btn_Create = QtWidgets.QPushButton(self.Data_Manager_tab)
         self.DaMa_btn_Create.setGeometry(QtCore.QRect(370, 200, 113, 101))
-        self.DaMa_btn_Create.setObjectName("DaMa_btn_Create")
+        self.DaMa_btn_Create.setObjectName("DaMa_btn_Create")     
+        
+        self.DaMa_btn_Delete_Ds = QtWidgets.QPushButton(self.Data_Manager_tab)
+        self.DaMa_btn_Delete_Ds.setGeometry(QtCore.QRect(370, 300, 241, 41))
+        self.DaMa_btn_Delete_Ds.setObjectName("DaMa_btn_Delete_Ds")
+           
         self.DaMa_txtLine_Stock_Item = QtWidgets.QLineEdit(self.Data_Manager_tab)
         self.DaMa_txtLine_Stock_Item.setGeometry(QtCore.QRect(60, 90, 231, 21))
         self.DaMa_txtLine_Stock_Item.setObjectName("DaMa_txtLine_Stock_Item")
@@ -522,6 +538,11 @@ class Ui_GUI_LSTM_FORCASTER(object):
         self.Model_C_PB_Create_M = QtWidgets.QPushButton(self.ModCrtion)
         self.Model_C_PB_Create_M.setGeometry(QtCore.QRect(40, 260, 221, 71))
         self.Model_C_PB_Create_M.setObjectName("Model_C_PB_Create_M")
+        
+        self.DaMa_btn_DeleteModel = QtWidgets.QPushButton(self.ModCrtion)
+        self.DaMa_btn_DeleteModel.setGeometry(QtCore.QRect(390, 260, 221, 71))
+        self.DaMa_btn_DeleteModel.setObjectName("DaMa_btn_DeleteModel")
+        
         self.Model_C_txtLine_Lyr_Dns = QtWidgets.QLineEdit(self.ModCrtion)
         self.Model_C_txtLine_Lyr_Dns.setGeometry(QtCore.QRect(360, 30, 270, 25))
         self.Model_C_txtLine_Lyr_Dns.setObjectName("Model_C_txtLine_Lyr_Dns")
@@ -568,7 +589,7 @@ class Ui_GUI_LSTM_FORCASTER(object):
         self.Model_C_LBL_Int_Model.setGeometry(QtCore.QRect(280, 260, 180, 16))
         self.Model_C_LBL_Int_Model.setObjectName("Model_C_LBL_Int_Model")
         self.Model_C_ComBox_Int_Model = QtWidgets.QComboBox(self.ModCrtion)
-        self.Model_C_ComBox_Int_Model.setGeometry(QtCore.QRect(280, 280, 141, 25))
+        self.Model_C_ComBox_Int_Model.setGeometry(QtCore.QRect(270, 280, 111, 26))
         self.Model_C_ComBox_Int_Model.setObjectName("Model_C_ComBox_Int_Model")
         
         self.Model_C_LBL_Int_Seed_Data = QtWidgets.QLabel(self.ModCrtion)
@@ -715,6 +736,10 @@ class Ui_GUI_LSTM_FORCASTER(object):
         
         
         self.MoTr_btn_Totrain.setText(_translate("GUI_LSTM_FORCASTER", "To train"))
+        
+        self.MoTr_btn_add_Ds.setText(_translate("GUI_LSTM_FORCASTER", "Add DataSet"))
+        self.MoTr_btn_Rmv_Ds.setText(_translate("GUI_LSTM_FORCASTER", "Remove DataSet"))
+        
         self.MoTr_lbl_CMD_training.setText(_translate("GUI_LSTM_FORCASTER", "CMD training process"))
         self.MoTr_txtLine_PercentDataSet.setText(_translate("GUI_LSTM_FORCASTER", "96"))
         self.MoTr_lbl_PercentDataset.setText(_translate("GUI_LSTM_FORCASTER", "% Data To used"))
@@ -753,6 +778,7 @@ class Ui_GUI_LSTM_FORCASTER(object):
         self.DaMa_Lbl_Progres.setText(_translate("GUI_LSTM_FORCASTER", "Ready"))
         self.DaMa_lbl_DataSetId.setText(_translate("GUI_LSTM_FORCASTER", "DataSet id"))
         self.DaMa_btn_Create.setText(_translate("GUI_LSTM_FORCASTER", "Create"))
+        self.DaMa_btn_Delete_Ds.setText(_translate("GUI_LSTM_FORCASTER", "Delete DataSet"))
         self.DaMa_lbl_Stock_Item.setText(_translate("GUI_LSTM_FORCASTER", "Stock Item"))
         self.DaMa_lbl_DateTime.setText(_translate("GUI_LSTM_FORCASTER", "Date time"))
         self.DaMa_lbl_BackDays.setText(_translate("GUI_LSTM_FORCASTER", "BackDays"))
@@ -777,6 +803,7 @@ class Ui_GUI_LSTM_FORCASTER(object):
         self.Model_C_LBL_Progres.setText(_translate("GUI_LSTM_FORCASTER", "Ready"))
         self.Model_C_LdBar.setProperty("value",0)
         self.Model_C_PB_Create_M.setText(_translate("GUI_LSTM_FORCASTER", "Create model"))
+        self.DaMa_btn_DeleteModel.setText(_translate("GUI_LSTM_FORCASTER", "Delete model"))
         self.Model_C_LBL_Int_Seed_Data.setText(_translate("GUI_LSTM_FORCASTER", "#Int Seed_Data"))
         self.Model_C_LBL_LSTM1.setText(_translate("GUI_LSTM_FORCASTER", "LSTM_1_#Units"))
         self.Model_C_LBL_LSTM2.setText(_translate("GUI_LSTM_FORCASTER", "LSTM_2_#Units"))
