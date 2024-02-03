@@ -1812,7 +1812,8 @@ class Ui_GUI_LSTM_FORCASTER(object):
         #ANswering question, there are FFT columns in DataSet?
         if (Open_FFT_C==1) or (High_FFT_C==1) or (Low_FFT_C==1)or(Close_FFT_C==1) or (Volum_FFT_C==1):FFTwereUsed=True
         else:FFTwereUsed=False
-        
+        print(FFTwereUsed)
+        print("-------------")
         
         #Defining Path files 
         if self.InstallerVersionActive:

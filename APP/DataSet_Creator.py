@@ -159,6 +159,11 @@ class DL_DataSet(QThread):
         self.Update_Progress_String.emit("DataSet Path created")
         self.Update_Progress.emit(50)
         
+        #Verifying if FFT to do
+        FFT_ToDo=False
+        if Open_FFT_C==1 or High_FFT_C==1 or Low_FFT_C==1 or Close_FFT_C==1 or Volum_FFT_C==1:
+            FFT_ToDo=True
+        
         #Check is directory exist, otherwise To Create A Directory With Subdirectories
         
         if path.exists(pathTocreated):
@@ -221,22 +226,29 @@ class DL_DataSet(QThread):
     
 
         #Generate new FFT columns
-        Colums_Selection_FFT=[Open_FFT_C,High_FFT_C,Low_FFT_C,Close_FFT_C,Volum_FFT_C]
-        columns=['Open','High','Low','Close','Volume']
-        ColumnsToFFT=[]
-        for i in range(0,len(columns)):
-            if Colums_Selection_FFT[i]==1:
-                ColumnsToFFT.append(columns[i])
+        if FFT_ToDo:
+            Colums_Selection_FFT=[Open_FFT_C,High_FFT_C,Low_FFT_C,Close_FFT_C,Volum_FFT_C]
+            columns=['Open','High','Low','Close','Volume']
+            ColumnsToFFT=[]
+            for i in range(0,len(columns)):
+                if Colums_Selection_FFT[i]==1:
+                    ColumnsToFFT.append(columns[i])
 
-        backdaysToconsider=self.BackDaysConsideredFFT+1
-        inicialPath=yearAddedPath
-        FFTNew_FileData=FFTAddedPath
-        frec=self.Convert(FFT_Frec)
+            backdaysToconsider=self.BackDaysConsideredFFT+1
+            inicialPath=yearAddedPath
+            FFTNew_FileData=FFTAddedPath
+            frec=self.Convert(FFT_Frec)
+            
+            
+            self.Update_Progress_String.emit("Adding FFT columns columns added")
+            self.Update_Progress.emit(80)
+            self.dataSet_Gen.getTheLastFFTValue(backdaysToconsider,frec,ColumnsToFFT,inicialPath, FFTNew_FileData)
         
-        
-        self.Update_Progress_String.emit("Adding FFT columns columns added")
-        self.Update_Progress.emit(80)
-        self.dataSet_Gen.getTheLastFFTValue(backdaysToconsider,frec,ColumnsToFFT,inicialPath, FFTNew_FileData)
+        else:
+            FFTNew_FileData=yearAddedPath
+            
+
+
 
         Colums_FFT_Selection=[Open_FFT_C,High_FFT_C,Low_FFT_C,Close_FFT_C,Volum_FFT_C]
         Colums_Selection=[Open_C,High_C,Low_C,Close_C,Volume_C]

@@ -117,7 +117,7 @@ class DL_Forcast(QThread):
 
         df=pd.read_csv(Data_CSV,index_col=0)
         
-        locpercentage=0
+        locpercentage_Prced=0
         ColumnCurrent_Close_Day=[]
         Real_Y_current=0
         ColumnForcast_Close_Day=[]
@@ -132,14 +132,19 @@ class DL_Forcast(QThread):
 
         ensambly=[]
 
-        indexDates=df.index
+        indexDates_df_Prced=df.index
+
         
-        locpercentage=int((indexDates.shape[0]*percentageData)/100)
+        ##getting the idex  about percentage: this for the last procesed data 
+        locpercentage_Prced=int((indexDates_df_Prced.shape[0]*percentageData)/100)
+        
+        
         #datefiltredPercentage=indexDates[locpercentage:]
         #
         # if datefiltredPercentage=indexDates[indexDates.shape[0]-backdaysConsideredToBForcasted:]
-        datefiltredPercentage=indexDates[locpercentage-backdaysConsideredToBForcasted:locpercentage]
-
+        datefiltredPercentage=indexDates_df_Prced[locpercentage_Prced-backdaysConsideredToBForcasted:locpercentage_Prced]
+        print(len(datefiltredPercentage))
+        print("----------------")
         self.Update_Progress_String.emit("Forcasting about to start")
         self.Update_Progress.emit(self.FirstPercentageAbout_toStartForcast)
         
@@ -182,11 +187,13 @@ class DL_Forcast(QThread):
 
         if FFtUsedQ:
             #if fft considered:
-            Allandforcast=all_df[locpercentage-backdaysConsideredToBForcasted+backdaysConsidered:locpercentage+backdaysConsidered]
+            Allandforcast=all_df[locpercentage_Prced-backdaysConsideredToBForcasted+backdaysConsidered:locpercentage_Prced+backdaysConsidered]
         else:
             #if not FFT considerf
-            Allandforcast=all_df[locpercentage-backdaysConsideredToBForcasted:locpercentage]
-
+            Allandforcast=all_df[locpercentage_Prced-backdaysConsideredToBForcasted:locpercentage_Prced]
+        print("********+  This is FFTUsedQ and Allandforcast *********+")
+        print(FFtUsedQ)
+        print(Allandforcast)
         frames = [Allandforcast, fd_ColumnForcast_Close_Day]
 
         Final_Allandforcast = pd.concat(frames,axis=1)
