@@ -142,18 +142,20 @@ class Model_Trainer:
 
     #------------------------- Training model --------------------------------
     
-    early_stop= EarlyStopping(monitor='mean_squared_error',mode='min',verbose=1,patience=25)
+    #early_stop= EarlyStopping(monitor='mean_squared_error',mode='min',verbose=1,patience=25)
     # Print the batch number at the beginning of every batch.
     
     ephoc_print_callback = LambdaCallback(on_epoch_end=lambda ephoc,logs: self.End_ephoc_event(ephoc))
     #ephoc_print_callback = LambdaCallback(on_epoch_end=lambda ephoc,logs: print("this is number ephoc: "+str(ephoc)))
     
-    model.fit(x=trainX,y=y_data, epochs=NumEpochs, batch_size=15, validation_data=(testingX,testing_y_data),callbacks=[early_stop,ephoc_print_callback])
+    Model_CheckPoint=keras.callbacks.ModelCheckpoint(modelPath,save_format="h5",save_best_only=True)
+    
+    model.fit(x=trainX,y=y_data, epochs=NumEpochs, batch_size=15, validation_data=(testingX,testing_y_data),callbacks=[ephoc_print_callback,Model_CheckPoint])
     #history = model.fit(trainX,y=y_data, epochs=125, batch_size=15)
 
 
     losses = pd.DataFrame(model.history.history)
-    model.save(modelPath,save_format="h5")
+    #model.save(modelPath,save_format="h5")
     
 
     #losses.plot()
