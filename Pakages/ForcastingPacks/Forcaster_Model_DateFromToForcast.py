@@ -116,7 +116,7 @@ class Forcast_Data:
     #testingX=np.array(testingX)
     ######    Generating forcast data   ######
     Prediction_Saved = self.model.predict(Batch_to_predict) #the input is a 120 units of time batch
-
+    print(Prediction_Saved)
     
     #####       Scaling Back     #####
     AllPrediction_DS_scaled_Back=0

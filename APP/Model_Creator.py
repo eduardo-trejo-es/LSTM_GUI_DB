@@ -105,12 +105,14 @@ class DL_Model(QThread):
         #x=Dropout_layer1=keras.layers.Dropout(0.2)(x)
         LSTM_Layer2=keras.layers.LSTM(LSTM2_Units, return_sequences=False,activation='PReLU')(LSTM_Layer1)
 
-        Dropout_layer3=keras.layers.Dropout(LryDcoeff)(LSTM_Layer2)# modify
+        #Dropout_layer3=keras.layers.Dropout(LryDcoeff)(LSTM_Layer2)# modify
 
         #---------------------------Outputs
         #dense=keras.layers.Dense(1,kernel_regularizer=tf.keras.regularizers.L1L2(l1=0.00001, l2=0.00001))(Dropout_layer3)# L1 + L2 penalties
         #dense=keras.layers.Dense(1)(Dropout_layer3)
-        dense=keras.layers.Dense(Lyr_Dns,kernel_regularizer=tf.keras.regularizers.L2(Lyr_Dn_Rgzr),activation='sigmoid')(Dropout_layer3)
+        
+        #the one 12 feb 2024
+        dense=keras.layers.Dense(Lyr_Dns,kernel_regularizer=tf.keras.regularizers.L2(Lyr_Dn_Rgzr),activation='sigmoid')(LSTM_Layer1)
 
         #-------Layers outputs are linked
         outputs=dense
