@@ -112,7 +112,7 @@ class DL_Model(QThread):
         #dense=keras.layers.Dense(1)(Dropout_layer3)
         
         #the one 12 feb 2024
-        dense=keras.layers.Dense(Lyr_Dns,kernel_regularizer=tf.keras.regularizers.L2(Lyr_Dn_Rgzr),activation='sigmoid')(LSTM_Layer1)
+        dense=keras.layers.Dense(Lyr_Dns,kernel_regularizer=tf.keras.regularizers.L2(Lyr_Dn_Rgzr),activation='sigmoid')(LSTM_Layer2)
 
         #-------Layers outputs are linked
         outputs=dense
