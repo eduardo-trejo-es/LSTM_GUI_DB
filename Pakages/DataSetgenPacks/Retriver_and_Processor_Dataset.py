@@ -445,4 +445,29 @@ class DatasetGenerator:
         
         print(FinalLastFFTDataset.tail)
         
-        self.SavingDataset(FinalLastFFTDataset,newFilepath, newFilepath, False)   
+        self.SavingDataset(FinalLastFFTDataset,newFilepath, newFilepath, False)
+    
+    def AddUpDown(self,csvFileName,csvFileName_New,Column):
+        df=pd.read_csv(csvFileName, index_col="Date")
+        firstDone=False
+        day_t=0
+        day_t_oneless=0
+        MvmtResult=0
+        MvmtResultList=[]
+        for i in df[Column]:
+            day_t=i
+            if firstDone==False:
+                MvmtResult=0
+                firstDone=True
+            else:
+                if day_t<day_t_oneless:
+                    MvmtResult=0
+                elif day_t>day_t_oneless:
+                    MvmtResult=1
+
+            MvmtResultList.append(MvmtResult)
+            day_t_oneless=day_t
+
+        df["UpDown"]=MvmtResultList
+        
+        self.SavingDataset(df,csvFileName, csvFileName_New,False)

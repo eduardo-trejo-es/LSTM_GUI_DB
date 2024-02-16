@@ -141,6 +141,8 @@ class DL_DataSet(QThread):
         Day_MonthNDay_C=SeedDataSetlist[14]
         Year_C=SeedDataSetlist[15]
         FFT_Frec=SeedDataSetlist[16]
+        UpDown_C=SeedDataSetlist[17]
+        Column=SeedDataSetlist[18]
          
         ParentPath= "APP/DataSets/"
         BasePath="{}/Id{}".format(itemName,DataSetId)
@@ -153,6 +155,7 @@ class DL_DataSet(QThread):
         DayNumAddedPath=pathTocreated+"/DataSet_DayNum.csv"
         MonthAddedPath=pathTocreated+"/DataSet_month.csv"
         yearAddedPath=pathTocreated+"/DataSet_year.csv"
+        UpDoneAddedPath=pathTocreated+"/DataSet_UpDown.csv"
         FFTAddedPath=pathTocreated+"/DataSet_FFTColumns.csv"
         LastPopcolum=pathTocreated+"/DataSet_lastPoppingColums.csv"
         
@@ -223,6 +226,14 @@ class DL_DataSet(QThread):
             self.Update_Progress.emit(85)
         else:
             yearAddedPath=MonthAddedPath
+        
+        #To Add UpDown
+        if UpDown_C==1:
+            self.dataSet_Gen.AddUpDown(yearAddedPath,UpDoneAddedPath,Column)
+            self.Update_Progress_String.emit("UpDown Added")
+            self.Update_Progress.emit(88)
+        else:
+            UpDoneAddedPath=yearAddedPath
     
 
         #Generate new FFT columns
@@ -235,17 +246,17 @@ class DL_DataSet(QThread):
                     ColumnsToFFT.append(columns[i])
 
             backdaysToconsider=self.BackDaysConsideredFFT+1
-            inicialPath=yearAddedPath
+            inicialPath=UpDoneAddedPath
             FFTNew_FileData=FFTAddedPath
             frec=self.Convert(FFT_Frec)
             
             
             self.Update_Progress_String.emit("Adding FFT columns columns added")
-            self.Update_Progress.emit(80)
+            self.Update_Progress.emit(90)
             self.dataSet_Gen.getTheLastFFTValue(backdaysToconsider,frec,ColumnsToFFT,inicialPath, FFTNew_FileData)
         
         else:
-            FFTNew_FileData=yearAddedPath
+            FFTNew_FileData=UpDoneAddedPath
             
 
 

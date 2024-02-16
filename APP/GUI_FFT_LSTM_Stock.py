@@ -421,7 +421,12 @@ class Ui_GUI_LSTM_FORCASTER(object):
         self.DaMa_Lbl_Progres.setObjectName("DaMa_Lbl_Progres")
         self.DaMa_lbl_DataSetId = QtWidgets.QLabel(self.Data_Manager_tab)
         self.DaMa_lbl_DataSetId.setGeometry(QtCore.QRect(370, 20, 91, 16))
-        self.DaMa_lbl_DataSetId.setObjectName("DaMa_lbl_DataSetId")    
+        self.DaMa_lbl_DataSetId.setObjectName("DaMa_lbl_DataSetId")   
+        
+        self.DaMa_lbl_UpDownClmn = QtWidgets.QLabel(self.Data_Manager_tab)
+        self.DaMa_lbl_UpDownClmn.setGeometry(QtCore.QRect(250, 120, 111, 16))
+        self.DaMa_lbl_UpDownClmn.setObjectName("DaMa_lbl_UpDownClmn")   
+        
         self.DaMa_btn_Create = QtWidgets.QPushButton(self.Data_Manager_tab)
         self.DaMa_btn_Create.setGeometry(QtCore.QRect(370, 200, 113, 101))
         self.DaMa_btn_Create.setObjectName("DaMa_btn_Create")     
@@ -437,7 +442,7 @@ class Ui_GUI_LSTM_FORCASTER(object):
         self.DaMa_txtLine_BackDay.setGeometry(QtCore.QRect(60, 140, 80, 21))
         self.DaMa_txtLine_BackDay.setObjectName("DaMa_txtLine_BackDay")
         self.DaMa_txtLine_FFT_Frec = QtWidgets.QLineEdit(self.Data_Manager_tab)
-        self.DaMa_txtLine_FFT_Frec.setGeometry(QtCore.QRect(210, 140, 80, 21))
+        self.DaMa_txtLine_FFT_Frec.setGeometry(QtCore.QRect(150, 140, 80, 21))
         self.DaMa_txtLine_FFT_Frec.setObjectName("DaMa_txtLine_FFT_Frec")
         self.DaMa_lbl_Stock_Item = QtWidgets.QLabel(self.Data_Manager_tab)
         self.DaMa_lbl_Stock_Item.setGeometry(QtCore.QRect(60, 70, 201, 16))
@@ -456,7 +461,7 @@ class Ui_GUI_LSTM_FORCASTER(object):
         self.DaMa_lbl_BackDays.setGeometry(QtCore.QRect(60, 120, 80, 16))
         self.DaMa_lbl_BackDays.setObjectName("DaMa_lbl_BackDays")
         self.DaMa_lbl_FFT_Frec = QtWidgets.QLabel(self.Data_Manager_tab)
-        self.DaMa_lbl_FFT_Frec.setGeometry(QtCore.QRect(210, 120, 80, 16))
+        self.DaMa_lbl_FFT_Frec.setGeometry(QtCore.QRect(150, 120, 80, 16))
         self.DaMa_lbl_FFT_Frec.setObjectName("DaMa_lbl_FFT_Frec")
         self.DaMa_lbl_PathCSVFile = QtWidgets.QLabel(self.Data_Manager_tab)
         self.DaMa_lbl_PathCSVFile.setGeometry(QtCore.QRect(370, 120, 201, 16))
@@ -494,9 +499,15 @@ class Ui_GUI_LSTM_FORCASTER(object):
         self.DaMa_CheckBox_Day_MonthNDay_C = QtWidgets.QCheckBox(self.Data_Manager_tab)
         self.DaMa_CheckBox_Day_MonthNDay_C.setGeometry(QtCore.QRect(240, 240, 100, 20))
         self.DaMa_CheckBox_Day_MonthNDay_C.setObjectName("DaMa_CheckBox_DayMonth")
+        
         self.DaMa_CheckBox_Year = QtWidgets.QCheckBox(self.Data_Manager_tab)
         self.DaMa_CheckBox_Year.setGeometry(QtCore.QRect(240, 260, 100, 20))
         self.DaMa_CheckBox_Year.setObjectName("DaMa_CheckBox_Year")
+        
+        self.DaMa_CheckBox_UpDown = QtWidgets.QCheckBox(self.Data_Manager_tab)
+        self.DaMa_CheckBox_UpDown.setGeometry(QtCore.QRect(240, 280, 100, 20))
+        self.DaMa_CheckBox_UpDown.setObjectName("DaMa_CheckBox_UpDown")
+        
         self.DaMa_CheckBox_Volume = QtWidgets.QCheckBox(self.Data_Manager_tab)
         self.DaMa_CheckBox_Volume.setGeometry(QtCore.QRect(40, 280, 100, 20))
         self.DaMa_CheckBox_Volume.setObjectName("DaMa_CheckBox_Volume")
@@ -508,6 +519,11 @@ class Ui_GUI_LSTM_FORCASTER(object):
         self.DaMa_ComBox_DataSet_Id.setGeometry(QtCore.QRect(370, 40, 101, 26))
         self.DaMa_ComBox_DataSet_Id.setObjectName("DaMa_ComBox_DataSet_Id")
         self.DaMa_ComBox_DataSet_Id.clear() #When starting app, combobox is updated
+        
+        self.DaMa_ComBox_Column_UpDown = QtWidgets.QComboBox(self.Data_Manager_tab)
+        self.DaMa_ComBox_Column_UpDown.setGeometry(QtCore.QRect(250, 140, 101, 26))
+        self.DaMa_ComBox_Column_UpDown.setObjectName("DaMa_ComBox_Column_UpDown")
+        self.DaMa_ComBox_Column_UpDown.clear() #When starting app, combobox is updated
         
         self.DaMa_ComBox_Seed_DataSet = QtWidgets.QComboBox(self.Data_Manager_tab)
         self.DaMa_ComBox_Seed_DataSet.setGeometry(QtCore.QRect(60, 40, 101, 26))
@@ -777,6 +793,8 @@ class Ui_GUI_LSTM_FORCASTER(object):
         self.DaMa_btn_Update.setText(_translate("GUI_LSTM_FORCASTER", "Update"))
         self.DaMa_Lbl_Progres.setText(_translate("GUI_LSTM_FORCASTER", "Ready"))
         self.DaMa_lbl_DataSetId.setText(_translate("GUI_LSTM_FORCASTER", "DataSet id"))
+        self.DaMa_lbl_UpDownClmn.setText(_translate("GUI_LSTM_FORCASTER", "Column UpDown"))
+        
         self.DaMa_btn_Create.setText(_translate("GUI_LSTM_FORCASTER", "Create"))
         self.DaMa_btn_Delete_Ds.setText(_translate("GUI_LSTM_FORCASTER", "Delete DataSet"))
         self.DaMa_lbl_Stock_Item.setText(_translate("GUI_LSTM_FORCASTER", "Stock Item"))
@@ -796,6 +814,7 @@ class Ui_GUI_LSTM_FORCASTER(object):
         self.DaMa_CheckBox_Close_FFT.setText(_translate("GUI_LSTM_FORCASTER", "Close FFT"))
         self.DaMa_CheckBox_Day_MonthNDay_C.setText(_translate("GUI_LSTM_FORCASTER", "DayMonth"))
         self.DaMa_CheckBox_Year.setText(_translate("GUI_LSTM_FORCASTER", "Year"))
+        self.DaMa_CheckBox_UpDown.setText(_translate("GUI_LSTM_FORCASTER", "UpDown"))
         self.DaMa_CheckBox_Volume.setText(_translate("GUI_LSTM_FORCASTER", "Volume"))
         self.DaMa_CheckBox_Volume_FFT.setText(_translate("GUI_LSTM_FORCASTER", "Volume FFT"))
         self.Tabs.setTabText(self.Tabs.indexOf(self.Data_Manager_tab), _translate("GUI_LSTM_FORCASTER", "Data manager"))
@@ -1167,18 +1186,24 @@ class Ui_GUI_LSTM_FORCASTER(object):
         if self.DaMa_CheckBox_Year.isChecked():Year_C=1
         else:Year_C=0
         
+        if self.DaMa_CheckBox_UpDown.isChecked():UpDown_C=1
+        else:UpDown_C=0
+        
+        
         FFT_Frec = self.DaMa_txtLine_FFT_Frec.text()
         
         DataSetSelected=self.DaMa_ComBox_DataSet_Id.currentText()
         
+        ColumnSelected=self.DaMa_ComBox_Column_UpDown.currentText()
+        
         #Check if seed data already exist
         matching,matching_row=self.Check_Matching_Seed_DataSet(Item,BackDays,Open_C ,High_C,Low_C,Close_C ,Volume_C,Open_FFT_C ,High_FFT_C ,Low_FFT_C,
-                                                           Close_FFT_C ,Volum_FFT_C ,Day_Wk_N_C, Day_MonthNDay_C ,Year_C ,FFT_Frec)
+                                                           Close_FFT_C ,Volum_FFT_C ,Day_Wk_N_C, Day_MonthNDay_C ,Year_C ,FFT_Frec, UpDown_C,ColumnSelected)
         
         #new seed dataSet is created; if at least a feature has been changed
         if matching==False:
             self.Create_new_SeedDataSet_DB(Item,BackDays,Open_C ,High_C,Low_C,Close_C ,Volume_C,Open_FFT_C ,High_FFT_C ,Low_FFT_C,
-                                        Close_FFT_C ,Volum_FFT_C ,Day_Wk_N_C ,Day_MonthNDay_C ,Year_C ,FFT_Frec)
+                                        Close_FFT_C ,Volum_FFT_C ,Day_Wk_N_C ,Day_MonthNDay_C ,Year_C ,FFT_Frec,UpDown_C,ColumnSelected)
             query="SELECT * FROM Seed_DataSet WHERE SeedDataSet_id=(SELECT max(SeedDataSet_id) FROM Seed_DataSet)"
             self.Forcaster_DB_c.execute(query)
             ContentList=self.Forcaster_DB_c.fetchall()
@@ -1318,6 +1343,9 @@ class Ui_GUI_LSTM_FORCASTER(object):
             
             if i[15]==1:self.DaMa_CheckBox_Year.setChecked(True)
             else:self.DaMa_CheckBox_Year.setChecked(False)
+            
+            if i[17]==1:self.DaMa_CheckBox_UpDown.setChecked(True)
+            else:self.DaMa_CheckBox_UpDown.setChecked(False)
             
             self.DaMa_txtLine_FFT_Frec.setText(str(i[16]))
               

@@ -13,7 +13,7 @@ c = conn.cursor()
 
 
 #Add colum
-#c.execute("""ALTER TABLE 'Models' ADD val_mean_squared_error REAL""")
+c.execute("""ALTER TABLE 'Seed_DataSet' ADD UpDown_Clmn INTEGER""")
           
           
 #c.execute("""DROP TABLE Relation_Model_Datasets""")
@@ -29,7 +29,7 @@ c = conn.cursor()
 #        """)
 
 
-c.execute("""INSERT INTO Relation_Model_Datasets (Model_id_FRGN,DataSet_id_FRGN) VALUES(35,2) """)
+#c.execute("""INSERT INTO Relation_Model_Datasets (Model_id_FRGN,DataSet_id_FRGN) VALUES(35,2) """)
 
 conn.commit()
           

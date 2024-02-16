@@ -30,7 +30,7 @@
      <enum>QTabWidget::North</enum>
     </property>
     <property name="currentIndex">
-     <number>2</number>
+     <number>3</number>
     </property>
     <property name="movable">
      <bool>false</bool>
@@ -1421,7 +1421,7 @@
      <widget class="QLineEdit" name="DaMa_txtLine_FFT_Frec">
       <property name="geometry">
        <rect>
-        <x>210</x>
+        <x>150</x>
         <y>140</y>
         <width>80</width>
         <height>21</height>
@@ -1431,7 +1431,7 @@
      <widget class="QLabel" name="DaMa_lbl_FFT_Frec">
       <property name="geometry">
        <rect>
-        <x>210</x>
+        <x>150</x>
         <y>120</y>
         <width>80</width>
         <height>16</height>
@@ -1465,6 +1465,42 @@
       </property>
       <property name="text">
        <string>Delete DataSet</string>
+      </property>
+     </widget>
+     <widget class="QRadioButton" name="DaMa_radioBtn_Year_2">
+      <property name="geometry">
+       <rect>
+        <x>240</x>
+        <y>280</y>
+        <width>100</width>
+        <height>20</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>UpDown</string>
+      </property>
+     </widget>
+     <widget class="QLabel" name="DaMa_lbl_FFT_Frec_2">
+      <property name="geometry">
+       <rect>
+        <x>250</x>
+        <y>120</y>
+        <width>111</width>
+        <height>16</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Column UpDown</string>
+      </property>
+     </widget>
+     <widget class="QComboBox" name="DaMa_ComBox_DataSet_Id_2">
+      <property name="geometry">
+       <rect>
+        <x>250</x>
+        <y>140</y>
+        <width>101</width>
+        <height>26</height>
+       </rect>
       </property>
      </widget>
     </widget>
