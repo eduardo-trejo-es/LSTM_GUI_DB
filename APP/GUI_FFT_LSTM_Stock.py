@@ -692,6 +692,7 @@ class Ui_GUI_LSTM_FORCASTER(object):
         self.DataSet_creator.Update_DataSetCreationStatus.connect(self.Event_DataSetCreationStatus)
         self.DataSet_creator.Update_Progress.connect(self.Event_UpdateProgress_DataSetCreator)
         self.DataSet_creator.Update_Progress_String.connect(self.Event_UpdateProgress_string_DataSetCreator)
+        self.DaMa_ComBox_Column_UpDown.state.connect(self.Event_CheckBox_Close)
         
         #####  Buttons calls #####   
         self.DaMa_btn_Create.clicked.connect(self.Create_DataSet)
@@ -1476,6 +1477,9 @@ class Ui_GUI_LSTM_FORCASTER(object):
         query="UPDATE DataSet SET Date_Time = ? WHERE DataSet_id=?"
         self.Forcaster_DB_c.execute(query,(Date_Time,DataSetToUpdate))
         self.Forcaster_DB_conn.commit()
+    
+    def Event_CheckBox_Close(self):
+        print("CheckBox Clicked")
         
     ##### Emit thread signals
     
