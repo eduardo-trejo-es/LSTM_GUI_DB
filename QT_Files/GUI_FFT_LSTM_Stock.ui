@@ -1480,7 +1480,7 @@
        <string>UpDown</string>
       </property>
      </widget>
-     <widget class="QLabel" name="DaMa_lbl_FFT_Frec_2">
+     <widget class="QLabel" name="DaMa_lbl_UpDown_Clmn">
       <property name="geometry">
        <rect>
         <x>250</x>
@@ -1493,7 +1493,7 @@
        <string>Column UpDown</string>
       </property>
      </widget>
-     <widget class="QComboBox" name="DaMa_ComBox_DataSet_Id_2">
+     <widget class="QComboBox" name="DaMa_ComBox_Column_UpDown">
       <property name="geometry">
        <rect>
         <x>250</x>
