@@ -99,21 +99,23 @@ class DL_Model(QThread):
         inputs=keras.Input(shape=(n_past,Columns_N))
 
         #LSTM_Layer1=keras.layers.LSTM(n_past, input_shape=(n_past,Columns_N), return_sequences=True,activation='PReLU')(inputs)
-        LSTM_Layer1=keras.layers.LSTM(LSTM1_Units, input_shape=(n_past,Columns_N), return_sequences=True,activation='PReLU')(inputs)
+        LSTM_Layer1=keras.layers.LSTM(LSTM1_Units, input_shape=(n_past,Columns_N), return_sequences=True,activation='PReLU',recurrent_dropout=0.25)(inputs)
 
         #Dropout_layer2=keras.layers.Dropout(0.5)(LSTM_Layer1)# modify
         #x=Dropout_layer1=keras.layers.Dropout(0.2)(x)
-        LSTM_Layer2=keras.layers.LSTM(LSTM2_Units, return_sequences=False,activation='PReLU')(LSTM_Layer1)
+        LSTM_Layer2=keras.layers.LSTM(LSTM2_Units, return_sequences=False,activation='PReLU',recurrent_dropout=0.25)(LSTM_Layer1)
 
-        #Dropout_layer3=keras.layers.Dropout(LryDcoeff)(LSTM_Layer2)# modify
+        Dropout_layer3=keras.layers.Dropout(LryDcoeff)(LSTM_Layer2)# modify
 
         #---------------------------Outputs
         #dense=keras.layers.Dense(1,kernel_regularizer=tf.keras.regularizers.L1L2(l1=0.00001, l2=0.00001))(Dropout_layer3)# L1 + L2 penalties
-        #dense=keras.layers.Dense(1)(Dropout_layer3)
+        dense=keras.layers.Dense(1)(Dropout_layer3)
         
         #the one 12 feb 2024
-        dense=keras.layers.Dense(Lyr_Dns,kernel_regularizer=tf.keras.regularizers.L2(Lyr_Dn_Rgzr),activation='sigmoid')(LSTM_Layer2)
-
+        #dense=keras.layers.Dense(Lyr_Dns,kernel_regularizer=tf.keras.regularizers.L2(Lyr_Dn_Rgzr),activation='sigmoid')(LSTM_Layer2)
+        #the one 17 feb 2024
+        #dense=keras.layers.Dense(Lyr_Dns,kernel_regularizer=tf.keras.regularizers.L2(Lyr_Dn_Rgzr),activation='sigmoid')(LSTM_Layer2)
+        
         #-------Layers outputs are linked
         outputs=dense
 
@@ -136,6 +138,7 @@ class DL_Model(QThread):
 
         #optim=keras.optimizers.Adam(1e-3)
         optim=keras.optimizers.Adam(OptAdam_Co)
+        #optim=keras.optimizers.RMSprop(OptAdam_Co)
         #Metrics=["mean_squared_error"]
         Metrics=["accuracy"]
 
