@@ -127,11 +127,17 @@ class DL_Model(QThread):
 
         #------------------- Loss and optimizer ----------------------------------------
         #got to ensure MeanAbsoluteError it's the good one for our data
-        loss = keras.losses.MeanSquaredError(reduction="auto", name="mean_squared_error")
+        #loss = keras.losses.MeanSquaredError(reduction="auto", name="mean_squared_error")
+        loss=keras.losses.BinaryCrossentropy(
+            axis=-1,
+            reduction="auto",
+            name='General_LossesName'
+        )
 
         #optim=keras.optimizers.Adam(1e-3)
         optim=keras.optimizers.Adam(OptAdam_Co)
-        Metrics=["mean_squared_error"]
+        #Metrics=["mean_squared_error"]
+        Metrics=["accuracy"]
 
         losses={
             "dense": loss

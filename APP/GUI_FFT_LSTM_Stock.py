@@ -43,6 +43,12 @@ from Eval_Forcast import DL_Evaluator
 #or by using the command c.execute('SELECT * FROM estudiantes")
 #print (c.fetchall()) a list is generated
 
+class ComboBox(QtWidgets.QComboBox):
+    popupAboutToBeShown = QtCore.pyqtSignal()
+
+    def showPopup(self):
+        self.popupAboutToBeShown.emit()
+        super(ComboBox, self).showPopup()
 
 class Ui_GUI_LSTM_FORCASTER(object):
     def __init__(self):
@@ -333,14 +339,11 @@ class Ui_GUI_LSTM_FORCASTER(object):
         self.MoTr_btn_Cancel_train = QtWidgets.QPushButton(self.Model_Trainner_Tab)
         self.MoTr_btn_Cancel_train.setGeometry(QtCore.QRect(470, 90, 141, 51))
         self.MoTr_btn_Cancel_train.setObjectName("MoTr_btn_Cancel_train")
-        self.MoTr_ComBox_Column_T_Predict = QtWidgets.QComboBox(self.Model_Trainner_Tab)
+        self.MoTr_ComBox_Column_T_Predict = ComboBox(self.Model_Trainner_Tab)
         self.MoTr_ComBox_Column_T_Predict.setGeometry(QtCore.QRect(270, 50, 81, 26))
         self.MoTr_ComBox_Column_T_Predict.setObjectName("MoTr_ComBox_Column_T_Predict")
-        self.MoTr_ComBox_Column_T_Predict.addItem("")
-        self.MoTr_ComBox_Column_T_Predict.addItem("")
-        self.MoTr_ComBox_Column_T_Predict.addItem("")
-        self.MoTr_ComBox_Column_T_Predict.addItem("")
-        self.MoTr_ComBox_Column_T_Predict.addItem("")
+        self.MoTr_ComBox_Column_T_Predict.clear()
+
         self.MoTr_lbl_ColumnPredict = QtWidgets.QLabel(self.Model_Trainner_Tab)
         self.MoTr_lbl_ColumnPredict.setGeometry(QtCore.QRect(270, 30, 111, 16))
         self.MoTr_lbl_ColumnPredict.setObjectName("MoTr_lbl_ColumnPredict")
@@ -520,7 +523,7 @@ class Ui_GUI_LSTM_FORCASTER(object):
         self.DaMa_ComBox_DataSet_Id.setObjectName("DaMa_ComBox_DataSet_Id")
         self.DaMa_ComBox_DataSet_Id.clear() #When starting app, combobox is updated
         
-        self.DaMa_ComBox_Column_UpDown = QtWidgets.QComboBox(self.Data_Manager_tab)
+        self.DaMa_ComBox_Column_UpDown = ComboBox(self.Data_Manager_tab)
         self.DaMa_ComBox_Column_UpDown.setGeometry(QtCore.QRect(250, 140, 101, 26))
         self.DaMa_ComBox_Column_UpDown.setObjectName("DaMa_ComBox_Column_UpDown")
         self.DaMa_ComBox_Column_UpDown.clear() #When starting app, combobox is updated
@@ -661,7 +664,7 @@ class Ui_GUI_LSTM_FORCASTER(object):
         #----------- TAB MODEL TRAINNING  -------------
         ############ General Emit Signals
         self.MoTr_ComBox_ChooseModel.currentIndexChanged.connect(self.Model_To_Train_ComboBoxChanged)
-        
+        self.MoTr_ComBox_Column_T_Predict.popupAboutToBeShown.connect(self.Model_To_Train_Event_ComboBox_Clicked)
         ############ Thread Emit Signals
         self.trainner.Update_TrainningProcssStatus.connect(self.Event_TrainningStatus)
         self.trainner.Update_Progress.connect(self.Event_UpdateProgress_TrainningProcess)
@@ -692,7 +695,7 @@ class Ui_GUI_LSTM_FORCASTER(object):
         self.DataSet_creator.Update_DataSetCreationStatus.connect(self.Event_DataSetCreationStatus)
         self.DataSet_creator.Update_Progress.connect(self.Event_UpdateProgress_DataSetCreator)
         self.DataSet_creator.Update_Progress_String.connect(self.Event_UpdateProgress_string_DataSetCreator)
-        self.DaMa_ComBox_Column_UpDown.state.connect(self.Event_CheckBox_Close)
+        self.DaMa_ComBox_Column_UpDown.popupAboutToBeShown.connect(self.Event_ComboBox_Clicked)
         
         #####  Buttons calls #####   
         self.DaMa_btn_Create.clicked.connect(self.Create_DataSet)
@@ -1359,7 +1362,7 @@ class Ui_GUI_LSTM_FORCASTER(object):
         #self.DaMa_ComBox_DataSet_Id.addItem(str(val1))
         
     def Check_Matching_Seed_DataSet(self,val_1,val_2,val_3,val_4,val_5,val_6,val_7,val_8,
-                                    val_9,val_10,val_11,val_12,val_13,val_14,val_15,val_16):
+                                    val_9,val_10,val_11,val_12,val_13,val_14,val_15,val_16,val_17,val_18):
         Matching=False
         Matching_Row=0
         Matching_Val1=False
@@ -1378,6 +1381,8 @@ class Ui_GUI_LSTM_FORCASTER(object):
         Matching_Val14=False
         Matching_Val15=False
         Matching_Val16=False
+        Matching_Val17=False
+        Matching_Val18=False
         
         ##Seed_Data; Getting all data 
         query="SELECT * FROM Seed_DataSet"
@@ -1436,10 +1441,15 @@ class Ui_GUI_LSTM_FORCASTER(object):
             if str(i[16])==str(val_16): Matching_Val16=True 
             else: Matching_Val16=False
             
+            if str(i[17])==str(val_17): Matching_Val17=True 
+            else: Matching_Val17=False
+            
+            if str(i[18])==str(val_18): Matching_Val18=True 
+            else: Matching_Val18=False
 
             if (Matching_Val1 and Matching_Val2 and Matching_Val3 and Matching_Val4 and Matching_Val5 and Matching_Val6 and Matching_Val7 and Matching_Val8
                 and Matching_Val9 and Matching_Val10 and Matching_Val11 and Matching_Val12 and Matching_Val13 and Matching_Val14 and Matching_Val15 and 
-                Matching_Val16):
+                Matching_Val16 and Matching_Val17 and Matching_Val18):
                 Matching=True
                 break
             else:
@@ -1448,14 +1458,14 @@ class Ui_GUI_LSTM_FORCASTER(object):
         return Matching,Matching_Row
         
     def Create_new_SeedDataSet_DB(self,val_1,val_2,val_3,val_4,val_5,val_6,val_7,val_8,
-                                    val_9,val_10,val_11,val_12,val_13,val_14,val_15,val_16):
+                                    val_9,val_10,val_11,val_12,val_13,val_14,val_15,val_16,val_17,val_18):
         
         query=""" INSERT INTO Seed_DataSet (Item,BackDays,Open_C ,High_C,Low_C,Close_C ,Volume_C,Open_FFT_C ,High_FFT_C ,Low_FFT_C,
-                                        Close_FFT_C ,Volum_FFT_C ,Day_Wk_N_C, Day_MonthNDay_C ,Year_C ,FFT_Frec)
-         VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)"""
+                                        Close_FFT_C ,Volum_FFT_C ,Day_Wk_N_C, Day_MonthNDay_C ,Year_C ,FFT_Frec,UpDown_C,UpDown_Clmn)
+         VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)"""
 
         self.Forcaster_DB_c.execute(query,(val_1,val_2,val_3,val_4,val_5,val_6,val_7,val_8,val_9,
-                                    val_10,val_11,val_12,val_13,val_14,val_15,val_16)) 
+                                    val_10,val_11,val_12,val_13,val_14,val_15,val_16,val_17,val_18)) 
         
         #Validate changes to our DB 
         self.Forcaster_DB_conn.commit()
@@ -1478,8 +1488,33 @@ class Ui_GUI_LSTM_FORCASTER(object):
         self.Forcaster_DB_c.execute(query,(Date_Time,DataSetToUpdate))
         self.Forcaster_DB_conn.commit()
     
-    def Event_CheckBox_Close(self):
-        print("CheckBox Clicked")
+    def Event_ComboBox_Clicked(self):
+        self.DaMa_ComBox_Column_UpDown.clear()
+        #Get check boxstates
+        if self.DaMa_CheckBox_Open.isChecked():Open_C=1
+        else: Open_C=0
+        
+        if self.DaMa_CheckBox_High.isChecked():High_C=1
+        else: High_C=0
+        
+        if self.DaMa_CheckBox_Low.isChecked():Low_C=1
+        else: Low_C=0
+        
+        if self.DaMa_CheckBox_Close.isChecked():Close_C=1
+        else: Close_C=0
+        
+        if self.DaMa_CheckBox_Volume.isChecked():Volume_C=1
+        else: Volume_C=0
+        
+        #Columns Filtre
+        ColumnsList=["Open","High","Low","Close","Volume"]
+        ColumnsSelected=[Open_C,High_C,Low_C,Close_C,Volume_C]
+        
+        for i in range(0,len(ColumnsList)-1):
+            if ColumnsSelected[i]==1:
+                self.DaMa_ComBox_Column_UpDown.addItem(str(ColumnsList[i]))
+        
+            
         
     ##### Emit thread signals
     
@@ -1685,6 +1720,26 @@ class Ui_GUI_LSTM_FORCASTER(object):
             self.MoTr_ComBox_Column_T_Predict.setCurrentIndex(index)
         
         self.TrainningTab_UpdateComboxRelationModelDataSet_ID()
+    
+    def Model_To_Train_Event_ComboBox_Clicked(self):
+        self.MoTr_ComBox_Column_T_Predict.clear()
+        Current_Trainning_DataSet_Id=int(self.MoTr_ComBox_DataSet.currentText())
+        
+        ## Getting the DB row DataSet 
+        query="SELECT * FROM DataSet WHERE DataSet_id=?"
+        self.Forcaster_DB_c.execute(query,(Current_Trainning_DataSet_Id,))
+        Model_Selected_Row=self.Forcaster_DB_c.fetchall()[0]
+        
+        DataSetPath=Model_Selected_Row[2]
+        
+        all_df=pd.read_csv(DataSetPath,index_col=0)
+        ColumnsList=all_df.columns
+        
+        for i in ColumnsList: self.MoTr_ComBox_Column_T_Predict.addItem(str(i))
+        
+        
+        
+        
         
     
     ##### Emit thread signals
