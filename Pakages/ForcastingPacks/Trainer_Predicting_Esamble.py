@@ -110,11 +110,54 @@ class Model_Trainer:
     #####   training data, testing data  ####
     trainX, testingX = self.Split3DimData(DS_finished_X,percentageTrainingData)
     trainY_Close,testingY_Close=self.Split3DimData(DS_finished_Close_Y,percentageTrainingData)
+    
+    
 
     ##Validated data set, im getting the spected result
-
+    
     print(testingX.shape)
     print(trainX.shape)
+    
+    print(type(trainY_Close))
+    print(trainY_Close[:6])
+    
+    ##### Converting Y data to do Classification function Updown #####
+    print("............................********************** 18 feb 2024 v")
+    # Doing trainY_Close
+    pre_trainY_Close_list=[]
+    for i in trainY_Close:
+      if i[0][0]==1:
+        pre_trainY_Close_list.append([1.,0.])
+      else:
+        pre_trainY_Close_list.append([0.,1.])
+
+    
+    trainY_Close=np.array(pre_trainY_Close_list)
+    print("trainY_Close.shape")
+    print(trainY_Close.shape)
+    
+    #print("trainY_Close.reshape shape")
+    #trainY_Close=np.reshape(trainY_Close,(trainY_Close.shape[0],1,2))
+    #print(trainY_Close.shape)
+    
+    # Doing testingY_Close
+    pre_testingY_Close_list=[]
+    for i in testingY_Close:
+      if i[0][0]==1:
+        pre_testingY_Close_list.append([1.,0.])
+      else:
+        pre_testingY_Close_list.append([0.,1.])
+    
+    testingY_Close=np.array(pre_testingY_Close_list)
+    print("testingY_Close.shape")
+    print(testingY_Close.shape)
+    
+    #print("testingY_Close.reshape shape")
+    #testingY_Close=np.reshape(testingY_Close,(testingY_Close.shape[0],1,2))
+    #print(testingY_Close.shape)
+    
+
+    print("............................********************** 18 feb 2024 A")
 
     train_Dates, testing_Dates = self.Split3DimData(Data_dates,percentageTrainingData)
 
@@ -148,7 +191,7 @@ class Model_Trainer:
     ephoc_print_callback = LambdaCallback(on_epoch_end=lambda ephoc,logs: self.End_ephoc_event(ephoc))
     #ephoc_print_callback = LambdaCallback(on_epoch_end=lambda ephoc,logs: print("this is number ephoc: "+str(ephoc)))
     
-    Model_CheckPoint=keras.callbacks.ModelCheckpoint(modelPath,save_format="h5",save_best_only=True)
+    Model_CheckPoint=keras.callbacks.ModelCheckpoint(modelPath,monitor="val_accuracy",save_format="h5",save_best_only=True)
     
     model.fit(x=trainX,y=y_data, epochs=NumEpochs, batch_size=15, validation_data=(testingX,testing_y_data),callbacks=[ephoc_print_callback,Model_CheckPoint])
     #history = model.fit(trainX,y=y_data, epochs=125, batch_size=15)

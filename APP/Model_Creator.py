@@ -109,7 +109,7 @@ class DL_Model(QThread):
 
         #---------------------------Outputs
         #dense=keras.layers.Dense(1,kernel_regularizer=tf.keras.regularizers.L1L2(l1=0.00001, l2=0.00001))(Dropout_layer3)# L1 + L2 penalties
-        dense=keras.layers.Dense(1)(Dropout_layer3)
+        dense=keras.layers.Dense(2,activation="softmax")(Dropout_layer3)
         
         #the one 12 feb 2024
         #dense=keras.layers.Dense(Lyr_Dns,kernel_regularizer=tf.keras.regularizers.L2(Lyr_Dn_Rgzr),activation='sigmoid')(LSTM_Layer2)
@@ -130,7 +130,7 @@ class DL_Model(QThread):
         #------------------- Loss and optimizer ----------------------------------------
         #got to ensure MeanAbsoluteError it's the good one for our data
         #loss = keras.losses.MeanSquaredError(reduction="auto", name="mean_squared_error")
-        loss=keras.losses.BinaryCrossentropy(
+        loss=keras.losses.CategoricalCrossentropy(
             axis=-1,
             reduction="auto",
             name='General_LossesName'

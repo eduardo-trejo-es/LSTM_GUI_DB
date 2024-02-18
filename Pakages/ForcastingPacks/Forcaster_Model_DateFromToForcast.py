@@ -39,6 +39,7 @@ class Forcast_Data:
     self.Forcasted_Date=""
     
     self.dataSet_Gen = DatasetGenerator()
+    self.classment_Active=True
     
   def ToForcastfrom(self,ColumToforcast,ColumRealYToCompare,dateFromForcast,data_frame_Path,BackDays):
     csvFileName=data_frame_Path
@@ -119,16 +120,24 @@ class Forcast_Data:
     print("###--- Pediction generated  ---- ")
     print(type(Prediction_Saved))
     print(Prediction_Saved)
-    print("Wait")
-    #####       Scaling Back     #####
-    AllPrediction_DS_scaled_Back=0
-    AllPrediction_DS_scaled_Back=scaler_Close.inverse_transform(Prediction_Saved)
-    
-    
-    Forcast_Close=0
-    
-    
-    Forcast_Close = AllPrediction_DS_scaled_Back[0][0]
+    if self.classment_Active:
+      ####  Traslating classification results ####
+      Prediction_Saved_list=0.
+      if Prediction_Saved[0][0] > Prediction_Saved[0][1]:
+        Prediction_Saved_list=1.
+      else:
+        Prediction_Saved_list=0.
+      
+      Forcast_Close=Prediction_Saved_list
+
+    else:
+      #####       Scaling Back     #####
+      AllPrediction_DS_scaled_Back=0
+      AllPrediction_DS_scaled_Back=scaler_Close.inverse_transform(Prediction_Saved)
+      
+      
+      Forcast_Close=0  
+      Forcast_Close = AllPrediction_DS_scaled_Back[0][0]
       
     #######    Generating forcasted dates    #######
 

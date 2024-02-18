@@ -111,21 +111,25 @@ class DL_Evaluator(QThread):
         Direction_Real=[]
         firstDate=df.index[0]
 
+        print("-----------------------*************************++++++")
+    
+
         ##Direction forcast close price and  Real close price
         for i in range(0,df.shape[0]):
+            
             #Direction_Forcast
             if df.index[i]==firstDate: 
                 Direction_Forcast.append("null")
                 Direction_Real.append("null")
             else:
-                if i<(df.shape[0]-1):
+                if i<(df.shape[0]-1): #To have 200 values at the end and not only 199
                     #Getting the Direction of forcast close price
                     if df['Forcast'][i]>df['Forcast'][i-1]:
                         Direction_Forcast.append("Up")
                     elif df['Forcast'][i]<df['Forcast'][i-1]:
                         Direction_Forcast.append("Down")
                     else:
-                        Direction_Real.append("equal")
+                        Direction_Forcast.append("equal")
                 else:
                     Direction_Forcast.append("null")
                 #Getting the Direction of Real close price   
@@ -138,8 +142,7 @@ class DL_Evaluator(QThread):
                         Direction_Real.append("equal")
                 else:
                     Direction_Real.append("null")
-                
-
+        
         df["Forcast_Direction"]=Direction_Forcast
         df["Real_Direction"]=Direction_Real
         
