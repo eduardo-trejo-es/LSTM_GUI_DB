@@ -257,7 +257,12 @@ class DL_DataSet(QThread):
         
         else:
             FFTNew_FileData=UpDoneAddedPath
-            
+        
+        #Generate new Normal distribution columns
+        if NormalD_ToDo:
+            self.dataSet_Gen.Add_normal_distribution(FFTNew_FileData,NewdfPath,MaxBackDist,BackPeriod,Column)
+        else:
+            NormalD_FileData=FFTNew_FileData
 
 
 
