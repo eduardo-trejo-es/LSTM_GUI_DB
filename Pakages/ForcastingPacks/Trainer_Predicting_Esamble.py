@@ -68,7 +68,27 @@ class Model_Trainer:
 
     scaler = scaler.fit(df_for_training)
     DS_raw_scaled = scaler.transform(df_for_training)
-    DS_raw_Close_scaled=DS_raw_scaled[:,[columToforcast]]
+    
+    #Dataset Y scaled
+    #DS_raw_Close_scaled=DS_raw_scaled[:,[columToforcast]]
+    
+    #Dataset Y not scaled
+    
+    DS_raw_Close_scaled=df_for_training.iloc[:,columToforcast]
+    DS_raw_Close_scaled=DS_raw_Close_scaled.to_numpy()
+    DS_raw_Close_scaled=np.reshape(DS_raw_Close_scaled,(DS_raw_Close_scaled.shape[0],1))
+    
+    
+    
+    
+    #Taking off the column to forcast from data that goes in model
+    print(type(DS_raw_scaled))
+    print(DS_raw_scaled.shape)
+    
+    print("After delete column to forcast from dataset ")
+    DS_raw_scaled=np.delete(DS_raw_scaled, columToforcast, 1)
+
+    
     #DS_raw_Close_scaled=DS_raw_scaled[:,[Columns_N]]
     #DS_raw_Close_scaled=DS_raw_scaled[:,[3]]
     #DS_raw_Close_scaled=DS_raw_scaled[:,[8]]
@@ -120,10 +140,12 @@ class Model_Trainer:
     
     print(type(trainY_Close))
     print(trainY_Close[:6])
+    print(trainY_Close.shape)
     
     ##### Converting Y data to do Classification function Updown #####
     print("............................********************** 18 feb 2024 v")
     # Doing trainY_Close
+    
     pre_trainY_Close_list=[]
     for i in trainY_Close:
       if i[0][0]==1:

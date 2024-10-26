@@ -43,6 +43,7 @@ class Forcast_Data:
     
   def ToForcastfrom(self,ColumToforcast,ColumRealYToCompare,dateFromForcast,data_frame_Path,BackDays):
     csvFileName=data_frame_Path
+    
   ########     Getting the Data     ######
     #Model_Path=model_Path
     df=pd.read_csv(csvFileName,index_col=0)
@@ -63,7 +64,8 @@ class Forcast_Data:
     
     #Getting the columns name
     cols = list(df)[0:Columns_N]
-    #New dataframe with only training data - 5 columns
+    
+    #New dataframe with only training data
     df_forcasting = df[cols].astype(float)
 
     #####       Scaling data     #####
@@ -73,22 +75,28 @@ class Forcast_Data:
     scaler = scaler.fit(df_forcasting)
     DS_raw_scaled = scaler.transform(df_forcasting)
     
+    print((DS_raw_scaled.shape))
+    print("After delete column to forcast from dataset ")
+    DS_raw_scaled=np.delete(DS_raw_scaled, columToforcast, 1)
+    print((DS_raw_scaled.shape))
+    
+
     ####    Scaling only the close colum   ####
     print(dateFromForcast)
     print("----------------------------------------------")
     print("\n")
-    df_forcasting_close=df_forcasting[cols[columToforcast]].to_numpy()
-    #df_forcasting_close=df_forcasting[cols[3]].to_numpy()
-    #df_forcasting_close=df_forcasting[cols[8]].to_numpy()
-    df_forcasting_close=df_forcasting_close.reshape(len(df_forcasting[cols[columToforcast]].to_numpy()),-1)
-    #df_forcasting_close=df_forcasting_close.reshape(len(df_forcasting[cols[3]].to_numpy()),-1)
-    #df_forcasting_close=df_forcasting_close.reshape(len(df_forcasting[cols[8]].to_numpy()),-1)
     
-    scaler_Close = MinMaxScaler()
-
-    scaler_Close = scaler_Close.fit(df_forcasting_close)
 
     
+    #Wont scale UpDown values
+    #df_forcasting_close=df_forcasting[cols[columToforcast]].to_numpy()
+
+    #df_forcasting_close=df_forcasting_close.reshape(len(df_forcasting[cols[columToforcast]].to_numpy()),-1)
+    #scaler_Close = MinMaxScaler()
+    #scaler_Close = scaler_Close.fit(df_forcasting_close)
+    scaler_Close=df_forcasting.iloc[:,columToforcast]
+    scaler_Close=scaler_Close.to_numpy()
+    scaler_Close=np.reshape(scaler_Close,(scaler_Close.shape[0],1))
 
     ####   getting the 120 most present data  ####
 
@@ -100,7 +108,7 @@ class Forcast_Data:
     
     Batch_Real_Y_NonScaled=np.array(Batch_Real_Y_NonScaled)
     #....... databatch .....#
-    Batch_to_predict=np.reshape(Batch_to_predict,(1,backDaysRef,Columns_N))
+    Batch_to_predict=np.reshape(Batch_to_predict,(1,backDaysRef,Columns_N-1))
 
 
     ##############      Retriving model       ########
@@ -116,10 +124,13 @@ class Forcast_Data:
     temporalScalingBack=0
     #testingX=np.array(testingX)
     ######    Generating forcast data   ######
+    
+    
     Prediction_Saved = self.model.predict(Batch_to_predict) #the input is a 120 units of time batch
     print("###--- Pediction generated  ---- ")
     print(type(Prediction_Saved))
     print(Prediction_Saved)
+    
     if self.classment_Active:
       ####  Traslating classification results ####
       Prediction_Saved_list=0.
