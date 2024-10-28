@@ -143,6 +143,7 @@ class DL_DataSet(QThread):
         FFT_Frec=SeedDataSetlist[16]
         UpDown_C=SeedDataSetlist[17]
         Column=SeedDataSetlist[18]
+        DevStnd_C=SeedDataSetlist[19]
          
         ParentPath= "APP/DataSets/"
         BasePath="{}/Id{}".format(itemName,DataSetId)
@@ -156,6 +157,7 @@ class DL_DataSet(QThread):
         MonthAddedPath=pathTocreated+"/DataSet_month.csv"
         yearAddedPath=pathTocreated+"/DataSet_year.csv"
         UpDoneAddedPath=pathTocreated+"/DataSet_UpDown.csv"
+        DevStndPath=pathTocreated+"/DataSet_DevStnd.csv"
         FFTAddedPath=pathTocreated+"/DataSet_FFTColumns.csv"
         LastPopcolum=pathTocreated+"/DataSet_lastPoppingColums.csv"
         
@@ -234,6 +236,12 @@ class DL_DataSet(QThread):
             self.Update_Progress.emit(88)
         else:
             UpDoneAddedPath=yearAddedPath
+            
+        #To add DevStnd
+        if DevStnd_C==1:
+            self.dataSet_Gen.Add_normal_distribution(UpDoneAddedPath,NewdfPath,MaxBackDist,BackPeriod,Column)
+        else:
+            NormalD_FileData=UpDoneAddedPath
     
 
         #Generate new FFT columns
@@ -258,11 +266,7 @@ class DL_DataSet(QThread):
         else:
             FFTNew_FileData=UpDoneAddedPath
         
-        #Generate new Normal distribution columns
-        if NormalD_ToDo:
-            self.dataSet_Gen.Add_normal_distribution(FFTNew_FileData,NewdfPath,MaxBackDist,BackPeriod,Column)
-        else:
-            NormalD_FileData=FFTNew_FileData
+        
 
 
 
