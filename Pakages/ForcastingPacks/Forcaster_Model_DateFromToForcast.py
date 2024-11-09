@@ -39,7 +39,7 @@ class Forcast_Data:
     self.Forcasted_Date=""
     
     self.dataSet_Gen = DatasetGenerator()
-    self.classment_Active=True
+    self.classment_Active=False #to allow UpDown binary forcast some other things were deleted
     
   def ToForcastfrom(self,ColumToforcast,ColumRealYToCompare,dateFromForcast,data_frame_Path,BackDays):
     csvFileName=data_frame_Path
@@ -87,16 +87,14 @@ class Forcast_Data:
     print("\n")
     
 
-    
-    #Wont scale UpDown values
-    #df_forcasting_close=df_forcasting[cols[columToforcast]].to_numpy()
+    df_forcasting_close=df_forcasting[cols[columToforcast]].to_numpy()
 
-    #df_forcasting_close=df_forcasting_close.reshape(len(df_forcasting[cols[columToforcast]].to_numpy()),-1)
-    #scaler_Close = MinMaxScaler()
-    #scaler_Close = scaler_Close.fit(df_forcasting_close)
-    scaler_Close=df_forcasting.iloc[:,columToforcast]
-    scaler_Close=scaler_Close.to_numpy()
-    scaler_Close=np.reshape(scaler_Close,(scaler_Close.shape[0],1))
+    df_forcasting_close=df_forcasting_close.reshape(len(df_forcasting[cols[columToforcast]].to_numpy()),-1)
+    scaler_Close = MinMaxScaler()
+    scaler_Close = scaler_Close.fit(df_forcasting_close)
+    #scaler_Close=df_forcasting.iloc[:,columToforcast]
+    #scaler_Close=scaler_Close.to_numpy()
+    #scaler_Close=np.reshape(scaler_Close,(scaler_Close.shape[0],1))
 
     ####   getting the 120 most present data  ####
 
@@ -109,12 +107,6 @@ class Forcast_Data:
     Batch_Real_Y_NonScaled=np.array(Batch_Real_Y_NonScaled)
     #....... databatch .....#
     Batch_to_predict=np.reshape(Batch_to_predict,(1,backDaysRef,Columns_N-1))
-
-
-    ##############      Retriving model       ########
-
-
-    #model = keras.models.load_model(Model_Path)
 
 
     ##########################################
