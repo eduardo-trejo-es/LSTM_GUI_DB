@@ -126,7 +126,7 @@ class DL_DataSet(QThread):
         self.Update_Progress.emit(25)
         
         itemName=SeedDataSetlist[1]
-        BackDays=SeedDataSetlist[2]
+        BackDays=int(SeedDataSetlist[2])
         Open_C=SeedDataSetlist[3]
         High_C=SeedDataSetlist[4]
         Low_C=SeedDataSetlist[5]
@@ -144,6 +144,9 @@ class DL_DataSet(QThread):
         UpDown_C=SeedDataSetlist[17]
         Column=SeedDataSetlist[18]
         DevStnd_C=SeedDataSetlist[19]
+        MaxBackDist=int(SeedDataSetlist[20])
+        BackPeriod=int(SeedDataSetlist[21])
+        
          
         ParentPath= "APP/DataSets/"
         BasePath="{}/Id{}".format(itemName,DataSetId)
@@ -157,7 +160,7 @@ class DL_DataSet(QThread):
         MonthAddedPath=pathTocreated+"/DataSet_month.csv"
         yearAddedPath=pathTocreated+"/DataSet_year.csv"
         UpDoneAddedPath=pathTocreated+"/DataSet_UpDown.csv"
-        DevStndPath=pathTocreated+"/DataSet_DevStnd.csv"
+        NormalD_Path=pathTocreated+"/DataSet_DevStnd.csv"
         FFTAddedPath=pathTocreated+"/DataSet_FFTColumns.csv"
         LastPopcolum=pathTocreated+"/DataSet_lastPoppingColums.csv"
         
@@ -203,6 +206,7 @@ class DL_DataSet(QThread):
 
         #To add the day of the week 0=monday, 1=tuesday .... 4= friday
         if Day_Wk_N_C==1:
+            self.Update_Progress_String.emit("Adding WeeDay columns")
             self.dataSet_Gen.AddColumnWeekDay(Onlyonecolumn, DayNumAddedPath,False)
             self.dataSet_Gen.PopListdf(ColumnsToPop,Original_Path_Retiving,Onlyonecolumn)
             self.Update_Progress_String.emit("WeeDay columns added")
@@ -215,6 +219,7 @@ class DL_DataSet(QThread):
         #To add the number*100 Month of the year: january = 100, dicember=1200
         # and Day of the month 1...30 or 1...28 or 1...31
         if Day_MonthNDay_C==1:
+            self.Update_Progress_String.emit("Adding Month and month day columns")
             self.dataSet_Gen.AddColumnMothandDay(DayNumAddedPath, MonthAddedPath,False)
             self.Update_Progress_String.emit("Month and month day columns added")
             self.Update_Progress.emit(80)
@@ -223,6 +228,7 @@ class DL_DataSet(QThread):
 
         #To add the year
         if Year_C==1:
+            self.Update_Progress_String.emit("Adding Year column")
             self.dataSet_Gen.AddColumnYear(MonthAddedPath,yearAddedPath)
             self.Update_Progress_String.emit("Year column added")
             self.Update_Progress.emit(85)
@@ -231,6 +237,7 @@ class DL_DataSet(QThread):
         
         #To Add UpDown
         if UpDown_C==1:
+            self.Update_Progress_String.emit("Adding UpDown")
             self.dataSet_Gen.AddUpDown(yearAddedPath,UpDoneAddedPath,Column)
             self.Update_Progress_String.emit("UpDown Added")
             self.Update_Progress.emit(88)
@@ -239,9 +246,12 @@ class DL_DataSet(QThread):
             
         #To add DevStnd
         if DevStnd_C==1:
-            self.dataSet_Gen.Add_normal_distribution(UpDoneAddedPath,NewdfPath,MaxBackDist,BackPeriod,Column)
+            self.Update_Progress_String.emit("Addeding Standard deviation ")
+            self.dataSet_Gen.Add_normal_distribution(UpDoneAddedPath,NormalD_Path,MaxBackDist,BackPeriod,Column)
+            self.Update_Progress_String.emit("Standard deviation Added")
+            self.Update_Progress.emit(90)
         else:
-            NormalD_FileData=UpDoneAddedPath
+            NormalD_Path=UpDoneAddedPath
     
 
         #Generate new FFT columns
@@ -253,18 +263,19 @@ class DL_DataSet(QThread):
                 if Colums_Selection_FFT[i]==1:
                     ColumnsToFFT.append(columns[i])
 
-            backdaysToconsider=self.BackDaysConsideredFFT+1
-            inicialPath=UpDoneAddedPath
+            #backdaysToconsider=self.BackDaysConsideredFFT+1
+            backdaysToconsider=BackDays+1
+            inicialPath=NormalD_Path
             FFTNew_FileData=FFTAddedPath
             frec=self.Convert(FFT_Frec)
             
             
             self.Update_Progress_String.emit("Adding FFT columns columns added")
-            self.Update_Progress.emit(90)
+            self.Update_Progress.emit(92)
             self.dataSet_Gen.getTheLastFFTValue(backdaysToconsider,frec,ColumnsToFFT,inicialPath, FFTNew_FileData)
         
         else:
-            FFTNew_FileData=UpDoneAddedPath
+            FFTNew_FileData=NormalD_Path
         
         
 

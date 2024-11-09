@@ -439,8 +439,17 @@ class Ui_GUI_LSTM_FORCASTER(object):
         self.DaMa_btn_Delete_Ds.setObjectName("DaMa_btn_Delete_Ds")
            
         self.DaMa_txtLine_Stock_Item = QtWidgets.QLineEdit(self.Data_Manager_tab)
-        self.DaMa_txtLine_Stock_Item.setGeometry(QtCore.QRect(60, 90, 231, 21))
+        self.DaMa_txtLine_Stock_Item.setGeometry(QtCore.QRect(170, 40, 121, 21))
         self.DaMa_txtLine_Stock_Item.setObjectName("DaMa_txtLine_Stock_Item")
+        
+        self.DaMa_txtLine_MaxBackDist = QtWidgets.QLineEdit(self.Data_Manager_tab)
+        self.DaMa_txtLine_MaxBackDist.setGeometry(QtCore.QRect(160, 90, 80, 21))
+        self.DaMa_txtLine_MaxBackDist.setObjectName("DaMa_txtLine_MaxBackDist")
+        
+        self.DaMa_txtLine_backPeriod = QtWidgets.QLineEdit(self.Data_Manager_tab)
+        self.DaMa_txtLine_backPeriod.setGeometry(QtCore.QRect(60, 90, 80, 21))
+        self.DaMa_txtLine_backPeriod.setObjectName("DaMa_txtLine_backPeriod")
+        
         self.DaMa_txtLine_BackDay = QtWidgets.QLineEdit(self.Data_Manager_tab)
         self.DaMa_txtLine_BackDay.setGeometry(QtCore.QRect(60, 140, 80, 21))
         self.DaMa_txtLine_BackDay.setObjectName("DaMa_txtLine_BackDay")
@@ -448,8 +457,18 @@ class Ui_GUI_LSTM_FORCASTER(object):
         self.DaMa_txtLine_FFT_Frec.setGeometry(QtCore.QRect(150, 140, 80, 21))
         self.DaMa_txtLine_FFT_Frec.setObjectName("DaMa_txtLine_FFT_Frec")
         self.DaMa_lbl_Stock_Item = QtWidgets.QLabel(self.Data_Manager_tab)
-        self.DaMa_lbl_Stock_Item.setGeometry(QtCore.QRect(60, 70, 201, 16))
+        self.DaMa_lbl_Stock_Item.setGeometry(QtCore.QRect(170, 20, 101, 16))
         self.DaMa_lbl_Stock_Item.setObjectName("DaMa_lbl_Stock_Item")
+        
+        self.DaMa_lbl_MaxBackDist = QtWidgets.QLabel(self.Data_Manager_tab)
+        self.DaMa_lbl_MaxBackDist.setGeometry(QtCore.QRect(160, 70, 111, 16))
+        self.DaMa_lbl_MaxBackDist.setObjectName("DaMa_lbl_MaxBackDist")
+        
+    
+        self.DaMa_lbl_backPeriod = QtWidgets.QLabel(self.Data_Manager_tab)
+        self.DaMa_lbl_backPeriod.setGeometry(QtCore.QRect(60, 70, 80, 16))
+        self.DaMa_lbl_backPeriod.setObjectName("DaMa_lbl_Stock_Item")
+        
         self.DaMa_txtLine_DateTime = QtWidgets.QLineEdit(self.Data_Manager_tab)
         self.DaMa_txtLine_DateTime.setGeometry(QtCore.QRect(370, 90, 241, 21))
         self.DaMa_txtLine_DateTime.setObjectName("DaMa_txtLine_DateTime")
@@ -802,11 +821,15 @@ class Ui_GUI_LSTM_FORCASTER(object):
         self.DaMa_btn_Update.setText(_translate("GUI_LSTM_FORCASTER", "Update"))
         self.DaMa_Lbl_Progres.setText(_translate("GUI_LSTM_FORCASTER", "Ready"))
         self.DaMa_lbl_DataSetId.setText(_translate("GUI_LSTM_FORCASTER", "DataSet id"))
-        self.DaMa_lbl_UpDownClmn.setText(_translate("GUI_LSTM_FORCASTER", "Column UpDown"))
+        self.DaMa_lbl_UpDownClmn.setText(_translate("GUI_LSTM_FORCASTER", "Column to predict"))
         
         self.DaMa_btn_Create.setText(_translate("GUI_LSTM_FORCASTER", "Create"))
         self.DaMa_btn_Delete_Ds.setText(_translate("GUI_LSTM_FORCASTER", "Delete DataSet"))
         self.DaMa_lbl_Stock_Item.setText(_translate("GUI_LSTM_FORCASTER", "Stock Item"))
+        
+        self.DaMa_lbl_MaxBackDist.setText(_translate("GUI_LSTM_FORCASTER", "Max Back Dist"))
+        self.DaMa_lbl_backPeriod.setText(_translate("GUI_LSTM_FORCASTER", "Back Period"))
+        
         self.DaMa_lbl_DateTime.setText(_translate("GUI_LSTM_FORCASTER", "Date time"))
         self.DaMa_lbl_BackDays.setText(_translate("GUI_LSTM_FORCASTER", "BackDays"))
         self.DaMa_lbl_FFT_Frec.setText(_translate("GUI_LSTM_FORCASTER", "FFT_frec"))
@@ -1151,6 +1174,9 @@ class Ui_GUI_LSTM_FORCASTER(object):
         CurrentSeedDataRow=0
         Item = self.DaMa_txtLine_Stock_Item.text()
         BackDays = self.DaMa_txtLine_BackDay.text()
+        MaxBackDist=self.DaMa_txtLine_MaxBackDist.text()
+        backPeriod=BackDays
+        
         
         
         #Getting data from GUI
@@ -1201,6 +1227,7 @@ class Ui_GUI_LSTM_FORCASTER(object):
         
         if self.DaMa_CheckBox_DevStnd.isChecked():DevStnd_C=1
         else: DevStnd_C=0
+    
         
         
         FFT_Frec = self.DaMa_txtLine_FFT_Frec.text()
@@ -1211,12 +1238,12 @@ class Ui_GUI_LSTM_FORCASTER(object):
         
         #Check if seed data already exist
         matching,matching_row=self.Check_Matching_Seed_DataSet(Item,BackDays,Open_C ,High_C,Low_C,Close_C ,Volume_C,Open_FFT_C ,High_FFT_C ,Low_FFT_C,
-                                                           Close_FFT_C ,Volum_FFT_C ,Day_Wk_N_C, Day_MonthNDay_C ,Year_C ,FFT_Frec, UpDown_C,ColumnSelected,DevStnd_C)
+                                                           Close_FFT_C ,Volum_FFT_C ,Day_Wk_N_C, Day_MonthNDay_C ,Year_C ,FFT_Frec, UpDown_C,ColumnSelected,DevStnd_C,MaxBackDist,backPeriod)
         
         #new seed dataSet is created; if at least a feature has been changed
         if matching==False:
             self.Create_new_SeedDataSet_DB(Item,BackDays,Open_C ,High_C,Low_C,Close_C ,Volume_C,Open_FFT_C ,High_FFT_C ,Low_FFT_C,
-                                        Close_FFT_C ,Volum_FFT_C ,Day_Wk_N_C ,Day_MonthNDay_C ,Year_C ,FFT_Frec,UpDown_C,ColumnSelected,DevStnd_C)
+                                        Close_FFT_C ,Volum_FFT_C ,Day_Wk_N_C ,Day_MonthNDay_C ,Year_C ,FFT_Frec,UpDown_C,ColumnSelected,DevStnd_C,MaxBackDist,backPeriod)
             query="SELECT * FROM Seed_DataSet WHERE SeedDataSet_id=(SELECT max(SeedDataSet_id) FROM Seed_DataSet)"
             self.Forcaster_DB_c.execute(query)
             ContentList=self.Forcaster_DB_c.fetchall()
@@ -1313,6 +1340,8 @@ class Ui_GUI_LSTM_FORCASTER(object):
         for i in Select_SeedDataSet:  
             self.DaMa_txtLine_Stock_Item.setText(str(i[1]))
             self.DaMa_txtLine_BackDay.setText(str(i[2]))
+            self.DaMa_txtLine_MaxBackDist.setText(str(i[20]))
+            self.DaMa_txtLine_backPeriod.setText(str(i[2]))
             
             # data from GUI
             if i[3]==1:self.DaMa_CheckBox_Open.setChecked(True)
@@ -1362,7 +1391,7 @@ class Ui_GUI_LSTM_FORCASTER(object):
             if i[17]==1:self.DaMa_CheckBox_UpDown.setChecked(True)
             else:self.DaMa_CheckBox_UpDown.setChecked(False)
             
-            if i[18]==1:self.DaMa_CheckBox_DevStnd.setChecked(True)
+            if i[19]==1:self.DaMa_CheckBox_DevStnd.setChecked(True)
             else: self.DaMa_CheckBox_DevStnd.setChecked(False)
             
             self.DaMa_txtLine_FFT_Frec.setText(str(i[16]))
@@ -1376,7 +1405,7 @@ class Ui_GUI_LSTM_FORCASTER(object):
         #self.DaMa_ComBox_DataSet_Id.addItem(str(val1))
         
     def Check_Matching_Seed_DataSet(self,val_1,val_2,val_3,val_4,val_5,val_6,val_7,val_8,
-                                    val_9,val_10,val_11,val_12,val_13,val_14,val_15,val_16,val_17,val_18,val_19):
+                                    val_9,val_10,val_11,val_12,val_13,val_14,val_15,val_16,val_17,val_18,val_19,val_20,val_21):
         Matching=False
         Matching_Row=0
         Matching_Val1=False
@@ -1398,6 +1427,8 @@ class Ui_GUI_LSTM_FORCASTER(object):
         Matching_Val17=False
         Matching_Val18=False
         Matching_Val19=False
+        Matching_Val20=False
+        Matching_Val21=False
         
         ##Seed_Data; Getting all data 
         query="SELECT * FROM Seed_DataSet"
@@ -1464,10 +1495,16 @@ class Ui_GUI_LSTM_FORCASTER(object):
             
             if str(i[19])==str(val_19): Matching_Val19=True 
             else: Matching_Val19=False
+            
+            if str(i[20])==str(val_20): Matching_Val20=True 
+            else: Matching_Val20=False
+            
+            if str(i[21])==str(val_21): Matching_Val21=True 
+            else: Matching_Val21=False
 
             if (Matching_Val1 and Matching_Val2 and Matching_Val3 and Matching_Val4 and Matching_Val5 and Matching_Val6 and Matching_Val7 and Matching_Val8
                 and Matching_Val9 and Matching_Val10 and Matching_Val11 and Matching_Val12 and Matching_Val13 and Matching_Val14 and Matching_Val15 and 
-                Matching_Val16 and Matching_Val17 and Matching_Val18 and Matching_Val19):
+                Matching_Val16 and Matching_Val17 and Matching_Val18 and Matching_Val19 and Matching_Val20 and Matching_Val21):
                 Matching=True
                 break
             else:
@@ -1476,14 +1513,14 @@ class Ui_GUI_LSTM_FORCASTER(object):
         return Matching,Matching_Row
         
     def Create_new_SeedDataSet_DB(self,val_1,val_2,val_3,val_4,val_5,val_6,val_7,val_8,
-                                    val_9,val_10,val_11,val_12,val_13,val_14,val_15,val_16,val_17,val_18,val_19):
+                                    val_9,val_10,val_11,val_12,val_13,val_14,val_15,val_16,val_17,val_18,val_19, val_20, val_21):
         
         query=""" INSERT INTO Seed_DataSet (Item,BackDays,Open_C ,High_C,Low_C,Close_C ,Volume_C,Open_FFT_C ,High_FFT_C ,Low_FFT_C,
-                                        Close_FFT_C ,Volum_FFT_C ,Day_Wk_N_C, Day_MonthNDay_C ,Year_C ,FFT_Frec,UpDown_C,UpDown_Clmn,DevStnd_C)
-         VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)"""
+                                        Close_FFT_C ,Volum_FFT_C ,Day_Wk_N_C, Day_MonthNDay_C ,Year_C ,FFT_Frec,UpDown_C,UpDown_Clmn,DevStnd_C,MaxBackDist,backPeriod)
+         VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)"""
 
         self.Forcaster_DB_c.execute(query,(val_1,val_2,val_3,val_4,val_5,val_6,val_7,val_8,val_9,
-                                    val_10,val_11,val_12,val_13,val_14,val_15,val_16,val_17,val_18,val_19)) 
+                                    val_10,val_11,val_12,val_13,val_14,val_15,val_16,val_17,val_18,val_19,val_20,val_21)) 
         
         #Validate changes to our DB 
         self.Forcaster_DB_conn.commit()

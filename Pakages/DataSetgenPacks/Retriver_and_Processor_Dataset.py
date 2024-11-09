@@ -473,8 +473,8 @@ class DatasetGenerator:
         
         self.SavingDataset(df,csvFileName, csvFileName_New,False)
     
-    def Add_normal_distribution(self,Df,NewdfPath,MaxBackDist,BackPeriod,Column):
-        df=pd.read_csv(Df, index_col="Date")
+    def Add_normal_distribution(self,csvFileName_NormalD,NewdfPath_NormalD,MaxBackDist,BackPeriod,Column):
+        df=pd.read_csv(csvFileName_NormalD, index_col="Date")
         New_df=df
         #print(New_df.shape[0])
         maxBackDist=MaxBackDist
@@ -525,4 +525,4 @@ class DatasetGenerator:
         New_df_[Name_New_Column_2]=All_Area_list
         New_df_[Name_New_Column_3]=sigmaOofset_Plus_list
 
-        self.SavingDataset(New_df_,"actualdfPath", NewdfPath, False)  
+        self.SavingDataset(New_df_,csvFileName_NormalD, NewdfPath_NormalD, False)  

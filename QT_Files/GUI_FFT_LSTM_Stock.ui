@@ -30,7 +30,7 @@
      <enum>QTabWidget::North</enum>
     </property>
     <property name="currentIndex">
-     <number>2</number>
+     <number>3</number>
     </property>
     <property name="movable">
      <bool>false</bool>
@@ -1134,9 +1134,9 @@
      <widget class="QLineEdit" name="DaMa_txtLine_Stock_Item">
       <property name="geometry">
        <rect>
-        <x>60</x>
-        <y>90</y>
-        <width>231</width>
+        <x>170</x>
+        <y>40</y>
+        <width>121</width>
         <height>21</height>
        </rect>
       </property>
@@ -1154,9 +1154,9 @@
      <widget class="QLabel" name="DaMa_lbl_Stock_Item">
       <property name="geometry">
        <rect>
-        <x>60</x>
-        <y>70</y>
-        <width>201</width>
+        <x>170</x>
+        <y>20</y>
+        <width>101</width>
         <height>16</height>
        </rect>
       </property>
@@ -1480,17 +1480,17 @@
        <string>UpDown</string>
       </property>
      </widget>
-     <widget class="QLabel" name="DaMa_lbl_UpDown_Clmn">
+     <widget class="QLabel" name="DaMa_lbl_UpDownClmn">
       <property name="geometry">
        <rect>
         <x>250</x>
-        <y>120</y>
-        <width>111</width>
-        <height>16</height>
+        <y>110</y>
+        <width>141</width>
+        <height>41</height>
        </rect>
       </property>
       <property name="text">
-       <string>Column UpDown</string>
+       <string>Column to predict</string>
       </property>
      </widget>
      <widget class="QComboBox" name="DaMa_ComBox_Column_UpDown">
@@ -1500,6 +1500,52 @@
         <y>140</y>
         <width>101</width>
         <height>26</height>
+       </rect>
+      </property>
+     </widget>
+     <widget class="QLabel" name="DaMa_lbl_backPeriod">
+      <property name="geometry">
+       <rect>
+        <x>60</x>
+        <y>70</y>
+        <width>80</width>
+        <height>16</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Back Period</string>
+      </property>
+     </widget>
+     <widget class="QLineEdit" name="DaMa_txtLine_backPeriod">
+      <property name="geometry">
+       <rect>
+        <x>60</x>
+        <y>90</y>
+        <width>80</width>
+        <height>21</height>
+       </rect>
+      </property>
+     </widget>
+     <widget class="QLabel" name="DaMa_lbl_MaxBackDist">
+      <property name="geometry">
+       <rect>
+        <x>160</x>
+        <y>70</y>
+        <width>111</width>
+        <height>16</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Max Back Dist</string>
+      </property>
+     </widget>
+     <widget class="QLineEdit" name="DaMa_txtLine_MaxBackDist">
+      <property name="geometry">
+       <rect>
+        <x>160</x>
+        <y>90</y>
+        <width>80</width>
+        <height>21</height>
        </rect>
       </property>
      </widget>
