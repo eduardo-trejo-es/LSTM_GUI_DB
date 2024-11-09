@@ -88,12 +88,14 @@ class DL_Trainner(QThread):
         
         training_result,self.losses=self.trainer_model.to_train(int(ColumToforcast),int(numEpochs),Model_Path,Data_CSV,int(percentageData),int(Np_pasdays))
         
+        """
+        #-------------  using binary   ----------  
         #getting the lats value loss
         loss=self.losses["loss"][len(self.losses)-1:].values[0]
         self.LastLoss=loss
         
         #getting the lats value mean_squared_error
-        Mean_Squared_error=self.losses["accuracy"][len(self.losses)-1:].values[0]
+        Mean_Squared_error=self.losses["mean_squared_error"][len(self.losses)-1:].values[0]
         self.LastMean_Squared_error=Mean_Squared_error
         
         #getting the lats value val_loss
@@ -101,7 +103,24 @@ class DL_Trainner(QThread):
         self.LastValLoss=ValLoss
         
         #getting the lats value val_mean_squared_error
-        ValMeanSquared_Error=self.losses["val_accuracy"][len(self.losses)-1:].values[0]
+        ValMeanSquared_Error=self.losses["val_mean_squared_error"][len(self.losses)-1:].values[0]
+        self.LastValMeanSquared_Error=ValMeanSquared_Error
+        """
+        #-------------  using regression  ----------  
+        #getting the lats value loss
+        loss=self.losses["loss"][len(self.losses)-1:].values[0]
+        self.LastLoss=loss
+        
+        #getting the lats value mean_squared_error
+        Mean_Squared_error=self.losses["mean_squared_error"][len(self.losses)-1:].values[0]
+        self.LastMean_Squared_error=Mean_Squared_error
+        
+        #getting the lats value val_loss
+        ValLoss=self.losses["val_loss"][len(self.losses)-1:].values[0]
+        self.LastValLoss=ValLoss
+        
+        #getting the lats value val_mean_squared_error
+        ValMeanSquared_Error=self.losses["val_mean_squared_error"][len(self.losses)-1:].values[0]
         self.LastValMeanSquared_Error=ValMeanSquared_Error
         
         self.Update_Progress_String.emit("Trainning finished")

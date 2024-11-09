@@ -220,7 +220,7 @@ class Model_Trainer:
 
 
     losses = pd.DataFrame(model.history.history)
-    #model.save(modelPath,save_format="h5")
+    model.save(modelPath,save_format="h5")
     
 
     #losses.plot()

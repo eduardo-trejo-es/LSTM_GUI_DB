@@ -127,7 +127,7 @@ class DL_Model(QThread):
         #keras.utils.plot_model(model, "my_first_model_with_shape_info.png", show_shapes=True)
 
 
-        #------------------- Loss and optimizer ----------------------------------------
+        """#------------------- Loss and optimizer accuracy binary Updown ----------------------------------------
         #got to ensure MeanAbsoluteError it's the good one for our data
         #loss = keras.losses.MeanSquaredError(reduction="auto", name="mean_squared_error")
         loss=keras.losses.CategoricalCrossentropy(
@@ -141,7 +141,19 @@ class DL_Model(QThread):
         #optim=keras.optimizers.RMSprop(OptAdam_Co)
         #Metrics=["mean_squared_error"]
         Metrics=["accuracy"]
+        """
+        
+        #------------------- Loss and optimizer  "mean_squared_error" ----------------------------------------
+        #got to ensure MeanAbsoluteError it's the good one for our data
+        loss = keras.losses.MeanSquaredError(
+            reduction="auto", 
+            name="mean_squared_error"
+        )
 
+        #optim=keras.optimizers.Adam(1e-3)
+        optim=keras.optimizers.Adam(1e-6)
+        Metrics=["mean_squared_error"]
+        
         losses={
             "dense": loss
         }
