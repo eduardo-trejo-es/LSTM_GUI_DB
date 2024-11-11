@@ -68,31 +68,10 @@ class Model_Trainer:
 
     scaler = scaler.fit(df_for_training)
     DS_raw_scaled = scaler.transform(df_for_training)
-    
+    DS_raw_Close_scaled=DS_raw_scaled[:,[columToforcast]]
     #Dataset Y scaled
     #DS_raw_Close_scaled=DS_raw_scaled[:,[columToforcast]]
-    
-    #Dataset Y not scaled
-    
-    DS_raw_Close_scaled=df_for_training.iloc[:,columToforcast]
-    DS_raw_Close_scaled=DS_raw_Close_scaled.to_numpy()
-    DS_raw_Close_scaled=np.reshape(DS_raw_Close_scaled,(DS_raw_Close_scaled.shape[0],1))
-    
-    
-    
-    
-    #Taking off the column to forcast from data that goes in model
-    print(type(DS_raw_scaled))
-    print(DS_raw_scaled.shape)
-    
-    print("After delete column to forcast from dataset ")
-    DS_raw_scaled=np.delete(DS_raw_scaled, columToforcast, 1)
-
-    
-    #DS_raw_Close_scaled=DS_raw_scaled[:,[Columns_N]]
-    #DS_raw_Close_scaled=DS_raw_scaled[:,[3]]
-    #DS_raw_Close_scaled=DS_raw_scaled[:,[8]]
-
+  
     
     #Empty lists to be populated using formatted training data
     DS_finished_X = []
@@ -103,11 +82,12 @@ class Model_Trainer:
     n_past =Np_pasdays
 
 
-    # Creatig the data batches, each one with 30d days
+    # Creatig the data batches, each one with N_pasdays 
 
     for i in range(n_past, len(DS_raw_scaled) - n_future +1):
       DS_finished_X.append(DS_raw_scaled[i - n_past:i, 0:DS_raw_scaled.shape[1]])
       DS_finished_Close_Y.append(DS_raw_Close_scaled[i:i+1, 0:DS_raw_scaled.shape[1]])
+      
 
     DS_finished_X,DS_finished_Close_Y=np.array(DS_finished_X), np.array(DS_finished_Close_Y)
     
@@ -134,58 +114,9 @@ class Model_Trainer:
     
 
     ##Validated data set, im getting the spected result
-    
-    print(testingX.shape)
-    print(trainX.shape)
-    
-    print(type(trainY_Close))
-    print(trainY_Close[:6])
-    print(trainY_Close.shape)
-    
-    ##### Converting Y data to do Classification function Updown #####
-    print("............................********************** 18 feb 2024 v")
-    # Doing trainY_Close
-    
-    pre_trainY_Close_list=[]
-    for i in trainY_Close:
-      if i[0][0]==1:
-        pre_trainY_Close_list.append([1.,0.])
-      else:
-        pre_trainY_Close_list.append([0.,1.])
 
-    
-    trainY_Close=np.array(pre_trainY_Close_list)
-    print("trainY_Close.shape")
-    print(trainY_Close.shape)
-    
-    #print("trainY_Close.reshape shape")
-    #trainY_Close=np.reshape(trainY_Close,(trainY_Close.shape[0],1,2))
-    #print(trainY_Close.shape)
-    
-    # Doing testingY_Close
-    pre_testingY_Close_list=[]
-    for i in testingY_Close:
-      if i[0][0]==1:
-        pre_testingY_Close_list.append([1.,0.])
-      else:
-        pre_testingY_Close_list.append([0.,1.])
-    
-    testingY_Close=np.array(pre_testingY_Close_list)
-    print("testingY_Close.shape")
-    print(testingY_Close.shape)
-    
-    #print("testingY_Close.reshape shape")
-    #testingY_Close=np.reshape(testingY_Close,(testingY_Close.shape[0],1,2))
-    #print(testingY_Close.shape)
-    
-
-    print("............................********************** 18 feb 2024 A")
 
     train_Dates, testing_Dates = self.Split3DimData(Data_dates,percentageTrainingData)
-
-    print(train_Dates.shape)
-    print(testing_Dates.shape)
-
 
     ##############      Retriving model       ########
 
@@ -207,7 +138,7 @@ class Model_Trainer:
 
     #------------------------- Training model --------------------------------
     
-    #early_stop= EarlyStopping(monitor='mean_squared_error',mode='min',verbose=1,patience=25)
+    early_stop= EarlyStopping(monitor='mean_squared_error',mode='min',verbose=1,patience=25)
     # Print the batch number at the beginning of every batch.
     
     ephoc_print_callback = LambdaCallback(on_epoch_end=lambda ephoc,logs: self.End_ephoc_event(ephoc))
@@ -215,7 +146,7 @@ class Model_Trainer:
     
     Model_CheckPoint=keras.callbacks.ModelCheckpoint(modelPath,monitor="val_accuracy",save_format="h5",save_best_only=True)
     
-    model.fit(x=trainX,y=y_data, epochs=NumEpochs, batch_size=15, validation_data=(testingX,testing_y_data),callbacks=[ephoc_print_callback,Model_CheckPoint])
+    model.fit(x=trainX,y=y_data, epochs=NumEpochs, batch_size=15, validation_data=(testingX,testing_y_data),callbacks=[early_stop,ephoc_print_callback,Model_CheckPoint])
     #history = model.fit(trainX,y=y_data, epochs=125, batch_size=15)
 
 
