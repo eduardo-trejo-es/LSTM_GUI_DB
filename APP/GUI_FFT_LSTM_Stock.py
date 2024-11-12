@@ -1286,6 +1286,8 @@ class Ui_GUI_LSTM_FORCASTER(object):
         
         self.DataSet_creator.Set_BackDaysConsideredFFT(int(BackDays))
         
+        
+        
         self.DataSet_creator.start()
     
     ############ General Fucntions  ############
@@ -1940,6 +1942,7 @@ class Ui_GUI_LSTM_FORCASTER(object):
         Low_FFT_C=int(Model_Selected_Row[10])
         Close_FFT_C=int(Model_Selected_Row[11])
         Volum_FFT_C=int(Model_Selected_Row[12])
+        MaxBackDaysConsidered=int(Model_Selected_Row[20])
         
         #Getting the Forcast table
         query="SELECT Forcasting_Resul_id FROM Forcasting_Resul WHERE Forcasting_Resul_id=(SELECT max(Forcasting_Resul_id) FROM Forcasting_Resul)"
@@ -1987,6 +1990,7 @@ class Ui_GUI_LSTM_FORCASTER(object):
         self.Forcaster.Set_all_colums_Data_CSV(BaseDataSet)
         self.Forcaster.Set_backdaysConsideredToBForcasted(int(Back_Days_To_Do)) #GUI
         self.Forcaster.Set_BackDays(int(BackDays)) ## From DB table model
+        self.Forcaster.Set_MaxBackDays(int(MaxBackDaysConsidered))
         self.Forcaster.Set_percentageData(int(Data_Precentage)) #GUI
         self.Forcaster.Set_FFtUsedQ(FFTwereUsed) # From DB tbale "model" then table "DataSet" then "Seed_DataSet" if FFT used True else False
         self.Forcaster.Set_forcastPath(ForcastPath)

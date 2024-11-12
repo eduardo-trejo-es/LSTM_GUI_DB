@@ -50,6 +50,9 @@ class DL_Forcast(QThread):
     
     def Set_BackDays(self,val):
         self.BackDays=val
+    
+    def Set_MaxBackDays(self,val):
+        self.MaxBackDays=val
         
     def Set_backdaysConsideredToBForcasted(self,val):
         self.backdaysConsideredToBForcasted=val
@@ -141,7 +144,7 @@ class DL_Forcast(QThread):
         
         #datefiltredPercentage=indexDates[locpercentage:]
         #
-        # if datefiltredPercentage=indexDates[indexDates.shape[0]-backdaysConsideredToBForcasted:]
+        #datefiltredPercentage=indexDates[indexDates.shape[0]-backdaysConsideredToBForcasted:]
         datefiltredPercentage=indexDates_df_Prced[locpercentage_Prced-backdaysConsideredToBForcasted:locpercentage_Prced]
         print(len(datefiltredPercentage))
         print("----------------")
@@ -185,9 +188,12 @@ class DL_Forcast(QThread):
         ### Below df has all origianl colums and dates
         #Allandforcast=all_df[all_df.shape[0]-backdaysConsideredToBForcasted:]
 
-        if FFtUsedQ:
-            #if fft considered:
-            Allandforcast=all_df[locpercentage_Prced-backdaysConsideredToBForcasted+backdaysConsidered:locpercentage_Prced+backdaysConsidered]
+        if FFtUsedQ or True: #Always true using Deviatio standard
+            
+            #If standard deviation consider 
+            Allandforcast=all_df[locpercentage_Prced-backdaysConsideredToBForcasted+self.MaxBackDays:locpercentage_Prced+self.MaxBackDays]
+            
+            #if fft considered:Allandforcast=all_df[locpercentage_Prced-backdaysConsideredToBForcasted+backdaysConsidered:locpercentage_Prced+backdaysConsidered]
         else:
             #if not FFT considerf
             Allandforcast=all_df[locpercentage_Prced-backdaysConsideredToBForcasted:locpercentage_Prced]

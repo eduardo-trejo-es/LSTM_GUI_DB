@@ -491,7 +491,7 @@ class DatasetGenerator:
         while maxBackDist<=New_df.shape[0]:
             temporalDataSet=loan_Column_df[backPeriod_init:maxBackDist]
             print(temporalDataSet)
-            mu=temporalDataSet.describe()[1] #Getting the mean value
+            mu=temporalDataSet.describe()[1:2] #Getting the mean value
 
             temporalNumpyDtaSet=temporalDataSet.to_numpy()
             sigma=np.std(temporalNumpyDtaSet) # Sigma standard deviation
