@@ -142,6 +142,8 @@ class Forcast_Data:
       DayToAdded=1
       
     lastTimedate=np.datetime64(lastTimedate) + np.timedelta64(DayToAdded, 'D')
+    print("-----")
+    print(lastTimedate)
     Forcasted_Dates=pd.Timestamp(np.datetime64(lastTimedate))
     self.Forcasted_Date=Forcasted_Dates
       

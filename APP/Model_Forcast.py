@@ -169,6 +169,7 @@ class DL_Forcast(QThread):
             Forcast_Dates.append(i)
             DatesIndex=DatesIndex+1
             self.update_DateForcasting(DatesIndex,i)
+        print(Forcast_Dates)
             
             
             #if i == datefiltredPercentage[len(datefiltredPercentage)-2]: break
