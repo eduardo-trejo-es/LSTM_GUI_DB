@@ -88,7 +88,7 @@ class DL_Evaluator(QThread):
                 self.diff_earned_percentage, self.Total_diff_lose, self.diff_lose_percentage,
                 self.total_movements,self.Real_earned,self.RealEarnedPercentage,self.TotalPercentage,
                 self.selectedForcast,self.EvalDFPath)
-    
+    # Forcast_Direction,Real_Direction,Result,diff_right,diff_wrong
     def run(self):
         df=pd.read_csv(self.forcastpath, index_col=0)
         
@@ -195,20 +195,23 @@ class DL_Evaluator(QThread):
                     
         df["diff_right"]=diff_right
         df["diff_wrong"]=diff_wrong
-
+        
 
         #Howmany Rows considered?
         RowConsidered=df.shape[0]-2
-        
+        print("RowConsidered"+str(RowConsidered))
         #Total right
+        countn=0
         TotalRight=0
         for i in range(0,df.shape[0]):
             if df.index[i]==firstDate: 
-                pass
+                pass    
             else:
                 if i<(df.shape[0]-1):
+                    countn+=1
                     TotalRight=TotalRight+df['Result'][i]
         print(TotalRight)
+        
         
 
         #Right %
@@ -219,25 +222,23 @@ class DL_Evaluator(QThread):
 
         #Total diff earned
         Total_diff_Earned=0
-        for i in range(0,df.shape[0]):
+        Total_diff_Earned=df['diff_right'].sum()
+        print("Total_diff_Earned"+str(Total_diff_Earned))
+        """for i in range(0,df.shape[0]):
             if df.index[i]==firstDate: 
                 pass
             else:
                 if i<(df.shape[0]-1):
-                    Total_diff_Earned=Total_diff_Earned+df['diff_right'][i]
+                    Total_diff_Earned=Total_diff_Earned+df['diff_right'][i]"""
 
-        print("Total_diff_Earned"+str(Total_diff_Earned))
+        
 
         #Total diff lose
         Total_diff_lose=0
-        for i in range(0,df.shape[0]):
-            if df.index[i]==firstDate: 
-                pass
-            else:
-                if i<(df.shape[0]-1):
-                    Total_diff_lose=Total_diff_lose+df['diff_wrong'][i]
-                
-        print("Total_diff_lose"+str(Total_diff_lose))
+        Total_diff_lose=df['diff_wrong'].sum()
+        
+        print("Total_diff_lose")
+        print(Total_diff_lose)
         
         #total movements
         total_movements=Total_diff_lose+Total_diff_Earned
@@ -270,6 +271,7 @@ class DL_Evaluator(QThread):
         
 
         #####   Results
+        print("---------------------------------")
         self.Set_RowConsidered(round(RowConsidered, 2))
         self.Set_TotalRight(round(TotalRight, 2))
         self.Set_Right_precentage(round(Right_precentage, 2))
