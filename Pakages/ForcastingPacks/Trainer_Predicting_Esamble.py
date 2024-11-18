@@ -58,6 +58,7 @@ class Model_Trainer:
     
 
     #New dataframe with only training data - 5 columns
+    print(df[cols])
     df_for_training = df[cols].astype(float)
     print(type(df_for_training))
     print(df_for_training.shape)

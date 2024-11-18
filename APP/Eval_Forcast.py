@@ -134,7 +134,7 @@ class DL_Evaluator(QThread):
                     Direction_Forcast.append("null")
                 #Getting the Direction of Real close price   
                 if i<(df.shape[0]-1):
-                    if df['Close'][i+1]>df['Close'][i]:
+                    if df['Close'][i+1]>df['Close'][i]: #i+1 it's important to keep to correctly compaire the forcast and real value
                         Direction_Real.append("Up")
                     elif df['Close'][i+1]<df['Close'][i]:
                         Direction_Real.append("Down")
@@ -213,7 +213,6 @@ class DL_Evaluator(QThread):
         print(TotalRight)
         
         
-
         #Right %
         Right_precentage=TotalRight*100/RowConsidered
         print(Right_precentage)
@@ -223,15 +222,6 @@ class DL_Evaluator(QThread):
         #Total diff earned
         Total_diff_Earned=0
         Total_diff_Earned=df['diff_right'].sum()
-        print("Total_diff_Earned"+str(Total_diff_Earned))
-        """for i in range(0,df.shape[0]):
-            if df.index[i]==firstDate: 
-                pass
-            else:
-                if i<(df.shape[0]-1):
-                    Total_diff_Earned=Total_diff_Earned+df['diff_right'][i]"""
-
-        
 
         #Total diff lose
         Total_diff_lose=0

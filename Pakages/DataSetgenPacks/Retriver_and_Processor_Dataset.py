@@ -509,7 +509,8 @@ class DatasetGenerator:
             sigmaOofset_less_list.append(SubPer_min)
 
             All_Area=norm.cdf(SubPer_Max,loc=mu,scale=sigma)-norm.cdf(SubPer_min,loc=mu,scale=sigma)#getting the accumulative normal distribution "Area under the curve"
-            All_Area_list.append(All_Area)
+            
+            All_Area_list.append(All_Area[0])
 
             backPeriod_init+=1
             maxBackDist+=1

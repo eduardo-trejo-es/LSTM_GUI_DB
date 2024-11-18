@@ -1,3 +1,12 @@
+"""
+  note: about the predictions generated, from the batch used to predict, the forcasting date is always +1 days,
+  so, the generated forcasting file, the row where the forcasted value is, correspond to the same day.
+  fo exemple if you use 2024-10-18, 2024-10-19, 2024-10-20 the forcast date will be 2024-10-21 and the forcasted
+  value will be located in the row of the corresponding date (2024-10-21) close and forcasted value of the sam row 
+  can be compared, the both are the same day
+"""
+
+
 from cProfile import label
 import pandas as pd
 import numpy as np
@@ -102,6 +111,8 @@ class Forcast_Data:
     #....... databatch .....#
     Batch_to_predict=np.reshape(Batch_to_predict,(1,backDaysRef,Columns_N))
 
+    print("Batch------------------- to use to predict")
+    print(df[df.index.get_loc(dateFromForcast)-(backDaysRef-1):df.index.get_loc(dateFromForcast)+1])
 
     ##########################################
     #           Model Forcasting             #
@@ -142,11 +153,10 @@ class Forcast_Data:
       DayToAdded=1
       
     lastTimedate=np.datetime64(lastTimedate) + np.timedelta64(DayToAdded, 'D')
-    print("-----")
-    print(lastTimedate)
     Forcasted_Dates=pd.Timestamp(np.datetime64(lastTimedate))
     self.Forcasted_Date=Forcasted_Dates
-      
+    
+    print("-------------------Forcasted_Dates: "+str(Forcasted_Dates)) 
     #####        splitting Real y    #####
     
     
