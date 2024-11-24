@@ -1,8 +1,8 @@
 """
-  note: about the predictions generated, from the batch used to predict, the forcasting date is always +1 days,
-  so, the generated forcasting file, the row where the forcasted value is, correspond to the same day.
-  fo exemple if you use 2024-10-18, 2024-10-19, 2024-10-20 the forcast date will be 2024-10-21 and the forcasted
-  value will be located in the row of the corresponding date (2024-10-21) close and forcasted value of the sam row 
+  note: about the predictions generated, from the batch used to predict, the forcasting date is always -1 days,
+  so, the generated forcasting file, the row where the forcasted value is, correspond to a 1 back day.
+  fo exemple if you used 2024-10-18, 2024-10-19, 2024-10-20 the forcast date will be 2024-10-21 and the forcasted
+  value will be located in the row of the corresponding date (2024-10-20) close and forcasted value of the sam row 
   can be compared, the both are the same day
 """
 
