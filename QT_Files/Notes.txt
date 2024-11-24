@@ -1,0 +1,34 @@
+**** Working on def Mapping_Colums and  def Model_To_Train_ComboBoxChanged(self): ***
+
+++ Training 
+ to show the ephocs done par model add object in GUI
+ to show progress in var
+ button cancel missing function
+
+ 
+++ to add model creation
+
+
+++ to add to dataset creation
+add columns  Original_Path_Retiving,!LastPopcolum¡ ** only saved the last
+
+What is the
+1.- about the model choosed, the available data will be use full
+
+About data set
+2.- Button to update dataset, check box to data data
+3.- Name file dataset changable in case I want to set anothe name
+4.- Select Dataset to affect
+5.- Asing a model to a data set, relationship is one to one, new model new dataset, 
+    once I choosed a model, a dataset will be automatically selected too
+
+
+At model creation
+
+the combo box int_model reapeting data, doubuling
+
+
+
+to convert Ui to pyqt5
+
+python3 -m PyQt5.uic.pyuic -x QT_Files/GUI_FFT_LSTM_Stock.ui -o bbGUI_FFT_LSTM_Stock.py
