@@ -5,6 +5,7 @@ from datetime import date, timedelta
 import numpy as np
 import matplotlib.pyplot as plt
 from scipy.stats import norm
+import sys
 
 import cmath
 
@@ -237,13 +238,18 @@ class DatasetGenerator:
         csvFileName=CsvFileName
         df=pd.read_csv(csvFileName, index_col="Date")
         
-        
-        
         startDate=df.index[df.shape[0]-1:]
-        startDate=str(np.datetime64(startDate[0])+np.timedelta64(1, 'D'))[0:10]
+        startDate=startDate[0]
+        
+        timestampDate=pd.to_datetime(np.datetime64(startDate))
+        DayToAdded=0
+        if timestampDate.dayofweek==4:
+            DayToAdded=3
+        else:
+            DayToAdded=1
+        
+        startDate=str(np.datetime64(startDate) + np.timedelta64(DayToAdded, 'D'))[0:10]
 
-        print(endDate)
-        print(startDate)
         self.RetivingDataPrices_Yahoo(itemName,startDate,endDate,csvFileName,csvFileName, addToOld)
         #df=yf.download('CL=F',start = startDate, end = endDate,interval='1d',utc=True,threads = True)
     
