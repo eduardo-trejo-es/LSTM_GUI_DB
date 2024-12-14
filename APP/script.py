@@ -3,7 +3,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 # Ruta del archivo CSV
-csv_file = "data.csv"
+csv_file = "APP/DataSets/CL=F/Id75/DataSet_lastPoppingColums.csv"
 
 # Cargar los datos
 # Se espera que el archivo tenga una columna 'Close' y 'Date'
@@ -24,8 +24,8 @@ data['Lower Band'] = data['SMA'] - (num_std_dev * data['STD'])  # Banda inferior
 # Identificación de soporte y resistencia
 # Soporte: Close toca o cruza la Banda Inferior
 # Resistencia: Close toca o cruza la Banda Superior
-data['Support'] = np.where(data['Close'] <= data['Lower Band'], True, False)
-data['Resistance'] = np.where(data['Close'] >= data['Upper Band'], True, False)
+data['Support'] = np.where(data['Close'] <= data['Lower Band'], 1, 0)
+data['Resistance'] = np.where(data['Close'] >= data['Upper Band'], 1, 0)
 
 # Guardar los resultados en un archivo CSV
 output_file = "bollinger_bands_output.csv"
