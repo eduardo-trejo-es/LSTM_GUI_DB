@@ -13,7 +13,7 @@ c = conn.cursor()
 
 
 #Add colum
-c.execute("""ALTER TABLE 'Seed_DataSet' ADD backPeriod INTEGER""")
+c.execute("""ALTER TABLE 'Seed_DataSet' ADD BollngBand_C INTEGER""")
  
           
 #c.execute("""DROP TABLE Relation_Model_Datasets""")

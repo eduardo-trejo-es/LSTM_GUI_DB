@@ -1,6 +1,6 @@
 import sys
 
-sys.path.append("/Users/eduardo/Desktop/GUI_LSTM_FFT/Pakages/ForcastingPacks")
+sys.path.append("Pakages/ForcastingPacks")
 from Trainer_Predicting_Esamble import Model_Trainer
 
 import pandas as pd

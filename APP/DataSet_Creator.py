@@ -1,5 +1,7 @@
 import sys
-sys.path.append("/Users/eduardo/Desktop/GUI_LSTM_FFT/Pakages/DataSetgenPacks")
+sys.path.append("Pakages/DataSetgenPacks")
+
+#"/Users/eduardo/Desktop/GUI_LSTM_FFT/Pakages/DataSetgenPacks"
 
 from PyQt5.QtCore import *
 
@@ -146,6 +148,7 @@ class DL_DataSet(QThread):
         DevStnd_C=SeedDataSetlist[19]
         MaxBackDist=int(SeedDataSetlist[20])
         BackPeriod=int(SeedDataSetlist[21])
+        BollngBand_C=SeedDataSetlist[22]
         
          
         ParentPath= "APP/DataSets/"
@@ -163,6 +166,7 @@ class DL_DataSet(QThread):
         NormalD_Path=pathTocreated+"/DataSet_DevStnd.csv"
         FFTAddedPath=pathTocreated+"/DataSet_FFTColumns.csv"
         LastPopcolum=pathTocreated+"/DataSet_lastPoppingColums.csv"
+        BollingerPath=pathTocreated+"/DataSet_Bollng_bands.csv"
         
         self.Update_Progress_String.emit("DataSet Path created")
         self.Update_Progress.emit(50)
@@ -252,7 +256,15 @@ class DL_DataSet(QThread):
             self.Update_Progress.emit(90)
         else:
             NormalD_Path=UpDoneAddedPath
-    
+            
+        #To add bollinger bands
+        if BollngBand_C==1:
+            self.Update_Progress_String.emit("Addeding bollinger bands ")
+            self.dataSet_Gen.Add_bollinger_bands(NormalD_Path,BollingerPath,BackPeriod,Column)
+            self.Update_Progress_String.emit("bollinger bands Added")
+            self.Update_Progress.emit(94)
+        else:
+            BollingerPath=NormalD_Path
 
         #Generate new FFT columns
         if FFT_ToDo:
@@ -265,17 +277,17 @@ class DL_DataSet(QThread):
 
             #backdaysToconsider=self.BackDaysConsideredFFT+1
             backdaysToconsider=BackDays+1
-            inicialPath=NormalD_Path
+            inicialPath=BollingerPath
             FFTNew_FileData=FFTAddedPath
             frec=self.Convert(FFT_Frec)
             
             
             self.Update_Progress_String.emit("Adding FFT columns columns added")
-            self.Update_Progress.emit(92)
+            self.Update_Progress.emit(95)
             self.dataSet_Gen.getTheLastFFTValue(backdaysToconsider,frec,ColumnsToFFT,inicialPath, FFTNew_FileData)
         
         else:
-            FFTNew_FileData=NormalD_Path
+            FFTNew_FileData=BollingerPath
         
         
 
