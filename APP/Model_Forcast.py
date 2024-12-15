@@ -157,8 +157,6 @@ class DL_Forcast(QThread):
         #datefiltredPercentage=indexDates[indexDates.shape[0]-backdaysConsideredToBForcasted:]
         datefiltredPercentage=indexDates_df_Prced[locpercentage_Prced-backdaysConsideredToBForcasted:locpercentage_Prced]
         AlldatefiltredPercentage=all_df[Alllocpercentage_Prced-backdaysConsideredToBForcasted:Alllocpercentage_Prced]
-        print(len(datefiltredPercentage))
-        print("----------------")
         self.Update_Progress_String.emit("Forcasting about to start")
         self.Update_Progress.emit(self.FirstPercentageAbout_toStartForcast)
         
@@ -202,31 +200,7 @@ class DL_Forcast(QThread):
         #Allandforcast=all_df[all_df.shape[0]-backdaysConsideredToBForcasted:]
 
 
-        Allandforcast=AlldatefiltredPercentage
-        
-        print("Allandforcast.shape ----"+str(Allandforcast.shape))
-        
-        """if StndUsed and CollngBandUsed : #Always true using Deviatio standard
-            
-            #If standard deviation consider 
-            
-            
-            #if fft considered:Allandforcast=all_df[locpercentage_Prced-backdaysConsideredToBForcasted+backdaysConsidered:locpercentage_Prced+backdaysConsidered]
-        elif StndUsed:
-            
-             #If standard deviation consider 
-            Allandforcast=all_df[locpercentage_Prced:locpercentage_Prced+self.MaxBackDays]   
-        elif CollngBandUsed:
-            
-            Allandforcast=all_df[locpercentage_Prced:locpercentage_Prced+backdaysConsideredToBForcasted]
-            
-        else :
-            #if not FFT considerf
-            Allandforcast=all_df[locpercentage_Prced-backdaysConsideredToBForcasted:locpercentage_Prced]"""
-            
-        print("********+  This is FFTUsedQ and Allandforcast *********+")
-        print(FFtUsedQ)
-        print(Allandforcast)
+        Allandforcast=AlldatefiltredPercentage        
         frames = [Allandforcast, fd_ColumnForcast_Close_Day]
 
         Final_Allandforcast = pd.concat(frames,axis=1)
