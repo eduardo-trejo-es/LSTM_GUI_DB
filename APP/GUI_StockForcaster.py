@@ -429,9 +429,10 @@ class Ui_GUI_LSTM_FORCASTER(object):
         self.DaMa_lbl_DataSetId.setGeometry(QtCore.QRect(370, 20, 91, 16))
         self.DaMa_lbl_DataSetId.setObjectName("DaMa_lbl_DataSetId")   
         
-        self.DaMa_lbl_UpDownClmn = QtWidgets.QLabel(self.Data_Manager_tab)
-        self.DaMa_lbl_UpDownClmn.setGeometry(QtCore.QRect(250, 120, 111, 16))
-        self.DaMa_lbl_UpDownClmn.setObjectName("DaMa_lbl_UpDownClmn")   
+        
+        self.DaMa_lbl_ColumnsTPred = QtWidgets.QLabel(self.Data_Manager_tab)
+        self.DaMa_lbl_ColumnsTPred.setGeometry(QtCore.QRect(250, 120, 111, 16))
+        self.DaMa_lbl_ColumnsTPred.setObjectName("DaMa_lbl_ColumnsTpred")   
         
         self.DaMa_btn_Create = QtWidgets.QPushButton(self.Data_Manager_tab)
         self.DaMa_btn_Create.setGeometry(QtCore.QRect(370, 200, 113, 101))
@@ -529,9 +530,9 @@ class Ui_GUI_LSTM_FORCASTER(object):
         self.DaMa_CheckBox_Year.setGeometry(QtCore.QRect(240, 260, 100, 20))
         self.DaMa_CheckBox_Year.setObjectName("DaMa_CheckBox_Year")
         
-        self.DaMa_CheckBox_UpDown = QtWidgets.QCheckBox(self.Data_Manager_tab)
-        self.DaMa_CheckBox_UpDown.setGeometry(QtCore.QRect(240, 280, 100, 20))
-        self.DaMa_CheckBox_UpDown.setObjectName("DaMa_CheckBox_UpDown")
+        self.DaMa_CheckBox_Bllng_Band = QtWidgets.QCheckBox(self.Data_Manager_tab)
+        self.DaMa_CheckBox_Bllng_Band.setGeometry(QtCore.QRect(240, 280, 100, 20))
+        self.DaMa_CheckBox_Bllng_Band.setObjectName("DaMa_CheckBox_Bllng_Band")
         
         self.DaMa_CheckBox_Volume = QtWidgets.QCheckBox(self.Data_Manager_tab)
         self.DaMa_CheckBox_Volume.setGeometry(QtCore.QRect(40, 280, 100, 20))
@@ -824,7 +825,7 @@ class Ui_GUI_LSTM_FORCASTER(object):
         self.DaMa_btn_Update.setText(_translate("GUI_LSTM_FORCASTER", "Update"))
         self.DaMa_Lbl_Progres.setText(_translate("GUI_LSTM_FORCASTER", "Ready"))
         self.DaMa_lbl_DataSetId.setText(_translate("GUI_LSTM_FORCASTER", "DataSet id"))
-        self.DaMa_lbl_UpDownClmn.setText(_translate("GUI_LSTM_FORCASTER", "Column to predict"))
+        self.DaMa_lbl_ColumnsTPred.setText(_translate("GUI_LSTM_FORCASTER", "Columns to predict"))
         
         self.DaMa_btn_Create.setText(_translate("GUI_LSTM_FORCASTER", "Create"))
         self.DaMa_btn_Delete_Ds.setText(_translate("GUI_LSTM_FORCASTER", "Delete DataSet"))
@@ -849,7 +850,7 @@ class Ui_GUI_LSTM_FORCASTER(object):
         self.DaMa_CheckBox_Close_FFT.setText(_translate("GUI_LSTM_FORCASTER", "Close FFT"))
         self.DaMa_CheckBox_Day_MonthNDay_C.setText(_translate("GUI_LSTM_FORCASTER", "DayMonth"))
         self.DaMa_CheckBox_Year.setText(_translate("GUI_LSTM_FORCASTER", "Year"))
-        self.DaMa_CheckBox_UpDown.setText(_translate("GUI_LSTM_FORCASTER", "UpDown"))
+        self.DaMa_CheckBox_Bllng_Band.setText(_translate("GUI_LSTM_FORCASTER", "bollinger bands"))
         self.DaMa_CheckBox_Volume.setText(_translate("GUI_LSTM_FORCASTER", "Volume"))
         self.DaMa_CheckBox_Volume_FFT.setText(_translate("GUI_LSTM_FORCASTER", "Volume FFT"))
         self.DaMa_CheckBox_DevStnd.setText(_translate("GUI_LSTM_FORCASTER", "Dev Stand"))
@@ -1225,8 +1226,11 @@ class Ui_GUI_LSTM_FORCASTER(object):
         if self.DaMa_CheckBox_Year.isChecked():Year_C=1
         else:Year_C=0
         
-        if self.DaMa_CheckBox_UpDown.isChecked():UpDown_C=1
-        else:UpDown_C=0
+        #UpDown_C
+        if self.DaMa_CheckBox_Bllng_Band.isChecked():BollngBand_C=1
+        else:BollngBand_C=0
+        
+        UpDown_C=0 #This one wasn't so useful but it would be too hard to takeoff from DB
         
         if self.DaMa_CheckBox_DevStnd.isChecked():DevStnd_C=1
         else: DevStnd_C=0
@@ -1241,12 +1245,12 @@ class Ui_GUI_LSTM_FORCASTER(object):
         
         #Check if seed data already exist
         matching,matching_row=self.Check_Matching_Seed_DataSet(Item,BackDays,Open_C ,High_C,Low_C,Close_C ,Volume_C,Open_FFT_C ,High_FFT_C ,Low_FFT_C,
-                                                           Close_FFT_C ,Volum_FFT_C ,Day_Wk_N_C, Day_MonthNDay_C ,Year_C ,FFT_Frec, UpDown_C,ColumnSelected,DevStnd_C,MaxBackDist,backPeriod)
+                                                           Close_FFT_C ,Volum_FFT_C ,Day_Wk_N_C, Day_MonthNDay_C ,Year_C ,FFT_Frec, UpDown_C,ColumnSelected,DevStnd_C,MaxBackDist,backPeriod,BollngBand_C)
         
         #new seed dataSet is created; if at least a feature has been changed
         if matching==False:
             self.Create_new_SeedDataSet_DB(Item,BackDays,Open_C ,High_C,Low_C,Close_C ,Volume_C,Open_FFT_C ,High_FFT_C ,Low_FFT_C,
-                                        Close_FFT_C ,Volum_FFT_C ,Day_Wk_N_C ,Day_MonthNDay_C ,Year_C ,FFT_Frec,UpDown_C,ColumnSelected,DevStnd_C,MaxBackDist,backPeriod)
+                                        Close_FFT_C ,Volum_FFT_C ,Day_Wk_N_C ,Day_MonthNDay_C ,Year_C ,FFT_Frec,UpDown_C,ColumnSelected,DevStnd_C,MaxBackDist,backPeriod,BollngBand_C)
             query="SELECT * FROM Seed_DataSet WHERE SeedDataSet_id=(SELECT max(SeedDataSet_id) FROM Seed_DataSet)"
             self.Forcaster_DB_c.execute(query)
             ContentList=self.Forcaster_DB_c.fetchall()
@@ -1393,11 +1397,13 @@ class Ui_GUI_LSTM_FORCASTER(object):
             if i[15]==1:self.DaMa_CheckBox_Year.setChecked(True)
             else:self.DaMa_CheckBox_Year.setChecked(False)
             
-            if i[17]==1:self.DaMa_CheckBox_UpDown.setChecked(True)
-            else:self.DaMa_CheckBox_UpDown.setChecked(False)
             
             if i[19]==1:self.DaMa_CheckBox_DevStnd.setChecked(True)
             else: self.DaMa_CheckBox_DevStnd.setChecked(False)
+            
+            if i[22]==1:self.DaMa_CheckBox_Bllng_Band.setChecked(True)
+            else:self.DaMa_CheckBox_Bllng_Band.setChecked(False)
+            
             
             self.DaMa_txtLine_FFT_Frec.setText(str(i[16]))
               
@@ -1410,7 +1416,7 @@ class Ui_GUI_LSTM_FORCASTER(object):
         #self.DaMa_ComBox_DataSet_Id.addItem(str(val1))
         
     def Check_Matching_Seed_DataSet(self,val_1,val_2,val_3,val_4,val_5,val_6,val_7,val_8,
-                                    val_9,val_10,val_11,val_12,val_13,val_14,val_15,val_16,val_17,val_18,val_19,val_20,val_21):
+                                    val_9,val_10,val_11,val_12,val_13,val_14,val_15,val_16,val_17,val_18,val_19,val_20,val_21,val_22):
         Matching=False
         Matching_Row=0
         Matching_Val1=False
@@ -1434,6 +1440,7 @@ class Ui_GUI_LSTM_FORCASTER(object):
         Matching_Val19=False
         Matching_Val20=False
         Matching_Val21=False
+        Matching_Val22=False
         
         ##Seed_Data; Getting all data 
         query="SELECT * FROM Seed_DataSet"
@@ -1506,10 +1513,13 @@ class Ui_GUI_LSTM_FORCASTER(object):
             
             if str(i[21])==str(val_21): Matching_Val21=True 
             else: Matching_Val21=False
+            
+            if str(i[22])==str(val_22): Matching_Val22=True 
+            else: Matching_Val22=False
 
             if (Matching_Val1 and Matching_Val2 and Matching_Val3 and Matching_Val4 and Matching_Val5 and Matching_Val6 and Matching_Val7 and Matching_Val8
                 and Matching_Val9 and Matching_Val10 and Matching_Val11 and Matching_Val12 and Matching_Val13 and Matching_Val14 and Matching_Val15 and 
-                Matching_Val16 and Matching_Val17 and Matching_Val18 and Matching_Val19 and Matching_Val20 and Matching_Val21):
+                Matching_Val16 and Matching_Val17 and Matching_Val18 and Matching_Val19 and Matching_Val20 and Matching_Val21 and Matching_Val22):
                 Matching=True
                 break
             else:
@@ -1518,14 +1528,14 @@ class Ui_GUI_LSTM_FORCASTER(object):
         return Matching,Matching_Row
         
     def Create_new_SeedDataSet_DB(self,val_1,val_2,val_3,val_4,val_5,val_6,val_7,val_8,
-                                    val_9,val_10,val_11,val_12,val_13,val_14,val_15,val_16,val_17,val_18,val_19, val_20, val_21):
+                                    val_9,val_10,val_11,val_12,val_13,val_14,val_15,val_16,val_17,val_18,val_19, val_20, val_21,val_22):
         
         query=""" INSERT INTO Seed_DataSet (Item,BackDays,Open_C ,High_C,Low_C,Close_C ,Volume_C,Open_FFT_C ,High_FFT_C ,Low_FFT_C,
-                                        Close_FFT_C ,Volum_FFT_C ,Day_Wk_N_C, Day_MonthNDay_C ,Year_C ,FFT_Frec,UpDown_C,UpDown_Clmn,DevStnd_C,MaxBackDist,backPeriod)
-         VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)"""
+                                        Close_FFT_C ,Volum_FFT_C ,Day_Wk_N_C, Day_MonthNDay_C ,Year_C ,FFT_Frec,UpDown_C,UpDown_Clmn,DevStnd_C,MaxBackDist,backPeriod,BollngBand_C)
+         VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)"""
 
         self.Forcaster_DB_c.execute(query,(val_1,val_2,val_3,val_4,val_5,val_6,val_7,val_8,val_9,
-                                    val_10,val_11,val_12,val_13,val_14,val_15,val_16,val_17,val_18,val_19,val_20,val_21)) 
+                                    val_10,val_11,val_12,val_13,val_14,val_15,val_16,val_17,val_18,val_19,val_20,val_21,val_22)) 
         
         #Validate changes to our DB 
         self.Forcaster_DB_conn.commit()
@@ -1946,6 +1956,8 @@ class Ui_GUI_LSTM_FORCASTER(object):
         Close_FFT_C=int(Model_Selected_Row[11])
         Volum_FFT_C=int(Model_Selected_Row[12])
         MaxBackDaysConsidered=int(Model_Selected_Row[20])
+        DevStnd_C=int(Model_Selected_Row[19])
+        CollngBand_C=int(Model_Selected_Row[22])
         
         #Getting the Forcast table
         query="SELECT Forcasting_Resul_id FROM Forcasting_Resul WHERE Forcasting_Resul_id=(SELECT max(Forcasting_Resul_id) FROM Forcasting_Resul)"
@@ -1998,6 +2010,8 @@ class Ui_GUI_LSTM_FORCASTER(object):
         self.Forcaster.Set_FFtUsedQ(FFTwereUsed) # From DB tbale "model" then table "DataSet" then "Seed_DataSet" if FFT used True else False
         self.Forcaster.Set_forcastPath(ForcastPath)
         self.Forcaster.Set_TrendImagePath(TrendImage_path)
+        self.Forcaster.Set_StndUsed(DevStnd_C)
+        self.Forcaster.Set_CollngBandUsed(CollngBand_C)
         
         self.Forcaster.start()
     

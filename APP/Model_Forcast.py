@@ -1,5 +1,5 @@
 import sys
-sys.path.append("FFT_added_LSTM_All_In_Close_Out_all_relu_added_HG_X/Pakages/ForcastingPacks")
+sys.path.append("Pakages/ForcastingPacks")
 #from Forcaster_Model import Forcast_Data
 from Forcaster_Model_DateFromToForcast import Forcast_Data
 import pandas as pd
@@ -66,6 +66,12 @@ class DL_Forcast(QThread):
         
     def Set_FFtUsedQ(self,val):
         self.FFtUsedQ=val
+        
+    def Set_StndUsed(self,val):
+        self.StndUsed=val
+        
+    def Set_CollngBandUsed(self,val):
+        self.CollngBandUsed=val
     
     def Set_forcastPath(self,val):
         self.forcastPath=val
@@ -112,6 +118,8 @@ class DL_Forcast(QThread):
         ColumToForcast=int(self.ColumToforcast)
         percentageData=int(self.percentageData)
         FFtUsedQ=self.FFtUsedQ
+        StndUsed=self.StndUsed
+        CollngBandUsed=self.CollngBandUsed
         
         saveAllandforcast=pd.DataFrame({})
         fd_ColumnForcast_Close_Day=pd.DataFrame({})
@@ -136,16 +144,19 @@ class DL_Forcast(QThread):
         ensambly=[]
 
         indexDates_df_Prced=df.index
+        indexDatesAll_df_Prced=all_df.index
 
         
         ##getting the idex  about percentage: this for the last procesed data 
         locpercentage_Prced=int((indexDates_df_Prced.shape[0]*percentageData)/100)
+        Alllocpercentage_Prced=int((indexDatesAll_df_Prced.shape[0]*percentageData)/100)
         
         
         #datefiltredPercentage=indexDates[locpercentage:]
         #
         #datefiltredPercentage=indexDates[indexDates.shape[0]-backdaysConsideredToBForcasted:]
         datefiltredPercentage=indexDates_df_Prced[locpercentage_Prced-backdaysConsideredToBForcasted:locpercentage_Prced]
+        AlldatefiltredPercentage=all_df[Alllocpercentage_Prced-backdaysConsideredToBForcasted:Alllocpercentage_Prced]
         print(len(datefiltredPercentage))
         print("----------------")
         self.Update_Progress_String.emit("Forcasting about to start")
@@ -182,6 +193,7 @@ class DL_Forcast(QThread):
 
         ### Below df only has close forcast data and dates forcast data
         fd_ColumnForcast_Close_Day=pd.DataFrame({'Forcast':ColumnForcast_Close_Day})
+        
         #fd_ColumnForcast_Close_Day=pd.DataFrame({'Forcast':ColumnForcast_Close_Day,'ForcastDateTShow':Forcast_Dates_toshow})
         fd_ColumnForcast_Close_Day['Dates']=Forcast_Dates
         fd_ColumnForcast_Close_Day=fd_ColumnForcast_Close_Day.set_index('Dates')
@@ -189,15 +201,29 @@ class DL_Forcast(QThread):
         ### Below df has all origianl colums and dates
         #Allandforcast=all_df[all_df.shape[0]-backdaysConsideredToBForcasted:]
 
-        if FFtUsedQ or True: #Always true using Deviatio standard
+
+        Allandforcast=AlldatefiltredPercentage
+        
+        print("Allandforcast.shape ----"+str(Allandforcast.shape))
+        
+        """if StndUsed and CollngBandUsed : #Always true using Deviatio standard
             
             #If standard deviation consider 
-            Allandforcast=all_df[locpercentage_Prced-backdaysConsideredToBForcasted+self.MaxBackDays:locpercentage_Prced+self.MaxBackDays]
+            
             
             #if fft considered:Allandforcast=all_df[locpercentage_Prced-backdaysConsideredToBForcasted+backdaysConsidered:locpercentage_Prced+backdaysConsidered]
-        else:
+        elif StndUsed:
+            
+             #If standard deviation consider 
+            Allandforcast=all_df[locpercentage_Prced:locpercentage_Prced+self.MaxBackDays]   
+        elif CollngBandUsed:
+            
+            Allandforcast=all_df[locpercentage_Prced:locpercentage_Prced+backdaysConsideredToBForcasted]
+            
+        else :
             #if not FFT considerf
-            Allandforcast=all_df[locpercentage_Prced-backdaysConsideredToBForcasted:locpercentage_Prced]
+            Allandforcast=all_df[locpercentage_Prced-backdaysConsideredToBForcasted:locpercentage_Prced]"""
+            
         print("********+  This is FFTUsedQ and Allandforcast *********+")
         print(FFtUsedQ)
         print(Allandforcast)
