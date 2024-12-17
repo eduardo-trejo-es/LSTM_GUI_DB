@@ -1956,8 +1956,12 @@ class Ui_GUI_LSTM_FORCASTER(object):
         Close_FFT_C=int(Model_Selected_Row[11])
         Volum_FFT_C=int(Model_Selected_Row[12])
         MaxBackDaysConsidered=int(Model_Selected_Row[20])
-        DevStnd_C=int(Model_Selected_Row[19])
-        CollngBand_C=int(Model_Selected_Row[22])
+        
+        if type(Model_Selected_Row[19]).__name__=='NoneType': DevStnd_C=0 
+        else:DevStnd_C=int(Model_Selected_Row[19])
+
+        if type(Model_Selected_Row[22]).__name__=='NoneType': CollngBand_C=0 
+        else:CollngBand_C=int(Model_Selected_Row[22])
         
         #Getting the Forcast table
         query="SELECT Forcasting_Resul_id FROM Forcasting_Resul WHERE Forcasting_Resul_id=(SELECT max(Forcasting_Resul_id) FROM Forcasting_Resul)"

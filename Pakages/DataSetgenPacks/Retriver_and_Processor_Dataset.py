@@ -245,10 +245,23 @@ class DatasetGenerator:
         DayToAdded=0
         if timestampDate.dayofweek==4:
             DayToAdded=3
+        elif timestampDate.dayofweek==1:
+            DayToAdded=2
         else:
             DayToAdded=1
+            
+        print("startDate ----------"+str(startDate))
+        print("startDate ----------"+str(DayToAdded))
+        DayToAdded=2
         
         startDate=str(np.datetime64(startDate) + np.timedelta64(DayToAdded, 'D'))[0:10]
+        print("startDate 2 ----------"+str(startDate))
+    
+        
+        # input
+        input1 = input()
+        print(input1)
+        
 
         self.RetivingDataPrices_Yahoo(itemName,startDate,endDate,csvFileName,csvFileName, addToOld)
         #df=yf.download('CL=F',start = startDate, end = endDate,interval='1d',utc=True,threads = True)
