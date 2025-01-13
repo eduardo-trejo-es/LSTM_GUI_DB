@@ -1956,12 +1956,8 @@ class Ui_GUI_LSTM_FORCASTER(object):
         Close_FFT_C=int(Model_Selected_Row[11])
         Volum_FFT_C=int(Model_Selected_Row[12])
         MaxBackDaysConsidered=int(Model_Selected_Row[20])
-        
-        if type(Model_Selected_Row[19]).__name__=='NoneType': DevStnd_C=0 
-        else:DevStnd_C=int(Model_Selected_Row[19])
-
-        if type(Model_Selected_Row[22]).__name__=='NoneType': CollngBand_C=0 
-        else:CollngBand_C=int(Model_Selected_Row[22])
+        DevStnd_C=self.IntConvertPreventNoneType(Model_Selected_Row[19],0)
+        CollngBand_C=self.IntConvertPreventNoneType(Model_Selected_Row[22],0)
         
         #Getting the Forcast table
         query="SELECT Forcasting_Resul_id FROM Forcasting_Resul WHERE Forcasting_Resul_id=(SELECT max(Forcasting_Resul_id) FROM Forcasting_Resul)"
@@ -2055,6 +2051,13 @@ class Ui_GUI_LSTM_FORCASTER(object):
         
         #Validate changes to our DB 
         self.Forcaster_DB_conn.commit()
+    def IntConvertPreventNoneType(self,value,exceptValue):
+        n=0
+        try:
+            n=int(value)
+        except:
+            n=exceptValue
+        return n
     
     ##### Emit general signals
     def Model_ForcastWith_ComboBoxChanged(self):
