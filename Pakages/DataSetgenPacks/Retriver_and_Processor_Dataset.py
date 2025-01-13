@@ -246,7 +246,7 @@ class DatasetGenerator:
         if timestampDate.dayofweek==4:
             DayToAdded=3
         else:
-            DayToAdded=1
+            DayToAdded=2
         
         startDate=str(np.datetime64(startDate) + np.timedelta64(DayToAdded, 'D'))[0:10]
 
