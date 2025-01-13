@@ -202,6 +202,10 @@ class DL_Forcast(QThread):
 
         Allandforcast=AlldatefiltredPercentage        
         frames = [Allandforcast, fd_ColumnForcast_Close_Day]
+        
+        print(Allandforcast)
+        print(fd_ColumnForcast_Close_Day)
+        
 
         Final_Allandforcast = pd.concat(frames,axis=1)
         
