@@ -150,7 +150,7 @@ class Forcast_Data:
     if timestampDate.dayofweek==4:
       DayToAdded=3
     else:
-      DayToAdded=1
+      DayToAdded=2
       
     lastTimedate=np.datetime64(lastTimedate) + np.timedelta64(DayToAdded, 'D')
     Forcasted_Dates=pd.Timestamp(np.datetime64(lastTimedate))
