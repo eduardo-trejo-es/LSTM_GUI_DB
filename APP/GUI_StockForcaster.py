@@ -1234,7 +1234,6 @@ class Ui_GUI_LSTM_FORCASTER(object):
         
         if self.DaMa_CheckBox_DevStnd.isChecked():DevStnd_C=1
         else: DevStnd_C=0
-    
         
         
         FFT_Frec = self.DaMa_txtLine_FFT_Frec.text()
