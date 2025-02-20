@@ -17,6 +17,7 @@ class DatasetGenerator:
         name_item= Name_Item
 
         df=yf.download(name_item,start = startDate, end = endDate,interval='1d',threads = True)
+        #df=yf.download(name_item,start = startDate, end = endDate,interval='1d')
         df.pop("Adj Close")
         
         self.SavingDataset(df,csvFileName, csvFileName_New, addToOld)
