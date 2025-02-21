@@ -1234,7 +1234,6 @@ class Ui_GUI_LSTM_FORCASTER(object):
         
         if self.DaMa_CheckBox_DevStnd.isChecked():DevStnd_C=1
         else: DevStnd_C=0
-    
         
         
         FFT_Frec = self.DaMa_txtLine_FFT_Frec.text()
@@ -1956,9 +1955,14 @@ class Ui_GUI_LSTM_FORCASTER(object):
         Close_FFT_C=int(Model_Selected_Row[11])
         Volum_FFT_C=int(Model_Selected_Row[12])
         MaxBackDaysConsidered=int(Model_Selected_Row[20])
+<<<<<<< HEAD
+        DevStnd_C=self.IntConvertPreventNoneType(Model_Selected_Row[19],0)
+        CollngBand_C=self.IntConvertPreventNoneType(Model_Selected_Row[22],0)
+=======
         DevStnd_C=int(Model_Selected_Row[19])
         CollngBand_C=self.IntConvertPreventNoneType(Model_Selected_Row[22],0)
         
+>>>>>>> main
         
         #Getting the Forcast table
         query="SELECT Forcasting_Resul_id FROM Forcasting_Resul WHERE Forcasting_Resul_id=(SELECT max(Forcasting_Resul_id) FROM Forcasting_Resul)"
@@ -2052,7 +2056,10 @@ class Ui_GUI_LSTM_FORCASTER(object):
         
         #Validate changes to our DB 
         self.Forcaster_DB_conn.commit()
+<<<<<<< HEAD
+=======
         
+>>>>>>> main
     def IntConvertPreventNoneType(self,value,exceptValue):
         n=0
         try:

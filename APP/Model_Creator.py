@@ -101,9 +101,9 @@ class DL_Model(QThread):
         #LSTM_Layer1=keras.layers.LSTM(n_past, input_shape=(n_past,Columns_N), return_sequences=True,activation='PReLU')(inputs)
         LSTM_Layer1=keras.layers.LSTM(LSTM1_Units, input_shape=(n_past,Columns_N), return_sequences=True,activation='PReLU')(inputs)
 
-        #Dropout_layer2=keras.layers.Dropout(0.5)(LSTM_Layer1)# modify
+        Dropout_layer2=keras.layers.Dropout(LryDcoeff)(LSTM_Layer1)# modify
         #x=Dropout_layer1=keras.layers.Dropout(0.2)(x)
-        LSTM_Layer2=keras.layers.LSTM(LSTM2_Units, return_sequences=False,activation='PReLU')(LSTM_Layer1)
+        LSTM_Layer2=keras.layers.LSTM(LSTM2_Units, return_sequences=False,activation='PReLU')(Dropout_layer2)
 
         Dropout_layer3=keras.layers.Dropout(LryDcoeff)(LSTM_Layer2)# modify
 

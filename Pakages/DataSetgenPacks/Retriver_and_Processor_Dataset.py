@@ -6,6 +6,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 from scipy.stats import norm
 import sys
+import time
 
 import cmath
 
@@ -16,6 +17,7 @@ class DatasetGenerator:
         name_item= Name_Item
 
         df=yf.download(name_item,start = startDate, end = endDate,interval='1d',threads = True)
+        #df=yf.download(name_item,start = startDate, end = endDate,interval='1d')
         df.pop("Adj Close")
         
         self.SavingDataset(df,csvFileName, csvFileName_New, addToOld)
@@ -241,15 +243,23 @@ class DatasetGenerator:
         startDate=df.index[df.shape[0]-1:]
         startDate=startDate[0]
         
+        print(startDate)
+        
         timestampDate=pd.to_datetime(np.datetime64(startDate))
         DayToAdded=0
         if timestampDate.dayofweek==4:
             DayToAdded=3
-        else:
+        else :
             DayToAdded=2
         
+        print(timestampDate.dayofweek)
+            
+        print(startDate)
+            
         startDate=str(np.datetime64(startDate) + np.timedelta64(DayToAdded, 'D'))[0:10]
-
+        print(startDate)
+        print(endDate)
+        #time.sleep(30)
         self.RetivingDataPrices_Yahoo(itemName,startDate,endDate,csvFileName,csvFileName, addToOld)
         #df=yf.download('CL=F',start = startDate, end = endDate,interval='1d',utc=True,threads = True)
     
