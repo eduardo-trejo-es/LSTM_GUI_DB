@@ -1,5 +1,10 @@
 import requests
 import pandas as pd
+import os
+from dotenv import load_dotenv
+# Cargar variables del archivo .env
+load_dotenv()
+from datetime import datetime, timedelta
 
 class InterFaceCapitalCom:
     
@@ -72,26 +77,26 @@ class InterFaceCapitalCom:
             "X-CAP-API-KEY": self.TU_API_KEY  # Opcional, pero puede ayudar a evitar errores
         }
 
-        print("\n📌 Datos que se enviarán en la autenticación:")
-        print("📧 X-SECURITY-TOKEN:", HEADERS["X-SECURITY-TOKEN"])
-        print("🔒 CST:", HEADERS["CST"])
-        print("🔑 X-CAP-API-KEY:", HEADERS["X-CAP-API-KEY"])
+        print("\n Datos que se enviarán en la autenticación:")
+        print(" X-SECURITY-TOKEN:", HEADERS["X-SECURITY-TOKEN"])
+        print(" CST:", HEADERS["CST"])
+        print(" X-CAP-API-KEY:", HEADERS["X-CAP-API-KEY"])
         
-        # 🔄 Hacer la solicitud GET
+        #  Hacer la solicitud GET
         PRICES_URL = f"https://api-capital.backend-capital.com/api/v1/prices/{EPIC}"
         response = requests.get(PRICES_URL, headers=HEADERS, params=PARAMS)
 
-        # 📌 Manejo de respuesta
+        # Manejo de respuesta
         if response.status_code == 200:
             data = response.json()  # Convertimos la respuesta a JSON
 
-            # 🔍 Extraer la lista de precios desde el JSON
+            # Extraer la lista de precios desde el JSON
             if "prices" in data:
                 price_data = data["prices"]
 
-                # 📌 Convertir a un DataFrame de pandas
+                # Convertir a un DataFrame de pandas
                 df = pd.DataFrame(price_data)
-                # 📌 Expandir columnas anidadas si es necesario
+                # Expandir columnas anidadas si es necesario
                 if "openPrice" in df.columns:
                     df["Date"] = df["snapshotTimeUTC"]
                     df["Open"] = df["openPrice"].apply(lambda x: x["bid"])
@@ -104,9 +109,9 @@ class InterFaceCapitalCom:
 
 
             else:
-                print("❌ No se encontraron datos de precios en la respuesta.")
+                print("No se encontraron datos de precios en la respuesta.")
         else:
-            print(f"❌ Error al obtener precios: {response.status_code}")
+            print(f"Error al obtener precios: {response.status_code}")
             print(response.text)
             
         
@@ -115,34 +120,58 @@ class InterFaceCapitalCom:
     def RetriveData(self, epic,from_, to_, resolution, max): 
         
         #Note: resolution : MINUTE, MINUTE_5, MINUTE_15, MINUTE_30, HOUR, HOUR_4, DAY, WEEK
-        # 📌 EPIC del instrumento financiero que deseas consultar
+        #EPIC del instrumento financiero que deseas consultar
         df_last= pd.DataFrame()
         df_init= pd.DataFrame()
         df=pd.DataFrame()
+        to_Prov=""
         EPIC = epic  # Cambia esto por el EPIC correcto
         tries=0
         
-        df_init=self.BrutRetriveData(epic,from_,to_,resolution,max)
         
-        while df_init.index[-1]!=to_ or tries<20:
+        #Convertir la cadena a un objeto datetime
+        from_dt = datetime.strptime(from_, "%Y-%m-%dT%H:%M:%S")
+        # 📌 Sumar días (por ejemplo, 3 días)
+        day_to_add = max
+        to_Prov = from_dt + timedelta(days=day_to_add)
+        to_Prov_str = to_Prov.strftime("%Y-%m-%dT%H:%M:%S")
+        
+        
+        while tries<(max*10000):
             print(tries)
             print("new from"+from_)
-            print(str(df_init.index[-1]!=to_) )
-            df_init=self.BrutRetriveData(epic,from_,to_,resolution,max)
+            df_init=self.BrutRetriveData(epic,from_,to_Prov_str,resolution,max)
         
             df=pd.concat([df_last,df_init])
+            # 📌 Eliminar índices duplicados y mantener solo la primera aparición
             
             df_last=df
-            from_= df_init.index[-1]
-            tries+=1 
+            #Convertir la cadena a un objeto datetime
+            if df_init.index[-1]==to_:
+                break
+            
+            from_=df_init.index[-1]    
+            
+            from_dt = datetime.strptime(from_, "%Y-%m-%dT%H:%M:%S")
+            # 📌 Sumar días (por ejemplo, 3 días)
+            day_to_add = max
+            to_Prov = from_dt + timedelta(days=day_to_add)
+            to_Prov_str = to_Prov.strftime("%Y-%m-%dT%H:%M:%S")
+        
+        
+        df = df.loc[~df.index.duplicated(keep="first")]
             
         return df
     
 
 
-TU_API_KEY="OuPiou9fpS5M6HLD"
-PasswordCaptial="qwerTyui1?"
-correoCapital= "paginalalo9@gmail.com"
+TU_API_KEY=os.getenv("TU_API_KEY")
+PasswordCaptial=os.getenv("PASSWORDCAPITAL")
+correoCapital= os.getenv("EMAILUSER")
+print("--------------------------------------")
+print(TU_API_KEY)
+print(PasswordCaptial)
+print("--------------------------------------")
 instance = InterFaceCapitalCom(TU_API_KEY,PasswordCaptial,correoCapital)
 
 

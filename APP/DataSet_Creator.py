@@ -20,7 +20,10 @@ import time
 
 ### Check if model is created
 import os.path as path
-import os 
+import os
+from dotenv import load_dotenv
+# Cargar variables del archivo .env
+load_dotenv()
 
 
 ##DataSet Creator
@@ -39,11 +42,16 @@ class DL_DataSet(QThread):
 
     def __init__(self):
         super().__init__()
-        self.Date_Time = datetime.now().strftime("%d/%m/%Y %H:%M:%S")
+        #self.Date_Time = datetime.now().strftime("%d/%m/%Y %H:%M:%S")
+        self.Date_Time = datetime.now().strftime("%Y-%m-%dT%H:%M:%S")
         self.Path_DataSet = ""
         self.Seed_DataSet_id_FRGN =0
         self.DataSet_id_Just_Created=0
-        self.dataSet_Gen = DatasetGenerator()
+        Api_Key=os.getenv("TU_API_KEY")
+        PasswordCaptial=os.getenv("PASSWORDCAPITAL")
+        correoCapital= os.getenv("EMAILUSER")
+        
+        self.dataSet_Gen = DatasetGenerator(Api_Key,PasswordCaptial,correoCapital)
         
     
     def Set_SeedParam(self,val1):
@@ -83,7 +91,9 @@ class DL_DataSet(QThread):
     def run(self):
         
         self.Update_DataSetCreationStatus.emit(False)
-        self.Date_Time = datetime.now().strftime("%d/%m/%Y %H:%M:%S")
+        #self.Date_Time = datetime.now().strftime("%d/%m/%Y %H:%M:%S")
+        self.Date_Time = datetime.now().strftime("%Y-%m-%dT%H:%M:%S")
+        
         self.Update_Progress_String.emit("Initializing DataSet creation")
         self.Update_Progress.emit(0)
         
@@ -95,9 +105,9 @@ class DL_DataSet(QThread):
             self.DataSet_id_Just_Created=self.DataSetToUpdateId
         
         
-        StartDay="2001-01-02"
+        StartDay="1983-03-30T00:00:00"
         #EndDate="2001-06-15"
-        EndDate=date.today().strftime("%Y-%m-%d")
+        EndDate=date.today().strftime("%Y-%m-%dT%H:%M:%S")
         
         ObjectiveFilePath=self.ToCreateOrUpdateDataSet(self.DataSet_id_Just_Created,self.SeedDataSetList,StartDay,EndDate,self.TypeProcessToDo)
         self.Path_DataSet = ObjectiveFilePath
@@ -185,7 +195,7 @@ class DL_DataSet(QThread):
 
         if ProcessToDo=="1": #Create a new
             addToOld=False
-            self.dataSet_Gen.RetivingDataPrices_Yahoo(itemName,dateStart, dateEnd,Original_Path_Retiving,Original_Path_Retiving,addToOld)
+            self.dataSet_Gen.RetivingDataPrices(itemName,dateStart, dateEnd,Original_Path_Retiving,Original_Path_Retiving,addToOld)
             self.Update_Progress_String.emit("Base DataSet Created created")
             self.Update_Progress.emit(60)
         elif ProcessToDo=="0": #Create update
