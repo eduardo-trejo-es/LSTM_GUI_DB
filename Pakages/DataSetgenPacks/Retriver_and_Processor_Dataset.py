@@ -1,6 +1,7 @@
 import pandas as pd
-import yfinance as yf
+#import yfinance as yf
 from datetime import date, timedelta
+from InterCapital_Com import InterFaceCapitalCom
 
 import numpy as np
 import matplotlib.pyplot as plt
@@ -11,14 +12,22 @@ import time
 import cmath
 
 class DatasetGenerator:
-    def RetivingDataPrices_Yahoo(self,Name_Item,From, to,csvFileName,csvFileName_New,addToOld):
+    
+    def __init__(self,TU_API_KEY,PasswordCaptial,correoCapital):
+        self.CapitalAPI = InterFaceCapitalCom(TU_API_KEY,PasswordCaptial,correoCapital)
+        self.resolution= "DAY" 
+        self.max=999
+        
+
+    def RetivingDataPrices(self,Name_Item,From, to,csvFileName,csvFileName_New,addToOld):
         startDate=From
         endDate= to
         name_item= Name_Item
 
-        df=yf.download(name_item,start = startDate, end = endDate,interval='1d',threads = True)
+        """df=yf.download(name_item,start = startDate, end = endDate,interval='1d',threads = True)
+        #df.pop("Adj Close")"""
+        df=self.CapitalAPI.RetriveData(name_item,startDate, endDate, self.resolution, self.max)
         #df=yf.download(name_item,start = startDate, end = endDate,interval='1d')
-        df.pop("Adj Close")
         
         self.SavingDataset(df,csvFileName, csvFileName_New, addToOld)
         
@@ -260,7 +269,7 @@ class DatasetGenerator:
         print(startDate)
         print(endDate)
         #time.sleep(30)
-        self.RetivingDataPrices_Yahoo(itemName,startDate,endDate,csvFileName,csvFileName, addToOld)
+        self.RetivingDataPrices(itemName,startDate,endDate,csvFileName,csvFileName, addToOld)
         #df=yf.download('CL=F',start = startDate, end = endDate,interval='1d',utc=True,threads = True)
     
     

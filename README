@@ -1,0 +1,19 @@
+
+
+to activate the virtual environnement on mac : source .venv/bin/activate
+(on windows: source .venv/Scripts/activate )
+to desactivate the virtual environnement on mac : deactivate
+
+to update the requirements.txt: pip  freeze > requirements.txt
+
+Local deploy
+to run the server run : python3 Server_gunicorn.py 
+ in if __name__=="__main__":: app.run(host="0.0.0.0", port=8000, _quiet=False)
+to stop the server: ctrl+C
+
+
+to deploy the web app: https://dashboard.render.com/
+#to deply on render live web
+serve(app, host="0.0.0.0", port=8080, _quiet=False)
+    
+    
