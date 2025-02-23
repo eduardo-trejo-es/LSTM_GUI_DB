@@ -82,6 +82,12 @@ class InterFaceCapitalCom:
         print(" CST:", HEADERS["CST"])
         print(" X-CAP-API-KEY:", HEADERS["X-CAP-API-KEY"])
         
+        print("parametters: -----------vvvvvvvv--------------")
+        print("\n resolution: "+str(resolution))
+        print(" max:", str(max))
+        print(" from_: ", str(from_))
+        print(" to_:", str(to_))
+        
         #  Hacer la solicitud GET
         PRICES_URL = f"https://api-capital.backend-capital.com/api/v1/prices/{EPIC}"
         response = requests.get(PRICES_URL, headers=HEADERS, params=PARAMS)
@@ -147,25 +153,33 @@ class InterFaceCapitalCom:
             
             df_last=df
             #Convertir la cadena a un objeto datetime
-            if df_init.index[-1]==to_:
+            try:
+                if df_init.index[-1]==to_:
+                    break
+                
+                from_=df_init.index[-1]    
+                
+                from_dt = datetime.strptime(from_, "%Y-%m-%dT%H:%M:%S")
+                # 📌 Sumar días (por ejemplo, 3 días)
+                day_to_add = max
+                to_Prov = from_dt + timedelta(days=day_to_add)
+                to_Prov_str = to_Prov.strftime("%Y-%m-%dT%H:%M:%S")
+            except:
+                print("capital df empty")
                 break
-            
-            from_=df_init.index[-1]    
-            
-            from_dt = datetime.strptime(from_, "%Y-%m-%dT%H:%M:%S")
-            # 📌 Sumar días (por ejemplo, 3 días)
-            day_to_add = max
-            to_Prov = from_dt + timedelta(days=day_to_add)
-            to_Prov_str = to_Prov.strftime("%Y-%m-%dT%H:%M:%S")
+                
         
-        
-        df = df.loc[~df.index.duplicated(keep="first")]
+        try:
+            df = df.loc[~df.index.duplicated(keep="first")]
+        except:
+            print("capital df empty")
+            
             
         return df
     
 
 
-TU_API_KEY=os.getenv("TU_API_KEY")
+"""TU_API_KEY=os.getenv("TU_API_KEY")
 PasswordCaptial=os.getenv("PASSWORDCAPITAL")
 correoCapital= os.getenv("EMAILUSER")
 print("--------------------------------------")
@@ -177,10 +191,12 @@ instance = InterFaceCapitalCom(TU_API_KEY,PasswordCaptial,correoCapital)
 
 epic= "OIL_CRUDE"  
 resolution= "DAY" 
-max = 5
-from_= "2025-01-27T00:00:00"
+max = 999
+StartDay="1983-03-30T00:00:00"
+#EndDate="2001-06-15"
+from_= "1983-03-30T00:00:00"
 to= "2025-02-14T00:00:00"
 df=instance.RetriveData(epic,from_, to, resolution, max)
 #df=instance.RetriveData(epic,from_,to,resolution,max)
 
-print(df)
+print(df)"""

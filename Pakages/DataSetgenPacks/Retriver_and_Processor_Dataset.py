@@ -16,7 +16,7 @@ class DatasetGenerator:
     def __init__(self,TU_API_KEY,PasswordCaptial,correoCapital):
         self.CapitalAPI = InterFaceCapitalCom(TU_API_KEY,PasswordCaptial,correoCapital)
         self.resolution= "DAY" 
-        self.max=1000
+        self.max=999
         
 
     def RetivingDataPrices(self,Name_Item,From, to,csvFileName,csvFileName_New,addToOld):

@@ -47,7 +47,7 @@ class Forcast_Data:
     self.Real_Y_Close=""
     self.Forcasted_Date=""
     
-    self.dataSet_Gen = DatasetGenerator()
+    #self.dataSet_Gen = DatasetGenerator()
     self.classment_Active=False #to allow UpDown binary forcast some other things were deleted
     
   def ToForcastfrom(self,ColumToforcast,ColumRealYToCompare,dateFromForcast,data_frame_Path,BackDays):
