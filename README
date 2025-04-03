@@ -6,8 +6,10 @@ to desactivate the virtual environnement on mac : deactivate
 
 to update the requirements.txt: pip  freeze > requirements.txt
 
+pip install -r requirements.txt
+
 Local deploy
-to run the server run : python3 Server_gunicorn.py 
+to run the server run : python3 APP/GUI_StockForcaster.py
  in if __name__=="__main__":: app.run(host="0.0.0.0", port=8000, _quiet=False)
 to stop the server: ctrl+C
 
