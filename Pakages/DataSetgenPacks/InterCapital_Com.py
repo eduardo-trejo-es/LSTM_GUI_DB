@@ -177,26 +177,3 @@ class InterFaceCapitalCom:
             
         return df
     
-
-
-"""TU_API_KEY=os.getenv("TU_API_KEY")
-PasswordCaptial=os.getenv("PASSWORDCAPITAL")
-correoCapital= os.getenv("EMAILUSER")
-print("--------------------------------------")
-print(TU_API_KEY)
-print(PasswordCaptial)
-print("--------------------------------------")
-instance = InterFaceCapitalCom(TU_API_KEY,PasswordCaptial,correoCapital)
-
-
-epic= "OIL_CRUDE"  
-resolution= "DAY" 
-max = 999
-StartDay="1983-03-30T00:00:00"
-#EndDate="2001-06-15"
-from_= "1983-03-30T00:00:00"
-to= "2025-02-14T00:00:00"
-df=instance.RetriveData(epic,from_, to, resolution, max)
-#df=instance.RetriveData(epic,from_,to,resolution,max)
-
-print(df)"""

@@ -2023,7 +2023,7 @@ class Ui_GUI_LSTM_FORCASTER(object):
             index= self.ForC_ComBox_Model_To_used.findText(str(Current_Row),QtCore.Qt.MatchFixedString)
             if index==-1:
                 self.ForC_ComBox_Model_To_used.addItem(str(Current_Row))
-    
+                
     def ForcastingTab_UpdateComboxRelationModelDataset_Id(self):
         self.ForC_ComBox_DataSet_To_use.clear()
         print("TrainningTab_UpdateComboxRelationModelDataSet_ID called")

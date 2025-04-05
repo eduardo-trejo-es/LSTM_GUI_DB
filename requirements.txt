@@ -32,7 +32,7 @@ importlib_resources==6.4.5
 itsdangerous==2.2.0
 Jinja2==3.1.5
 joblib==1.4.2
-keras==2.13.1
+keras
 kiwisolver==1.4.7
 libclang==18.1.1
 lxml==5.3.0
@@ -41,7 +41,7 @@ MarkupSafe==2.1.5
 matplotlib==3.7.5
 mplfinance==0.12.10b0
 multitasking==0.0.11
-numpy==1.24.3
+numpy==1.23.5
 oauthlib==3.2.2
 opt_einsum==3.4.0
 packaging==24.2
@@ -69,11 +69,12 @@ seaborn==0.13.2
 simple-websocket==1.1.0
 six==1.17.0
 soupsieve==2.6
-tensorboard==2.13.0
+tensorboard==2.12.3
 tensorboard-data-server==0.7.2
-tensorflow==2.13.1
-tensorflow-estimator==2.13.0
-tensorflow-io-gcs-filesystem==0.34.0
+tensorflow-estimator==2.12.0
+tensorflow-io-gcs-filesystem==0.37.1
+tensorflow-macos==2.12.0
+tensorflow-metal==1.0.0
 termcolor==2.4.0
 threadpoolctl==3.5.0
 typing_extensions==4.5.0
@@ -82,7 +83,8 @@ urllib3==2.2.3
 waitress==3.0.0
 webencodings==0.5.1
 Werkzeug==3.0.6
-wrapt==1.17.2
+wrapt
 wsproto==1.2.0
 yfinance==0.2.52
 zipp==3.20.2
+python-dotenv==1.0.1
