@@ -20,18 +20,54 @@ class DatasetGenerator:
         
 
     def RetivingDataPrices(self,Name_Item,From, to,csvFileName,csvFileName_New,addToOld):
-        startDate=From
-        endDate= to
-        name_item= Name_Item
+        print("✅ Entered RetivingDataPrices()")
+        print(f"📡 Requesting data for {Name_Item} from {From} to {to}")
 
-        """df=yf.download(name_item,start = startDate, end = endDate,interval='1d',threads = True)
-        #df.pop("Adj Close")"""
-        df=self.CapitalAPI.RetriveData(name_item,startDate, endDate, self.resolution, self.max)
-        #df=yf.download(name_item,start = startDate, end = endDate,interval='1d')
-        
-        self.SavingDataset(df,csvFileName, csvFileName_New, addToOld)
+        startDate = From
+        endDate = to
+        name_item = Name_Item
+
+        # Add WebSocket debug message
+        #self.socketio.emit("Update_progress", {"status": "Calling Capital.com API...", "progress": 10})
+
+        try:
+            print("📡 Calling Capital.com API...")
+            
+            # Add a timeout to prevent hanging forever
+            import requests
+            from requests.exceptions import Timeout
+
+            try:
+                self.CapitalAPI.authentication()
+                df = self.CapitalAPI.RetriveData(name_item, startDate, endDate, self.resolution, self.max)
+            except Timeout:
+                print("❌ ERROR: API request **timed out**!")
+                #self.socketio.emit("Update_progress", {"status": "API Timeout", "progress": 95})
+                return
+            except Exception as e:
+                print(f"❌ ERROR: API request failed! {e}")
+                #self.socketio.emit("Update_progress", {"status": f"API Error: {e}", "progress": 95})
+                return
+
+            print("✅ API call successful!")
+
+            # Check if API returned data
+            if df is None or df.empty:
+                print("❌ ERROR: API returned **no data**.")
+                #self.socketio.emit("Update_progress", {"status": "API returned no data", "progress": 95})
+                return
+
+            print(f"📊 Data sample: {df.head()}")  # Print first rows
+
+            self.SavingDataset(df, csvFileName, csvFileName_New, addToOld)
+            print("✅ Data saved successfully!")
+            #self.socketio.emit("Update_progress", {"status": "Data saved!", "progress": 20})
+        except Exception as e:
+            print(f"❌ ERROR in RetivingDataPrices(): {str(e)}")
+            #self.socketio.emit("Update_progress", {"status": f"Error: {str(e)}", "progress": 95})
         
     def PopListdf(self,columns,csvFileName, csvFileName_New,):
+        
         df=pd.read_csv(csvFileName, index_col="Date")
         Column=columns
         for i in Column:

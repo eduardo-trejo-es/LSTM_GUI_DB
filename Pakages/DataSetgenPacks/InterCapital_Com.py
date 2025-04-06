@@ -1,10 +1,17 @@
 import requests
+import certifi
+import ssl
 import pandas as pd
 import os
+import time
 from dotenv import load_dotenv
 # Cargar variables del archivo .env
 load_dotenv()
 from datetime import datetime, timedelta
+import urllib3
+from types import SimpleNamespace
+import json
+import urllib.parse
 
 class InterFaceCapitalCom:
     
@@ -15,7 +22,7 @@ class InterFaceCapitalCom:
         self.correoCapital= correoCapital_
         self.CST=""
         self.SECURITY_TOKEN=""  
-        self.authentication()   
+        #self.authentication()
     
     def authentication(self):  
         result="" 
@@ -37,32 +44,58 @@ class InterFaceCapitalCom:
         print("📧 Correo:", PAYLOAD["identifier"])
         print("🔒 Contraseña cifrada:", PAYLOAD["password"])
         print("🔑 API Key:", HEADERS["X-CAP-API-KEY"])
+        
+        # Avant d'appeler requests
 
-        response = requests.post(SESSION_URL, json=PAYLOAD, headers=HEADERS)
+        try:
+            
+            # 🔐 Créer un contexte SSL propre
+            ssl_context = ssl.create_default_context(cafile=certifi.where())
 
-        if response.status_code == 200:
-            print("✅ Autenticación exitosa")
-            result="Autenticación exitosa"
-            tokens = response.headers
-            self.CST = tokens.get("CST")
-            self.SECURITY_TOKEN = tokens.get("X-SECURITY-TOKEN")
-            print("CST Token:", self.CST)
-            print("X-SECURITY-TOKEN:", self.SECURITY_TOKEN)
-        else:
-            print(f"❌ Error en la autenticación: {response.status_code}")
-            result=f"❌ Error en la autenticación: {response.status_code}"
-            print(response.text)
+            # 🌐 Créer un gestionnaire HTTP sécurisé
+            http = urllib3.PoolManager(ssl_context=ssl_context)
+
+            # 🔄 Encoder les données JSON
+            encoded_payload = json.dumps(PAYLOAD).encode('utf-8')
+
+            # 📡 Requête POST via urllib3
+            response_raw = http.request(
+                "POST",
+                SESSION_URL,
+                body=encoded_payload,
+                headers=HEADERS
+            )
+
+            # 📦 Adapter la réponse pour rester compatible avec le reste du code
+            response = SimpleNamespace(
+                status_code=response_raw.status,
+                headers=response_raw.headers,
+                text=response_raw.data.decode()
+            )
+
+            if response.status_code == 200:
+                print("✅ Autenticación exitosa")
+                result="Autenticación exitosa"
+                tokens = response.headers
+                self.CST = tokens.get("CST")
+                self.SECURITY_TOKEN = tokens.get("X-SECURITY-TOKEN")
+                print("CST Token:", self.CST)
+                print("X-SECURITY-TOKEN:", self.SECURITY_TOKEN)
+            else:
+                print(f"❌ Error en la autenticación: {response.status_code}")
+                result=f"❌ Error en la autenticación: {response.status_code}"
+                print(response.text)
+        except Exception as e:
+            print(f"❌ EXCEPTION during authentication: {str(e)}")
+            result = f"❌ Exception: {str(e)}"
+            
         
         return result
         
-    def BrutRetriveData(self, epic,from_, to_, resolution, max): 
+    def BrutRetriveData(self, epic, from_, to_, resolution, max): 
+        print("🟢 Entering BrutRetriveData()...")
         
-        #Note: resolution : MINUTE, MINUTE_5, MINUTE_15, MINUTE_30, HOUR, HOUR_4, DAY, WEEK
-        # 📌 EPIC del instrumento financiero que deseas consultar
-        df= pd.DataFrame()
-        EPIC = epic  # Cambia esto por el EPIC correcto
-
-        # 📌 Parámetros para la consulta de precios
+        # Define request parameters
         PARAMS = {
             "resolution": resolution,
             "max": max,
@@ -70,110 +103,177 @@ class InterFaceCapitalCom:
             "to": to_
         }
 
-        # 📌 Encabezados de autenticación
         HEADERS = {
             "X-SECURITY-TOKEN": self.SECURITY_TOKEN,
             "CST": self.CST,
-            "X-CAP-API-KEY": self.TU_API_KEY  # Opcional, pero puede ayudar a evitar errores
+            "X-CAP-API-KEY": self.TU_API_KEY
         }
 
-        print("\n Datos que se enviarán en la autenticación:")
-        print(" X-SECURITY-TOKEN:", HEADERS["X-SECURITY-TOKEN"])
-        print(" CST:", HEADERS["CST"])
-        print(" X-CAP-API-KEY:", HEADERS["X-CAP-API-KEY"])
-        
-        print("parametters: -----------vvvvvvvv--------------")
-        print("\n resolution: "+str(resolution))
-        print(" max:", str(max))
-        print(" from_: ", str(from_))
-        print(" to_:", str(to_))
-        
-        #  Hacer la solicitud GET
-        PRICES_URL = f"https://api-capital.backend-capital.com/api/v1/prices/{EPIC}"
-        response = requests.get(PRICES_URL, headers=HEADERS, params=PARAMS)
+        PRICES_URL = f"https://api-capital.backend-capital.com/api/v1/prices/{epic}"
 
-        # Manejo de respuesta
-        if response.status_code == 200:
-            data = response.json()  # Convertimos la respuesta a JSON
-
-            # Extraer la lista de precios desde el JSON
-            if "prices" in data:
-                price_data = data["prices"]
-
-                # Convertir a un DataFrame de pandas
-                df = pd.DataFrame(price_data)
-                # Expandir columnas anidadas si es necesario
-                if "openPrice" in df.columns:
-                    df["Date"] = df["snapshotTimeUTC"]
-                    df["Open"] = df["openPrice"].apply(lambda x: x["bid"])
-                    df["High"] = df["highPrice"].apply(lambda x: x["bid"])
-                    df["Low"] = df["lowPrice"].apply(lambda x: x["bid"])
-                    df["Close"] = df["closePrice"].apply(lambda x: x["bid"])
-                    df["Volume"] = df["lastTradedVolume"]
-                    df.drop(["snapshotTimeUTC","snapshotTime","openPrice", "closePrice", "highPrice", "lowPrice","lastTradedVolume"], axis=1, inplace=True)
-                    df.set_index("Date", inplace=True)
-
-
-            else:
-                print("No se encontraron datos de precios en la respuesta.")
-        else:
-            print(f"Error al obtener precios: {response.status_code}")
-            print(response.text)
-            
-        
-        return df
-    
-    def RetriveData(self, epic,from_, to_, resolution, max): 
-        
-        #Note: resolution : MINUTE, MINUTE_5, MINUTE_15, MINUTE_30, HOUR, HOUR_4, DAY, WEEK
-        #EPIC del instrumento financiero que deseas consultar
-        df_last= pd.DataFrame()
-        df_init= pd.DataFrame()
-        df=pd.DataFrame()
-        to_Prov=""
-        EPIC = epic  # Cambia esto por el EPIC correcto
-        tries=0
-        
-        
-        #Convertir la cadena a un objeto datetime
-        from_dt = datetime.strptime(from_, "%Y-%m-%dT%H:%M:%S")
-        # 📌 Sumar días (por ejemplo, 3 días)
-        day_to_add = max
-        to_Prov = from_dt + timedelta(days=day_to_add)
-        to_Prov_str = to_Prov.strftime("%Y-%m-%dT%H:%M:%S")
-        
-        
-        while tries<(max*10000):
-            print(tries)
-            print("new from"+from_)
-            df_init=self.BrutRetriveData(epic,from_,to_Prov_str,resolution,max)
-        
-            df=pd.concat([df_last,df_init])
-            # 📌 Eliminar índices duplicados y mantener solo la primera aparición
-            
-            df_last=df
-            #Convertir la cadena a un objeto datetime
-            try:
-                if df_init.index[-1]==to_:
-                    break
-                
-                from_=df_init.index[-1]    
-                
-                from_dt = datetime.strptime(from_, "%Y-%m-%dT%H:%M:%S")
-                # 📌 Sumar días (por ejemplo, 3 días)
-                day_to_add = max
-                to_Prov = from_dt + timedelta(days=day_to_add)
-                to_Prov_str = to_Prov.strftime("%Y-%m-%dT%H:%M:%S")
-            except:
-                print("capital df empty")
-                break
-                
+        print(f"📡 Fetching data from API: {PRICES_URL}")
+        print(f"📅 Time Range: {from_} ➝ {to_}")
         
         try:
-            df = df.loc[~df.index.duplicated(keep="first")]
-        except:
-            print("capital df empty")
+            # Create clean SSL context
+            ssl_context = ssl.create_default_context(cafile=certifi.where())
+            http = urllib3.PoolManager(ssl_context=ssl_context)
+
+            # Encode params to URL query string
+            query_string = urllib.parse.urlencode(PARAMS)
+            full_url = f"{PRICES_URL}?{query_string}"
+
+            # Send GET request manually
+            response = http.request("GET", full_url, headers=HEADERS, timeout=30.0)
+
+            # Set a timeout of 30 seconds
+            #response = requests.get(PRICES_URL, headers=HEADERS, params=PARAMS, timeout=30,verify=certifi.where())
+
+            print(f"🔄 API Response Status: {response.status}")
+
+            if response.status != 200:
+                print(f"❌ API Request Failed! Status Code: {response.status}")
+                print(f"❌ Response: {response.data.decode()}")
+                return pd.DataFrame()
+
+            data = json.loads(response.data.decode())
             
-            
-        return df
+            # Check if the response contains price data
+            if "prices" not in data or not data["prices"]:
+                print("⚠️ WARNING: API returned empty data!")
+                return pd.DataFrame()
+
+            # Convert to DataFrame
+            df = pd.DataFrame(data["prices"])
+
+            # Expand columns
+            if "openPrice" in df.columns:
+                df["Date"] = df["snapshotTimeUTC"]
+                df["Open"] = df["openPrice"].apply(lambda x: x["bid"])
+                df["High"] = df["highPrice"].apply(lambda x: x["bid"])
+                df["Low"] = df["lowPrice"].apply(lambda x: x["bid"])
+                df["Close"] = df["closePrice"].apply(lambda x: x["bid"])
+                df["Volume"] = df["lastTradedVolume"]
+                df.drop(["snapshotTimeUTC", "snapshotTime", "openPrice", "closePrice", 
+                        "highPrice", "lowPrice", "lastTradedVolume"], axis=1, inplace=True)
+                df.set_index("Date", inplace=True)
+
+            print(f"✅ Successfully retrieved {len(df)} rows of data.")
+            return df
+
+        except urllib3.exceptions.HTTPError as e:
+                print(f"❌ ERROR: HTTP error: {str(e)}")
+                return pd.DataFrame()
+        except Exception as e:
+                print(f"❌ ERROR: An unexpected error occurred: {str(e)}")
+                return pd.DataFrame()
     
+    def RetriveData(self, epic, from_, to_, resolution, max_per_request=999): 
+        print("🟢 Entering RetriveData()")
+        
+        #Verify Token expiration
+        if not self.tokens_valid():
+            print("🔐 Autenticación requerida. Ejecutando login...")
+            auth_result = self.authentication()
+            if "❌" in auth_result:
+                print("❌ Falló la autenticación. Cancelando recuperación de datos.")
+                return pd.DataFrame()
+
+        df = pd.DataFrame()  # DataFrame final donde se almacenarán los datos
+        EPIC = epic  
+        tries = 0  
+        MAX_TRIES = 100  # Máximo número de intentos para evitar bucles infinitos
+
+        from_dt = datetime.strptime(from_, "%Y-%m-%dT%H:%M:%S")
+        to_dt = datetime.strptime(to_, "%Y-%m-%dT%H:%M:%S")
+
+        total_days = (to_dt - from_dt).days  # Número total de días a recuperar
+        processed_days = 0  # Lleva el seguimiento de los días procesados
+
+        while from_dt < to_dt and tries < MAX_TRIES:
+            # 🔹 Definir el nuevo límite: 999 días o los días restantes
+            remaining_days = (to_dt - from_dt).days
+            days_to_fetch = min(remaining_days, max_per_request)
+
+            # 🔹 Calcular la nueva fecha límite
+            to_Prov = from_dt + timedelta(days=days_to_fetch)
+            to_Prov_str = to_Prov.strftime("%Y-%m-%dT%H:%M:%S")
+            from_str = from_dt.strftime("%Y-%m-%dT%H:%M:%S")
+
+            print(f"🔄 Attempt {tries + 1}/{MAX_TRIES}: Fetching from {from_str} to {to_Prov_str}")
+
+            df_new = self.BrutRetriveData(EPIC, from_str, to_Prov_str, resolution, max_per_request)
+
+            if df_new.empty:
+                print("⚠️ API returned no data. Stopping.")
+                break  # ⛔ Evita bucles innecesarios
+
+            df = pd.concat([df, df_new])  # Agregar nuevos datos al DataFrame final
+
+            # 🔹 Actualizar la fecha de inicio para la siguiente iteración
+            from_dt = to_Prov
+            processed_days += days_to_fetch
+
+            # 🔥 Emitir progreso en tiempo real
+            progress = int((processed_days / total_days) * 100)
+            print(f"📊 Progress: {progress}% complete")
+            #self.socketio.emit("Update_progress", {"status": "Retrieving data...", "progress": progress})
+
+            tries += 1  # Incrementar el contador de intentos
+
+        # 🗑️ Eliminar duplicados antes de devolver los datos
+        if not df.empty:
+            print("🗑️ Removing duplicate rows")
+            df = df.loc[~df.index.duplicated(keep="first")]
+
+        print("✅ Data retrieval completed!")
+        return df
+
+
+    def calculate_variable_days(self, from_date, limit=999, depth=0, max_depth=10):
+        today = datetime.today()
+        #from_dt = datetime.strptime(from_date, "%Y-%m-%dT%H:%M:%S")
+        from_dt=from_date
+        
+        remaining_days = (today - from_dt).days  # 🔹 Días faltantes hasta hoy
+
+        if remaining_days <= 0:
+            return from_date  # ✅ Si la fecha de inicio es hoy o en el futuro, no hacemos nada
+
+        # 🔥 Si quedan más de `limit` días, sumamos `limit`, si no, sumamos los días restantes
+        dynamic_max = min(remaining_days, limit)
+
+        to_Prov = from_dt + timedelta(days=dynamic_max)
+
+        return to_Prov.strftime("%Y-%m-%dT%H:%M:%S"),remaining_days
+
+    def tokens_valid(self):
+        # Si los tokens están vacíos, no son válidos
+        if not self.CST or not self.SECURITY_TOKEN:
+            return False
+
+        # 🔍 Realiza un ping a una ruta protegida para ver si sigue autenticado
+        TEST_EPIC = "OIL_CRUDE"  # Un epic conocido cualquiera
+        TEST_URL = f"https://api-capital.backend-capital.com/api/v1/prices/{TEST_EPIC}?resolution=MINUTE&max=1"
+
+        HEADERS = {
+            "X-SECURITY-TOKEN": self.SECURITY_TOKEN,
+            "CST": self.CST,
+            "X-CAP-API-KEY": self.TU_API_KEY
+        }
+
+        try:
+            ssl_context = ssl.create_default_context(cafile=certifi.where())
+            http = urllib3.PoolManager(ssl_context=ssl_context)
+            response = http.request("GET", TEST_URL, headers=HEADERS, timeout=10)
+
+            if response.status in [401, 403]:
+                print("🔒 Tokens caducados.")
+                return False
+
+            print("🔐 Tokens aún válidos.")
+            return True
+
+        except Exception as e:
+            print(f"❌ Error al validar tokens: {str(e)}")
+            return False
