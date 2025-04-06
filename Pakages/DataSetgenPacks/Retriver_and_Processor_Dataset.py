@@ -596,7 +596,8 @@ class DatasetGenerator:
 
         # Cargar los datos
         data = pd.read_csv(csv_file)
-        data['Date'] = pd.to_datetime(data['Date'])  # Asegurarse de que 'Date' sea tipo datetime
+        #data['Date'] = pd.to_datetime(data['Date'])  # Asegurarse de que 'Date' sea tipo datetime
+        data['Date'] = pd.to_datetime(data['Date'], errors='coerce').dt.normalize()
         data.set_index('Date', inplace=True)  # Establecer 'Date' como índice para análisis temporal
 
         # Parámetros de Bollinger Bands

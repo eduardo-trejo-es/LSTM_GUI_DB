@@ -164,20 +164,26 @@ class DL_Forcast(QThread):
         
         for i in datefiltredPercentage:
             
+            print(f"⚙️ Forecasting date: {i} | Index: {DatesIndex}")
             #print("to be predict from: "+str(i))
             #ColumToforcast, ColumRealYToCompare, dateFromForcast, data_frame_Path, BackDays
-            self.forcaster.ToForcastfrom(ColumToForcast,ColumToForcast,str(i),Data_CSV,backdaysConsidered)
-            Real_Y_current=self.forcaster.Get_UnicForcast_Real_Y_current()
-            Real_Y_Forcast=self.forcaster.Get_UnicForcast_Forcast_Close()
-            Real_Y_Close=self.forcaster.Get_UnicForcast_Real_Y_Close()
-            forcastedDate=self.forcaster.Get_Forcasted_Date()
-            ColumnCurrent_Close_Day.append(Real_Y_current)
-            ColumnForcast_Close_Day.append(Real_Y_Forcast)
-            ColumnReal_Close_Day.append(Real_Y_Close)
-            Columnforcasteddate.append(str(forcastedDate))
-            Forcast_Dates.append(i)
-            DatesIndex=DatesIndex+1
-            self.update_DateForcasting(DatesIndex,i)
+            try:
+                self.forcaster.ToForcastfrom(ColumToForcast,ColumToForcast,str(i),Data_CSV,backdaysConsidered)
+                Real_Y_current=self.forcaster.Get_UnicForcast_Real_Y_current()
+                print(f"👉 Real_Y_current: {Real_Y_current}")
+                Real_Y_Forcast=self.forcaster.Get_UnicForcast_Forcast_Close()
+                Real_Y_Close=self.forcaster.Get_UnicForcast_Real_Y_Close()
+                forcastedDate=self.forcaster.Get_Forcasted_Date()
+                ColumnCurrent_Close_Day.append(Real_Y_current)
+                ColumnForcast_Close_Day.append(Real_Y_Forcast)
+                ColumnReal_Close_Day.append(Real_Y_Close)
+                Columnforcasteddate.append(str(forcastedDate))
+                Forcast_Dates.append(i)
+                DatesIndex=DatesIndex+1
+                self.update_DateForcasting(DatesIndex,i)
+            except Exception as e:
+                print(f"❌ Forecast failed: {str(e)}")
+                break
         print(Forcast_Dates)
             
             
@@ -200,13 +206,12 @@ class DL_Forcast(QThread):
         #Allandforcast=all_df[all_df.shape[0]-backdaysConsideredToBForcasted:]
 
 
-        Allandforcast=AlldatefiltredPercentage        
-        frames = [Allandforcast, fd_ColumnForcast_Close_Day]
+        Allandforcast=AlldatefiltredPercentage 
         
-        print(Allandforcast)
-        print(fd_ColumnForcast_Close_Day)
-        
-
+        df1 = self.clean_and_set_index(Allandforcast)
+        df2 = self.clean_and_set_index(fd_ColumnForcast_Close_Day)
+       
+        frames = [df1, df2]
         Final_Allandforcast = pd.concat(frames,axis=1)
         
         #Creating the csv File
@@ -240,5 +245,9 @@ class DL_Forcast(QThread):
         self.Update_Progress_String.emit("Forcasting in process, last forcast: "+str(DateIndexDone)+" ("+str(Date)+")"+" of "+str(DatesToForcast))
         self.Update_Progress.emit(int(CurrenEpochPrecent_and_Already_Done))
 
-        
+    def clean_and_set_index(self, df):
+        df.index = pd.to_datetime(df.index, errors='coerce').normalize()
+        df = df[~df.index.isna()]  # ✅ Elimina filas cuyo índice es NaT
+        return df
+ 
         
