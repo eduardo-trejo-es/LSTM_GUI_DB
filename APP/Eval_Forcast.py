@@ -218,7 +218,6 @@ class DL_Evaluator(QThread):
         print(Right_precentage)
         
 
-
         #Total diff earned
         Total_diff_Earned=0
         Total_diff_Earned=df['diff_right'].sum()
