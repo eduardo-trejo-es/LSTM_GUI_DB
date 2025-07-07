@@ -5,6 +5,11 @@
   value will be located in the row of the corresponding date (2024-10-20) close and forcasted value of the sam row 
   can be compared, the both are the same day
 """
+import os
+os.environ["CUDA_VISIBLE_DEVICES"] = "-1"  # pour compatibilité avec Linux
+os.environ["TF_CPP_MIN_LOG_LEVEL"] = "2"
+os.environ["TF_ENABLE_ONEDNN_OPTS"] = "0"
+os.environ["TF_METAL_DISABLE"] = "1"  # <--- désactive Metal explicitement
 
 
 from cProfile import label
@@ -38,6 +43,9 @@ sys.path.append("/Users/eduardo/Desktop/LSTM_Capital_API_220922/FFT_added_LSTM_A
 # import all classes
 from Retriver_and_Processor_Dataset import DatasetGenerator
 
+import tensorflow as tf
+tf.config.set_visible_devices([], 'GPU') #Super important to avoil M1 problems
+
 class Forcast_Data:
   def __init__(self,Model_Path):
     self.model = keras.models.load_model(Model_Path)
@@ -61,7 +69,7 @@ class Forcast_Data:
     columRealYToCompare=ColumRealYToCompare
     #Separate dates for future plotting
     Data_dates = df.index
-    Data_dates=pd.to_datetime(Data_dates,utc=True)
+    Data_dates=pd.to_datetime(Data_dates,format='mixed', errors='raise')
     Data_dates=Data_dates.tz_localize(None)
     #....... dates .....#
     Dates_To_Use_To_Forcast=Data_dates[Data_dates.get_loc(dateFromForcast)-(backDaysRef-1):Data_dates.get_loc(dateFromForcast)+1]

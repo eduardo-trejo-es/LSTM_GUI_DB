@@ -1,3 +1,9 @@
+import os
+os.environ["CUDA_VISIBLE_DEVICES"] = "-1"  # pour compatibilité avec Linux
+os.environ["TF_CPP_MIN_LOG_LEVEL"] = "2"
+os.environ["TF_ENABLE_ONEDNN_OPTS"] = "0"
+os.environ["TF_METAL_DISABLE"] = "1"  # <--- désactive Metal explicitement
+
 from unittest import result
 import pandas as pd
 import numpy as np
@@ -23,6 +29,7 @@ from tensorflow.python.keras.layers.core import Activation
 
 import warnings
 
+tf.config.set_visible_devices([], 'GPU')
 
 
 class Model_Trainer:
