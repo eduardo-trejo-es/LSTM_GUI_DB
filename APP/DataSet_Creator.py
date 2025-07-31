@@ -105,8 +105,9 @@ class DL_DataSet(QThread):
             self.DataSet_id_Just_Created=self.DataSetToUpdateId
         
         
-        StartDay="2010-01-04T00:00:00"
+        #StartDay="2010-01-04T00:00:00"
         #EndDate="2001-06-15"
+        StartDay="2025-03-04T00:00:00"
         EndDate=date.today().strftime("%Y-%m-%dT%H:%M:%S")
         
         ObjectiveFilePath=self.ToCreateOrUpdateDataSet(self.DataSet_id_Just_Created,self.SeedDataSetList,StartDay,EndDate,self.TypeProcessToDo)

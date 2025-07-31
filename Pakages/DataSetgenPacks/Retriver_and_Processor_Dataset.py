@@ -15,7 +15,8 @@ class DatasetGenerator:
     
     def __init__(self,TU_API_KEY,PasswordCaptial,correoCapital):
         self.CapitalAPI = InterFaceCapitalCom(TU_API_KEY,PasswordCaptial,correoCapital)
-        self.resolution= "DAY" 
+        #self.resolution= "DAY" 
+        self.resolution= "HOUR"
         self.max=999
         
 
@@ -39,7 +40,8 @@ class DatasetGenerator:
 
             try:
                 self.CapitalAPI.authentication()
-                df = self.CapitalAPI.RetriveData(name_item, startDate, endDate, self.resolution, self.max)
+                max_per_request = 1 if self.resolution in ["HOUR", "MINUTE"] else self.max
+                df = self.CapitalAPI.RetriveData(name_item, startDate, endDate, self.resolution, max_per_request)
             except Timeout:
                 print("❌ ERROR: API request **timed out**!")
                 #self.socketio.emit("Update_progress", {"status": "API Timeout", "progress": 95})
