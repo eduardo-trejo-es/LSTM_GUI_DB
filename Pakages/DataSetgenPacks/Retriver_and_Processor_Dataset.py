@@ -40,7 +40,7 @@ class DatasetGenerator:
 
             try:
                 self.CapitalAPI.authentication()
-                max_per_request = 1 if self.resolution in ["HOUR", "MINUTE"] else self.max
+                max_per_request = 24 if self.resolution == "Hour" else self.max
                 df = self.CapitalAPI.RetriveData(name_item, startDate, endDate, self.resolution, max_per_request)
             except Timeout:
                 print("❌ ERROR: API request **timed out**!")

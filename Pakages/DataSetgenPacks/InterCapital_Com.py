@@ -171,8 +171,6 @@ class InterFaceCapitalCom:
     
     def RetriveData(self, epic, from_, to_, resolution, max_per_request=999): 
         print("🟢 Entering RetriveData()")
-        if resolution in ["HOUR", "MINUTE"]:
-            max_per_request = 24  # La API solo permite 1 día por request con resolución horaria
         
         #Verify Token expiration
         if not self.tokens_valid():
@@ -234,7 +232,7 @@ class InterFaceCapitalCom:
         return df
 
 
-    def calculate_variable_days(self, from_date, limit=999, depth=0, max_depth=10):
+    def calculate_variable_days(self, from_date, limit=1, depth=0, max_depth=10):
         today = datetime.today()
         #from_dt = datetime.strptime(from_date, "%Y-%m-%dT%H:%M:%S")
         from_dt=from_date
