@@ -172,7 +172,7 @@ class InterFaceCapitalCom:
     def RetriveData(self, epic, from_, to_, resolution, max_per_request=999): 
         print("🟢 Entering RetriveData()")
         if resolution in ["HOUR", "MINUTE"]:
-            max_per_request = 1  # La API solo permite 1 día por request con resolución horaria
+            max_per_request = 24  # La API solo permite 1 día por request con resolución horaria
         
         #Verify Token expiration
         if not self.tokens_valid():
@@ -281,48 +281,3 @@ class InterFaceCapitalCom:
         except Exception as e:
             print(f"❌ Error al validar tokens: {str(e)}")
             return False
-
-    def test_resolution_range(self, epic, start_date="2025-07-30T00:00:00", resolution_list=None, max_days_back=30):
-        import csv
-        import os
-
-        if resolution_list is None:
-            resolution_list = ["TICK", "MINUTE", "HOUR", "DAY"]
-
-        print(f"🔍 Testing available resolutions for EPIC: {epic}")
-        if not self.tokens_valid():
-            self.authentication()
-
-        filename = f"resolutions_{epic}.csv"
-        with open(filename, mode="w", newline="") as file:
-            writer = csv.writer(file)
-            writer.writerow(["Resolution", "Date", "Status", "Rows Returned"])
-
-            for resolution in resolution_list:
-                print(f"\n📐 Testing resolution: {resolution}")
-                found_first = False
-                for delta in range(max_days_back):
-                    from_dt = datetime.strptime(start_date, "%Y-%m-%dT%H:%M:%S") - timedelta(days=delta + 1)
-                    to_dt = from_dt + timedelta(days=1)
-                    from_str = from_dt.strftime("%Y-%m-%dT%H:%M:%S")
-                    to_str = to_dt.strftime("%Y-%m-%dT%H:%M:%S")
-
-                    print(f"⏳ Querying from {from_str} to {to_str}")
-                    df = self.BrutRetriveData(epic, from_str, to_str, resolution, 1)
-                    # 💤 Espera para evitar sobrecargar la API
-                    time.sleep(2)
-                    row_count = len(df) if not df.empty else 0
-                    status = "OK" if row_count > 0 else "No data"
-                    writer.writerow([resolution, from_str[:10], status, row_count])
-
-                    if status == "OK":
-                        print(f"✅ Data available for {from_str[:10]} ({row_count} rows)")
-                        if not found_first:
-                            print(f"🟢 Earliest available date at {resolution}: {from_str[:10]}")
-                            found_first = True
-                    else:
-                        print(f"⚠️ No data for {from_str[:10]}")
-                        if found_first:
-                            break
-    
-   
