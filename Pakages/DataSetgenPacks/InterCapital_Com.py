@@ -183,7 +183,7 @@ class InterFaceCapitalCom:
         df = pd.DataFrame()  # DataFrame final donde se almacenarán los datos
         EPIC = epic  
         tries = 0  
-        MAX_TRIES = 100  # Máximo número de intentos para evitar bucles infinitos
+        MAX_TRIES = 1000  # Máximo número de intentos para evitar bucles infinitos
 
         from_dt = datetime.strptime(from_, "%Y-%m-%dT%H:%M:%S")
         to_dt = datetime.strptime(to_, "%Y-%m-%dT%H:%M:%S")
@@ -194,7 +194,12 @@ class InterFaceCapitalCom:
         while from_dt < to_dt and tries < MAX_TRIES:
             # 🔹 Definir el nuevo límite: 999 días o los días restantes
             remaining_days = (to_dt - from_dt).days
-            days_to_fetch = min(remaining_days, max_per_request)
+
+            if resolution.upper() == "HOUR":
+                # Para resolución HOUR, limitamos el bloque a máximo 3 días
+                days_to_fetch = min(remaining_days, 3)
+            else:
+                days_to_fetch = min(remaining_days, max_per_request)
 
             # 🔹 Calcular la nueva fecha límite
             to_Prov = from_dt + timedelta(days=days_to_fetch)
@@ -221,7 +226,7 @@ class InterFaceCapitalCom:
             #self.socketio.emit("Update_progress", {"status": "Retrieving data...", "progress": progress})
 
             tries += 1  # Incrementar el contador de intentos
-            time.sleep(2)  # Evitar saturar la API
+            time.sleep(4)  # Evitar saturar la API
 
         # 🗑️ Eliminar duplicados antes de devolver los datos
         if not df.empty:
