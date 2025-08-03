@@ -107,7 +107,7 @@ class DL_DataSet(QThread):
         
         #StartDay="2010-01-04T00:00:00"
         #EndDate="2001-06-15"
-        StartDay="2024-01-03T00:00:00"
+        StartDay="2017-05-03T00:00:00"
         EndDate=date.today().strftime("%Y-%m-%dT%H:%M:%S")
         
         ObjectiveFilePath=self.ToCreateOrUpdateDataSet(self.DataSet_id_Just_Created,self.SeedDataSetList,StartDay,EndDate,self.TypeProcessToDo)
@@ -133,7 +133,7 @@ class DL_DataSet(QThread):
     
     
     def ToCreateOrUpdateDataSet(self,DataSetId,SeedDataSetlist,dateStart,dateEnd,ProcessToDo):
-        print("this is the one: "+str(SeedDataSetlist[1]))
+        #print("this is the one: "+str(SeedDataSetlist[1]))
         
         self.Update_Progress_String.emit("Creating DataSet")
         self.Update_Progress.emit(25)
@@ -212,7 +212,7 @@ class DL_DataSet(QThread):
         ColumnsToPop=[]
         
         for i in range(0,len(Colums_Selection)):
-            print(i)
+            #print(i)
             if Colums_Selection[i]==0 and Colums_Selection_FFT[i]==0:
                 ColumnsToPop.append(columns[i])
         self.dataSet_Gen.PopListdf(ColumnsToPop,Original_Path_Retiving,Onlyonecolumn)

@@ -73,8 +73,8 @@ class DatasetGenerator:
         df=pd.read_csv(csvFileName, index_col="Date")
         Column=columns
         for i in Column:
-            print(i)
-            print(type(i))
+            #print(i)
+            #print(type(i))
             df.pop(i)
         self.SavingDataset(df,csvFileName, csvFileName_New,False)
               
@@ -83,20 +83,20 @@ class DatasetGenerator:
         if Add_to_old:
             try:
                 existing=pd.read_csv(csvFileName, index_col="Date")
-                #print(existing)
-                #print(type(existing))
+                ##print(existing)
+                ##print(type(existing))
                 try:
                     #existing = existing.append(df)
                     existing = pd.concat([existing,df])
                 except :
                     print("could not be possible to add new rows")
-                print("was try")
-                print(existing)
+                #print("was try")
+                #print(existing)
                 existing.to_csv(path_or_buf=csvFileName_New,index=True)
                 
             except :
                 
-                print("was execpt")
+                #print("was execpt")
                 df.to_csv(path_or_buf=csvFileName_New,index=True)
         else:
             print("The actual data saved")
@@ -111,11 +111,11 @@ class DatasetGenerator:
         weekday_Number=[]
         for i in df.index:
             dateIndex.append(i)
-            print(dateIndex)
+            #print(dateIndex)
             d_name = pd.Timestamp(i)
             weekday_Name.append(str(d_name.day_name()))
             weekday_Number.append(d_name.dayofweek)
-            print(weekday_Number)
+            #print(weekday_Number)
             
         if DayName_Too:
             df["DayName"]=weekday_Name
@@ -168,7 +168,7 @@ class DatasetGenerator:
 
         lastIndexRow=df.index[(df.shape[0]-1)]    
         LastRow=df.loc[lastIndexRow]
-        print(lastIndexRow)
+        #print(lastIndexRow)
         time_stamp = pd.Timestamp(lastIndexRow)
         time_stamp=time_stamp+ timedelta(days=1) 
         #time_stamp_str=str(time_stamp)[0:10]
@@ -186,10 +186,10 @@ class DatasetGenerator:
         df=pd.read_csv(csvFileName, index_col="Date")
         
         Colum_Used=column_to_use
-        #print("using colum"+str(Colum_Used))
+        ##print("using colum"+str(Colum_Used))
         data_FT = df[Colum_Used]
-        #print("This is the head"+str(data_FT.head))
-        print(data_FT.shape)
+        ##print("This is the head"+str(data_FT.head))
+        #print(data_FT.shape)
         
         dateIndex=[]
         for i in data_FT.index:
@@ -205,7 +205,7 @@ class DatasetGenerator:
         
         array_like=np.asarray(data_FT).tolist()
         The_fft = np.fft.fft(array_like)
-        print(The_fft)
+        #print(The_fft)
         fft_df =pd.DataFrame({'fft':The_fft})
         fft_df['absolute']=fft_df['fft'].apply(lambda x: np.abs(x))
         fft_df['angle']=fft_df['fft'].apply(lambda x: np.angle(x))
@@ -229,7 +229,7 @@ class DatasetGenerator:
         df["FFT_Mag_{}_{}".format(Colum_Used,periodic_Components_num)]=Magnitud
         df["FFT_Angl_{}_{}".format(Colum_Used,periodic_Components_num)]=Angle
         
-        #print("this is the last df"+str(df.head))   
+        ##print("this is the last df"+str(df.head))   
         
         self.SavingDataset(df,Origin_File_Path, Destiny_File_Path, False)
         
@@ -290,7 +290,7 @@ class DatasetGenerator:
         startDate=df.index[df.shape[0]-1:]
         startDate=startDate[0]
         
-        print(startDate)
+        #print(startDate)
         
         timestampDate=pd.to_datetime(np.datetime64(startDate))
         DayToAdded=0
@@ -299,13 +299,13 @@ class DatasetGenerator:
         else :
             DayToAdded=2
         
-        print(timestampDate.dayofweek)
+        #print(timestampDate.dayofweek)
             
-        print(startDate)
+        #print(startDate)
             
         startDate=str(np.datetime64(startDate) + np.timedelta64(DayToAdded, 'D'))[0:10]
-        print(startDate)
-        print(endDate)
+        #print(startDate)
+        #print(endDate)
         #time.sleep(30)
         self.RetivingDataPrices(itemName,startDate,endDate,csvFileName,csvFileName, addToOld)
         #df=yf.download('CL=F',start = startDate, end = endDate,interval='1d',utc=True,threads = True)
@@ -314,13 +314,13 @@ class DatasetGenerator:
     def deleterRowWhenNull(self,dataFrame):
         df_isnull=dataFrame.isnull().any(axis=1)
         df_isnull_index=dataFrame.index
-        print(df_isnull_index)
+        #print(df_isnull_index)
         index_when_null=[]
         index_num=0
         for i in df_isnull:
             if i :index_when_null.append(df_isnull_index[index_num])
             index_num+=1
-        print(index_when_null)
+        #print(index_when_null)
         dataFrame.drop(index_when_null, axis=0, inplace=True)
 
         return dataFrame
@@ -329,7 +329,7 @@ class DatasetGenerator:
         Last_pd=pd.DataFrame({})
         
         for i in PathListdf:
-            print(i)
+            #print(i)
             existing=pd.read_csv(i, index_col="Date")
             if i.find("GH_F")!=-1:
                 itemName="_GH_F"
@@ -350,7 +350,7 @@ class DatasetGenerator:
             for j in range(0,len(list_Orig_Columns)):
                 dict_Columns[list_Orig_Columns[j]]=list_New_Columns[j]
             
-            print(len(dict_Columns))
+            #print(len(dict_Columns))
             
             existing_Columns_Renamed=existing.rename(columns=dict_Columns)
             
@@ -359,7 +359,7 @@ class DatasetGenerator:
         
         Last_pd=self.deleterRowWhenNull(Last_pd)
         Last_pd.index.name='Date'
-        print(Last_pd.shape)
+        #print(Last_pd.shape)
         self.SavingDataset(Last_pd,NewFIleName, NewFIleName,False)
     
     def AddColumnPRCNTG(self,csvFileName, csvFileName_New):
@@ -501,13 +501,13 @@ class DatasetGenerator:
                     
             df_short=df[:i] #starting from row 0 values up to backdays-1 and increase until df.shape[0] 
             NewLastFFTDataset=self.Add_ColumsFourier_Transform_Df_Return(frec,colum, df_short)
-            print(NewLastFFTDataset)
+            #print(NewLastFFTDataset)
             NewLastFFTDataset=NewLastFFTDataset.iloc[-1:]#getting only the last one
-            print(NewLastFFTDataset)
+            #print(NewLastFFTDataset)
             
             FinalLastFFTDataset=pd.concat([FinalLastFFTDataset,NewLastFFTDataset])  
         
-        print(FinalLastFFTDataset.tail)
+        #print(FinalLastFFTDataset.tail)
         
         self.SavingDataset(FinalLastFFTDataset,newFilepath, newFilepath, False)
     
@@ -553,7 +553,7 @@ class DatasetGenerator:
 
         while maxBackDist<=New_df.shape[0]:
             temporalDataSet=loan_Column_df[backPeriod_init:maxBackDist]
-            print(temporalDataSet)
+            #print(temporalDataSet)
             mu=temporalDataSet.describe()[1:2] #Getting the mean value
 
             temporalNumpyDtaSet=temporalDataSet.to_numpy()
@@ -561,7 +561,7 @@ class DatasetGenerator:
 
 
             SubPeriod_df=temporalDataSet[temporalDataSet.shape[0]-backPeriod_end:]
-            print(SubPeriod_df)
+            #print(SubPeriod_df)
             SubPer_Max = SubPeriod_df.max()
             SubPer_min = SubPeriod_df.min()
 
